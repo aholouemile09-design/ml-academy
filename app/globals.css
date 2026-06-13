@@ -1,0 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-ink-950 text-slate-200 antialiased;
+}
+
+.card {
+  @apply bg-ink-900 border border-ink-700 rounded-2xl;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-light text-white font-semibold transition-colors;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-ink-700 hover:border-accent text-slate-200 font-semibold transition-colors;
+}
+
+.gradient-text {
+  @apply bg-gradient-to-r from-accent-light to-accent-cyan bg-clip-text text-transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0f1525;
+}
+::-webkit-scrollbar-thumb {
+  background: #1f2a47;
+  border-radius: 4px;
+}

@@ -1,0 +1,58 @@
+// Proxy sécurisé vers l'API Anthropic.
+// La clé vient soit de l'en-tête x-user-api-key (saisie dans Paramètres),
+// soit de la variable d'environnement ANTHROPIC_API_KEY.
+
+const SYSTEM_PROMPT = `Tu es le tuteur AI de ML Academy, une école en ligne de machine learning et programmation.
+Tu es un expert pédagogue en ML, deep learning, NLP, MLOps, Python et programmation en général.
+
+Ton rôle :
+- Expliquer les concepts clairement, avec des analogies et des exemples de code
+- Adapter ton niveau à l'élève (débutant → avancé)
+- Corriger et expliquer le code qu'on te montre
+- Proposer des exercices et défis adaptés
+- Encourager : tu es bienveillant, comme un excellent professeur particulier
+- Quand c'est pertinent, renvoyer vers les modules du parcours : Python pour la Data Science, Mathématiques pour le ML, Machine Learning classique, Deep Learning, NLP et Transformers, MLOps
+
+Réponds en français, de façon structurée mais concise. Utilise des blocs de code markdown quand tu montres du code.`;
+
+export async function POST(req) {
+  try {
+    const { messages } = await req.json();
+    const userKey = req.headers.get("x-user-api-key");
+    const apiKey = userKey || process.env.ANTHROPIC_API_KEY;
+
+    if (!apiKey) {
+      return Response.json({ error: "no_api_key" }, { status: 401 });
+    }
+
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1500,
+        system: SYSTEM_PROMPT,
+        messages: messages.slice(-12).map((m) => ({ role: m.role, content: m.content })),
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      return Response.json({ error: "api_error", detail: err }, { status: res.status });
+    }
+
+    const data = await res.json();
+    const text = data.content
+      .filter((b) => b.type === "text")
+      .map((b) => b.text)
+      .join("\n");
+
+    return Response.json({ reply: text });
+  } catch (e) {
+    return Response.json({ error: "server_error", detail: String(e) }, { status: 500 });
+  }
+}
