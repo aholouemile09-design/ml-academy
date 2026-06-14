@@ -1,4 +1,7 @@
+"use client";
 import Link from "next/link";
+import { CertificationIllustration } from "@/components/Illustrations";
+import { CERT_PREP } from "@/lib/certPrep";
 
 const CERTIFICATIONS = [
   {
@@ -124,10 +127,17 @@ const priorityColors = {
 export default function Certifications() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-      <h1 className="text-3xl font-bold text-white mb-1">Certifications</h1>
-      <p className="text-slate-400 mb-3">
-        Ordre réaliste issu de ton plan — la certification vaut quelque chose parce qu'elle suit la pratique, pas l'inverse.
-      </p>
+      <div className="flex items-center gap-6 mb-6">
+        <div className="hidden sm:block">
+          <CertificationIllustration className="w-40 h-28 opacity-90" />
+        </div>
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-1">Certifications</h1>
+          <p className="text-slate-400">
+            Ordre réaliste issu de ton plan — la certification vaut quelque chose parce qu'elle suit la pratique, pas l'inverse.
+          </p>
+        </div>
+      </div>
       <div className="flex gap-3 mb-10 flex-wrap text-sm">
         <span className="px-3 py-1 rounded-full border text-emerald-400 border-emerald-500/30 bg-emerald-500/5">Priorité A — Obligatoire 2026-2027</span>
         <span className="px-3 py-1 rounded-full border text-amber-400 border-amber-500/30 bg-amber-500/5">Priorité B — Si en avance</span>
@@ -166,14 +176,24 @@ export default function Certifications() {
                 <div className="mt-2 text-sm text-slate-400 italic">
                   💡 {c.why}
                 </div>
-                <a
-                  href={c.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center gap-1 text-sm text-accent-light hover:underline"
-                >
-                  Voir la certification →
-                </a>
+                <div className="mt-3 flex items-center gap-3 flex-wrap">
+                  <a
+                    href={c.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-accent-light hover:underline"
+                  >
+                    Voir la certification →
+                  </a>
+                  {CERT_PREP[c.id] && (
+                    <Link
+                      href={`/certifications/prep/${c.id}`}
+                      className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-accent/10 border border-accent/30 text-accent-light text-sm font-semibold hover:bg-accent/20 transition-colors"
+                    >
+                      🎯 Se préparer
+                    </Link>
+                  )}
+                </div>
               </div>
             </div>
           </div>

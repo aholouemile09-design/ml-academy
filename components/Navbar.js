@@ -12,6 +12,7 @@ const NAV_GROUPS = [
       { href: "/parcours", label: "Parcours ML" },
       { href: "/projets", label: "Projets" },
       { href: "/certifications", label: "Certifications" },
+      { href: "/certifications/prep/c6", label: "🎯 Prép AWS CLF" },
     ],
   },
   {

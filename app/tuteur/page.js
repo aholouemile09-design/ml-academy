@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { simulatedReply } from "@/lib/simulatedTutor";
 import Markdown from "@/components/Markdown";
+import { TutorAvatar } from "@/components/Illustrations";
 
 const SUGGESTIONS = [
   "Par où commencer si je débute ?",
@@ -81,9 +82,10 @@ export default function Tuteur() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 flex flex-col h-[calc(100vh-4rem)]">
-      <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+      <div className="flex items-center gap-4 mb-4">
+        <TutorAvatar className="w-14 h-14 shrink-0" />
         <div>
-          <h1 className="text-2xl font-bold text-white">🤖 Tuteur AI</h1>
+          <h1 className="text-2xl font-bold text-white">Tuteur AI</h1>
           <p className="text-sm text-slate-500">
             {hasKey ? (
               <span className="text-emerald-400">● Connecté à l'API Claude</span>
@@ -102,9 +104,12 @@ export default function Tuteur() {
 
       <div className="flex-1 overflow-y-auto space-y-4 pb-4">
         {messages.map((m, i) => (
-          <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+          <div key={i} className={`flex items-end gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+            {m.role === "assistant" && (
+              <TutorAvatar className="w-8 h-8 shrink-0 mb-1" />
+            )}
             <div
-              className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm ${
+              className={`max-w-[82%] rounded-2xl px-4 py-3 text-sm ${
                 m.role === "user"
                   ? "bg-accent text-white rounded-br-sm"
                   : "card rounded-bl-sm"
