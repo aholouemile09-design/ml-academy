@@ -1,222 +1,238 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   WEEKLY_SCHEDULE,
   ROADMAP_5ANS,
-  MONTHLY_PLAN_2026_2027,
+  MODULE_PLAN,
+  TOTAL_WEEKS_ML,
+  TOTAL_WEEKS_WEB,
   ANTI_DECOURAGE_RULES,
 } from "@/lib/calendar";
+import Link from "next/link";
 
-const STORAGE_KEY = "ml-academy-calendar-checks";
-
-const dayColors = {
-  study: "bg-accent/10 border-accent/40",
-  deep:  "bg-accent-cyan/10 border-accent-cyan/40",
-  rest:  "bg-ink-800 border-ink-700",
+const DAY_STYLE = {
+  study: { bg: "bg-accent/10 border-accent/40",           icon: "📖", label: "Étude"     },
+  deep:  { bg: "bg-cyan-500/10 border-cyan-500/40",       icon: "🛠️", label: "Bloc profond" },
+  rest:  { bg: "bg-ink-800 border-ink-700",               icon: "😴", label: "Repos"      },
 };
 
-const dayIcons = { study: "📖", deep: "🛠️", rest: "😴" };
+const TABS = ["Programme type", "Modules ML", "Modules Web", "Roadmap 5 ans", "Règles anti-décrochage"];
 
-export default function Calendrier() {
-  const [tab, setTab] = useState("semaine");
-  const [checks, setChecks] = useState({});
-  const [loaded, setLoaded] = useState(false);
+function WeeksBar({ weeks, max }) {
+  const pct = Math.round((weeks / max) * 100);
+  return (
+    <div className="flex items-center gap-2 flex-1">
+      <div className="flex-1 h-2 bg-ink-800 rounded-full overflow-hidden">
+        <div className="h-full rounded-full bg-gradient-to-r from-accent to-accent-cyan" style={{ width: `${pct}%` }} />
+      </div>
+      <span className="text-xs text-slate-400 whitespace-nowrap">{weeks} sem.</span>
+    </div>
+  );
+}
 
-  useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    setChecks(saved);
-    setLoaded(true);
-  }, []);
+export default function CalendrierPage() {
+  const [tab, setTab] = useState(0);
 
-  const toggle = (key) => {
-    const next = { ...checks, [key]: !checks[key] };
-    setChecks(next);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-  };
-
-  const monthlyDone = MONTHLY_PLAN_2026_2027.filter((_, i) => checks[`month-${i}`]).length;
+  const mlModules  = MODULE_PLAN.filter(m => m.track === "ml");
+  const webModules = MODULE_PLAN.filter(m => m.track === "web");
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-      <h1 className="text-3xl font-bold text-white mb-1">Calendrier de Discipline</h1>
-      <p className="text-slate-400 mb-8">
-        Ton plan 2026-2031 — rythme réaliste pour un emploi à temps plein.
-      </p>
-
-      {/* Règles anti-décrochage */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-10">
-        {ANTI_DECOURAGE_RULES.map((r) => (
-          <div key={r.rule} className="card p-4">
-            <div className="text-2xl mb-1">{r.icon}</div>
-            <div className="text-sm font-semibold text-white">{r.rule}</div>
-            <div className="text-xs text-slate-400 mt-1">{r.detail}</div>
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-white mb-2">📅 Plan d'apprentissage</h1>
+        <p className="text-slate-400 mb-4">
+          Programme générique recommandé — environ <strong className="text-white">7-9h par semaine</strong>.
+          Pour un calendrier avec tes propres dates, utilise{" "}
+          <Link href="/espace" className="text-accent-light hover:underline">Mon Espace →</Link>
+        </p>
+        <div className="flex gap-4 flex-wrap">
+          <div className="px-4 py-2 rounded-xl border border-accent/30 bg-accent/5 text-sm">
+            🤖 ML/Data Science — <span className="text-white font-bold">{TOTAL_WEEKS_ML} semaines</span>
           </div>
-        ))}
+          <div className="px-4 py-2 rounded-xl border border-cyan-500/30 bg-cyan-500/5 text-sm text-cyan-400">
+            🌐 Web Full Stack — <span className="text-white font-bold">{TOTAL_WEEKS_WEB} semaines</span>
+          </div>
+          <Link href="/espace" className="px-4 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/5 text-sm text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            📆 Mon calendrier personnel →
+          </Link>
+        </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-8 flex-wrap">
-        {["semaine", "mensuel", "roadmap"].map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={`px-4 py-2 rounded-xl border text-sm font-medium transition-colors capitalize ${
-              tab === t
-                ? "border-accent bg-accent/10 text-white"
-                : "border-ink-700 text-slate-400 hover:border-accent/50"
-            }`}
-          >
-            {t === "semaine" ? "📅 Planning hebdo" : t === "mensuel" ? "🗓 Plan 2026-2027" : "🗺 Roadmap 5 ans"}
+      <div className="flex gap-1 mb-8 overflow-x-auto pb-1">
+        {TABS.map((t, i) => (
+          <button key={i} onClick={() => setTab(i)}
+            className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-colors ${
+              tab === i ? "bg-accent/20 border border-accent/40 text-white" : "text-slate-400 hover:text-white border border-transparent"
+            }`}>
+            {t}
           </button>
         ))}
       </div>
 
-      {/* ── PLANNING HEBDO ─────────────────────────────────────────────── */}
-      {tab === "semaine" && (
+      {/* Tab 0 — Programme type hebdomadaire */}
+      {tab === 0 && (
+        <div className="space-y-4">
+          <p className="text-slate-400 text-sm mb-6">
+            Rythme recommandé : 3 soirs × 75 min + 1 bloc profond le samedi. Total ≈ 7-9h/semaine.
+            Le dimanche est protégé pour la récupération.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {WEEKLY_SCHEDULE.map(day => {
+              const style = DAY_STYLE[day.type];
+              return (
+                <div key={day.day} className={`rounded-2xl border p-4 ${style.bg}`}>
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-xl">{style.icon}</span>
+                    <div>
+                      <p className="font-semibold text-white">{day.day}</p>
+                      <p className="text-xs text-slate-500">{style.label}</p>
+                    </div>
+                  </div>
+                  {day.sessions.length > 0 ? (
+                    <div className="space-y-1">
+                      {day.sessions.map((s, i) => (
+                        <div key={i} className="flex items-center justify-between text-sm">
+                          <span className="text-slate-300">{s.label}</span>
+                          <span className="text-slate-500 font-mono text-xs">{s.time} ({s.duration}min)</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-slate-600 italic">Pas de session prévue</p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Tab 1 — Modules ML */}
+      {tab === 1 && (
         <div>
           <p className="text-slate-400 text-sm mb-6">
-            Charge cible : <strong className="text-white">7–9h / semaine</strong> — assez pour progresser sans s'épuiser.
+            Durées estimées au rythme de 7-9h/semaine. Ces chiffres sont des moyennes — adapte selon ton niveau de départ.
           </p>
-          <div className="grid sm:grid-cols-2 gap-4">
-            {WEEKLY_SCHEDULE.map((d) => (
-              <div key={d.day} className={`card p-5 border ${dayColors[d.type]}`}>
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-2xl">{dayIcons[d.type]}</span>
-                  <div>
-                    <div className="font-bold text-white">{d.day}</div>
-                    <div className="text-xs text-slate-500 capitalize">
-                      {d.type === "study" ? "Soir d'apprentissage (75 min)" : d.type === "deep" ? "Session projet (3h30)" : "Repos protégé"}
+          <div className="space-y-3">
+            {mlModules.map((m, i) => (
+              <div key={m.id} className="card p-5">
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl shrink-0">{m.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <span className="text-xs text-slate-600 font-mono">0{i + 1}</span>
+                      <h3 className="font-semibold text-white">{m.title}</h3>
+                      <span className="text-xs px-2 py-0.5 rounded-full border border-accent/30 bg-accent/5 text-accent-light">
+                        Priorité {m.priority}
+                      </span>
+                    </div>
+                    <WeeksBar weeks={m.weeks} max={10} />
+                    <div className="mt-2 grid sm:grid-cols-2 gap-2 text-xs text-slate-500">
+                      <span>📚 {m.resource}</span>
+                      <span>🛠 {m.project}</span>
                     </div>
                   </div>
-                  <div className="ml-auto">
-                    {d.sessions.reduce((acc, s) => acc + s.duration, 0) > 0 && (
-                      <span className="text-xs text-slate-400">
-                        {Math.round(d.sessions.reduce((acc, s) => acc + s.duration, 0) / 60 * 10) / 10}h
-                      </span>
-                    )}
+                </div>
+              </div>
+            ))}
+            <div className="card p-4 border-accent/30 bg-accent/5 text-center">
+              <p className="text-white font-bold">Total parcours ML : <span className="text-accent-light">{TOTAL_WEEKS_ML} semaines</span></p>
+              <p className="text-xs text-slate-500 mt-1">≈ {Math.round(TOTAL_WEEKS_ML / 4)} mois au rythme recommandé</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 2 — Modules Web */}
+      {tab === 2 && (
+        <div>
+          <p className="text-slate-400 text-sm mb-6">
+            Le parcours Web peut se faire en parallèle du ML (niveau débutant) ou après (niveaux intermédiaire/avancé).
+          </p>
+          <div className="space-y-3">
+            {webModules.map((m, i) => (
+              <div key={m.id} className="card p-5">
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl shrink-0">{m.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <span className="text-xs text-slate-600 font-mono">0{i + 1}</span>
+                      <h3 className="font-semibold text-white">{m.title}</h3>
+                    </div>
+                    <WeeksBar weeks={m.weeks} max={8} />
+                    <div className="mt-2 grid sm:grid-cols-2 gap-2 text-xs text-slate-500">
+                      <span>📚 {m.resource}</span>
+                      <span>🛠 {m.project}</span>
+                    </div>
                   </div>
                 </div>
-                {d.sessions.map((s) => (
-                  <div key={s.label} className="bg-ink-950/50 rounded-xl px-3 py-2 text-sm">
-                    <div className="text-accent-light font-medium">{s.time}</div>
-                    <div className="text-slate-300">{s.label}</div>
-                  </div>
-                ))}
-                {d.sessions.length === 0 && (
-                  <p className="text-sm text-slate-500 italic">
-                    Repos absolu — la récupération fait partie du plan.
-                  </p>
+              </div>
+            ))}
+            <div className="card p-4 border-cyan-500/30 bg-cyan-500/5 text-center">
+              <p className="text-white font-bold">Total parcours Web : <span className="text-cyan-400">{TOTAL_WEEKS_WEB} semaines</span></p>
+              <p className="text-xs text-slate-500 mt-1">≈ {Math.round(TOTAL_WEEKS_WEB / 4)} mois au rythme recommandé</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 3 — Roadmap 5 ans */}
+      {tab === 3 && (
+        <div className="space-y-5">
+          {ROADMAP_5ANS.map(phase => (
+            <div key={phase.id} className={`card p-6 border ${phase.bgColor}`}>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-3xl">{phase.icon}</span>
+                <div>
+                  <p className="text-xs text-slate-500">{phase.period}</p>
+                  <h3 className={`font-bold text-lg ${phase.textColor}`}>{phase.title}</h3>
+                </div>
+                {phase.salaryTarget && (
+                  <span className="ml-auto text-xs px-3 py-1 rounded-full bg-black/20 text-slate-300">
+                    💰 {phase.salaryTarget}
+                  </span>
                 )}
               </div>
-            ))}
-          </div>
-          <div className="mt-6 card p-5 bg-accent/5 border-accent/20">
-            <p className="text-sm text-slate-300">
-              💡 <strong className="text-white">Règle finale :</strong> moins de ressources, plus de preuves. Si une ressource ne produit pas un projet ou une compétence testable, elle doit être retirée du planning.
-            </p>
-          </div>
+              <p className="text-slate-300 text-sm mb-4">{phase.objective}</p>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs text-slate-500 uppercase font-semibold mb-2">Livrables</p>
+                  <ul className="space-y-1">
+                    {phase.livrables.map((l, i) => (
+                      <li key={i} className="text-sm text-slate-300 flex gap-2">
+                        <span className="text-emerald-400">✓</span>{l}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 uppercase font-semibold mb-2">Jalons</p>
+                  <ul className="space-y-1">
+                    {phase.milestones.map((ms, i) => (
+                      <li key={i} className="text-sm text-slate-300 flex gap-2">
+                        <span className={`font-mono text-xs ${phase.textColor} shrink-0`}>{ms.month}</span>
+                        {ms.label}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
-      {/* ── PLAN MENSUEL 2026-2027 ──────────────────────────────────────── */}
-      {tab === "mensuel" && (
-        <div>
-          <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-            <p className="text-slate-400 text-sm">Coche chaque bloc complété avec un projet GitHub publié.</p>
-            <span className="text-sm text-accent-light font-semibold">
-              ✅ {monthlyDone} / {MONTHLY_PLAN_2026_2027.length} blocs
-            </span>
-          </div>
-
-          <div className="w-full h-3 bg-ink-800 rounded-full overflow-hidden mb-8">
-            <div
-              className="h-full bg-gradient-to-r from-accent to-accent-cyan transition-all"
-              style={{ width: `${(monthlyDone / MONTHLY_PLAN_2026_2027.length) * 100}%` }}
-            />
-          </div>
-
-          <div className="space-y-4">
-            {MONTHLY_PLAN_2026_2027.map((bloc, i) => (
-              <div
-                key={i}
-                className={`card p-5 transition-colors ${checks[`month-${i}`] ? "border-emerald-500/40 bg-emerald-500/5" : ""}`}
-              >
-                <div className="flex items-start gap-4">
-                  <button
-                    onClick={() => toggle(`month-${i}`)}
-                    className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
-                      checks[`month-${i}`] ? "bg-emerald-500 border-emerald-500" : "border-ink-700 hover:border-emerald-500"
-                    }`}
-                  >
-                    {checks[`month-${i}`] && <span className="text-white text-xs">✓</span>}
-                  </button>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 flex-wrap mb-1">
-                      <span className={`text-xs font-mono font-bold ${bloc.color}`}>{bloc.month}</span>
-                      <span className="text-xs border border-current rounded px-1.5 py-0.5 text-slate-500">
-                        Priorité {bloc.priority}
-                      </span>
-                      <span className="text-xs text-slate-500">{bloc.weeks} sem.</span>
-                    </div>
-                    <h3 className="font-semibold text-white">{bloc.bloc}</h3>
-                    <div className="mt-2 text-xs text-slate-400 space-y-1">
-                      <div>📚 <em>{bloc.resource}</em></div>
-                      <div>🛠️ <strong className="text-slate-300">Projet :</strong> {bloc.project}</div>
-                      <div>✅ <strong className="text-slate-300">Validation :</strong> {bloc.validation}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ── ROADMAP 5 ANS ──────────────────────────────────────────────── */}
-      {tab === "roadmap" && (
-        <div className="space-y-6">
-          {ROADMAP_5ANS.map((phase) => (
-            <div key={phase.id} className={`card p-6 border ${phase.bgColor}`}>
-              <div className="flex items-start gap-4">
-                <span className="text-4xl">{phase.icon}</span>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 flex-wrap mb-1">
-                    <span className={`font-mono text-sm font-bold ${phase.textColor}`}>{phase.period}</span>
-                    {phase.salaryTarget && (
-                      <span className="text-xs text-slate-500 border border-ink-700 rounded px-2 py-0.5">
-                        🎯 {phase.salaryTarget}
-                      </span>
-                    )}
-                  </div>
-                  <h2 className="text-lg font-bold text-white mb-1">{phase.title}</h2>
-                  <p className="text-sm text-slate-400 mb-4">{phase.objective}</p>
-
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <div className="text-xs font-semibold text-slate-500 uppercase mb-2">Livrables concrets</div>
-                      <ul className="space-y-1">
-                        {phase.livrables.map((l) => (
-                          <li key={l} className="text-sm text-slate-300 flex gap-2">
-                            <span className="text-accent-light">→</span> {l}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <div className="text-xs font-semibold text-slate-500 uppercase mb-2">Jalons</div>
-                      <ul className="space-y-1">
-                        {phase.milestones.map((m) => (
-                          <li key={m.month} className="text-sm text-slate-300 flex gap-2">
-                            <span className={`font-mono text-xs font-bold shrink-0 ${phase.textColor}`}>{m.month}</span>
-                            {m.label}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
+      {/* Tab 4 — Règles anti-décrochage */}
+      {tab === 4 && (
+        <div className="grid sm:grid-cols-2 gap-4">
+          {ANTI_DECOURAGE_RULES.map(r => (
+            <div key={r.rule} className="card p-5">
+              <div className="text-3xl mb-2">{r.icon}</div>
+              <h3 className="font-bold text-white mb-1">{r.rule}</h3>
+              <p className="text-sm text-slate-400">{r.detail}</p>
             </div>
           ))}
         </div>

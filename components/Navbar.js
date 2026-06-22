@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useRef } from "react";
 import { useProgress } from "@/lib/progress";
-import { useProfiles, AVATAR_COLORS } from "@/lib/profiles";
+import { useProfiles, AVATAR_COLORS, getAvatarEmoji } from "@/lib/profiles";
 
 const NAV_GROUPS = [
   {
@@ -12,6 +12,7 @@ const NAV_GROUPS = [
     links: [
       { href: "/parcours", label: "Parcours ML" },
       { href: "/projets", label: "Projets" },
+      { href: "/projets/publier", label: "🐙 Publier sur GitHub" },
       { href: "/certifications", label: "Certifications" },
       { href: "/certifications/prep/c6", label: "🎯 Prép AWS CLF" },
       { href: "/profils", label: "👤 Profils" },
@@ -26,8 +27,10 @@ const NAV_GROUPS = [
   {
     label: "Outils",
     links: [
-      { href: "/calendrier", label: "Calendrier" },
+      { href: "/espace", label: "🏠 Mon Espace" },
+      { href: "/calendrier", label: "Plan général" },
       { href: "/ressources", label: "Ressources" },
+      { href: "/aller-plus-loin", label: "🚀 Aller plus loin" },
       { href: "/tuteur", label: "Tuteur AI" },
       { href: "/dashboard", label: "Dashboard" },
       { href: "/parametres", label: "Paramètres" },
@@ -50,9 +53,7 @@ export default function Navbar() {
   const profileColor = activeProfile
     ? AVATAR_COLORS.find(c => c.id === activeProfile.colorId) || AVATAR_COLORS[0]
     : null;
-  const initials = activeProfile
-    ? activeProfile.name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()
-    : "?";
+  const avatarEmoji = activeProfile ? getAvatarEmoji(activeProfile) : "👤";
 
   const handleEnter = (label) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -134,8 +135,8 @@ export default function Navbar() {
             <div className="relative hidden sm:block"
               onMouseEnter={() => { if (profileTimer.current) clearTimeout(profileTimer.current); setProfileOpen(true); }}
               onMouseLeave={() => { profileTimer.current = setTimeout(() => setProfileOpen(false), 150); }}>
-              <button className={`w-8 h-8 rounded-full ${profileColor?.bg || "bg-slate-600"} flex items-center justify-center text-xs font-bold text-white ring-2 ring-offset-1 ring-offset-ink-950 ${profileColor?.ring || "ring-slate-500"}`}>
-                {initials}
+              <button className={`w-8 h-8 rounded-full ${profileColor?.bg || "bg-slate-600"} flex items-center justify-center text-base ring-2 ring-offset-1 ring-offset-ink-950 ${profileColor?.ring || "ring-slate-500"}`}>
+                {avatarEmoji}
               </button>
               {profileOpen && (
                 <div className="absolute right-0 top-full mt-1 bg-ink-900 border border-ink-700 rounded-xl shadow-2xl py-2 min-w-[180px] z-50"
@@ -148,7 +149,7 @@ export default function Navbar() {
                     return (
                       <button key={p.id} onClick={() => { switchProfile(p.id); setProfileOpen(false); }}
                         className={`w-full text-left px-4 py-2 text-sm flex items-center gap-3 transition-colors ${p.id === activeProfile?.id ? "bg-accent/10 text-white" : "text-slate-300 hover:bg-ink-800"}`}>
-                        <span className={`w-6 h-6 rounded-full ${col.bg} flex items-center justify-center text-xs font-bold text-white shrink-0`}>{ini}</span>
+                        <span className={`w-6 h-6 rounded-full ${col.bg} flex items-center justify-center text-sm shrink-0`}>{getAvatarEmoji(p)}</span>
                         <span className="flex-1 truncate">{p.name}</span>
                         {p.id === activeProfile?.id && <span className="text-emerald-400 text-xs">✓</span>}
                       </button>

@@ -198,11 +198,15 @@ export default function Projets() {
                     </div>
                   )}
 
-                  {/* Lien tuteur */}
-                  <div className="mt-4">
+                  {/* Actions */}
+                  <div className="mt-4 flex gap-3 flex-wrap">
                     <Link href="/tuteur"
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-accent/10 border border-accent/30 text-accent-light text-sm font-semibold hover:bg-accent/20 transition-colors">
-                      🤖 Poser une question au tuteur AI
+                      🤖 Demander de l'aide au tuteur
+                    </Link>
+                    <Link href={`/projets/publier?id=${p.id}`}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-ink-800 border border-ink-700 text-slate-300 text-sm font-semibold hover:border-accent/40 hover:text-white transition-colors">
+                      🐙 Publier sur GitHub
                     </Link>
                   </div>
                 </div>

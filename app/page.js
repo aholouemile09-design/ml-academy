@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CURRICULUM, LEVELS } from "@/lib/curriculum";
 import { WEB_CURRICULUM } from "@/lib/webdev";
 import { NeuralNetworkIllustration, WebDevIllustration, DashboardIllustration } from "@/components/Illustrations";
+import ProfileWidget from "@/components/ProfileWidget";
 
 const features = [
   { icon: "🗺", title: "Deux parcours complets", desc: "Track ML/Data Science (9 modules) + Track Web Full Stack (6 modules). Complémentaires et progressifs." },
@@ -66,6 +67,11 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* ── PROFIL WIDGET ────────────────────────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-4">
+        <ProfileWidget />
       </section>
 
       {/* ── FEATURES ─────────────────────────────────────────────────────── */}
