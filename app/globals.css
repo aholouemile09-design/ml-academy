@@ -39,7 +39,7 @@ html.light {
   --color-text-primary:   15 23 42;    /* slate-900 */
   --color-text-secondary: 30 41 59;    /* slate-800 */
   --color-text-muted:     71 85 105;   /* slate-600 */
-  --color-text-subtle:    100 116 139; /* slate-500 */
+  --color-text-subtle:    71 85 105;   /* slate-600 — un peu plus foncé pour la lisibilité en clair */
   /* Scrollbar */
   --scrollbar-track: #f1f5f9;
   --scrollbar-thumb: #cbd5e1;
@@ -58,7 +58,7 @@ body {
 html.light .text-white  { color: rgb(var(--color-text-primary))   !important; }
 html.light .text-slate-100 { color: rgb(var(--color-text-primary)) !important; }
 html.light .text-slate-200 { color: rgb(var(--color-text-secondary)) !important; }
-html.light .text-slate-300 { color: 51 65 85 !important; } /* slate-700 */
+html.light .text-slate-300 { color: rgb(51 65 85) !important; } /* slate-700 — corrigé (rgb manquant) */
 html.light .text-slate-400 { color: rgb(var(--color-text-muted))   !important; }
 html.light .text-slate-500 { color: rgb(var(--color-text-subtle))  !important; }
 html.light .text-slate-600 { color: rgb(var(--color-text-subtle))  !important; }
