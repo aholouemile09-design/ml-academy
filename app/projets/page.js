@@ -75,10 +75,10 @@ export default function Projets() {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink-950/90 via-ink-950/60 to-transparent" />
-        <div className="absolute inset-0 flex flex-col justify-center px-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">🛠 Projets pratiques</h1>
-          <p className="text-slate-300 text-sm">Construis ton portfolio avec des projets guidés, de débutant à expert.</p>
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/75 to-transparent" />
+        <div className="absolute inset-0 flex flex-col justify-center px-6 [text-shadow:0_2px_8px_rgba(0,0,0,0.85)]">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-50 mb-1">🛠 Projets pratiques</h1>
+          <p className="text-slate-200/90 text-sm">Construis ton portfolio avec des projets guidés, de débutant à expert.</p>
         </div>
       </div>
 

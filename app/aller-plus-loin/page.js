@@ -147,13 +147,13 @@ export default function AllerPlusLoinPage() {
           fill
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink-950/90 via-ink-950/60 to-transparent" />
-        <div className="absolute inset-0 flex flex-col justify-center px-8">
-          <span className="inline-block px-3 py-1 rounded-full border border-accent/30 bg-accent/10 text-accent-light text-xs font-semibold mb-3 w-fit">
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/75 to-transparent" />
+        <div className="absolute inset-0 flex flex-col justify-center px-8 [text-shadow:0_2px_8px_rgba(0,0,0,0.85)]">
+          <span className="inline-block px-3 py-1 rounded-full border border-accent/30 bg-accent/10 text-accent-light text-xs font-semibold mb-3 w-fit [text-shadow:none]">
             🚀 Section évolutive — se complète au fil du parcours
           </span>
-          <h1 className="text-3xl font-bold text-white mb-2">Aller plus loin</h1>
-          <p className="text-slate-300 max-w-xl text-sm">
+          <h1 className="text-3xl font-bold text-slate-50 mb-2">Aller plus loin</h1>
+          <p className="text-slate-200/90 max-w-xl text-sm">
             Ressources avancées, communautés, compétitions, projets ambitieux et parcours Master — tout ce qui distingue un praticien d'un expert reconnu.
           </p>
         </div>
