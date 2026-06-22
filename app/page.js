@@ -80,11 +80,11 @@ export default function Home() {
                   alt="Intelligence artificielle et machine learning"
                   width={600}
                   height={420}
-                  className="w-full object-cover rounded-3xl opacity-80"
+                  className="w-full object-cover rounded-3xl"
                   priority
                 />
-                {/* Overlay gradient pour intégrer dans le design */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-ink-950/70 via-transparent to-accent/10 rounded-3xl" />
+                {/* Overlay gradient pour intégrer dans le design (foncé fixe — ne blanchit pas en mode clair) */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-slate-950/70 via-transparent to-accent/10 rounded-3xl" />
                 {/* Badge flottant */}
                 <div className="absolute bottom-4 left-4 px-4 py-2 rounded-2xl bg-ink-900/90 border border-ink-700 backdrop-blur-sm">
                   <p className="text-xs text-slate-400">Alimenté par</p>
@@ -176,9 +176,9 @@ export default function Home() {
                 alt="Data science et visualisation de données"
                 width={340}
                 height={420}
-                className="w-full object-cover rounded-2xl opacity-75"
+                className="w-full object-cover rounded-2xl"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-ink-950/20 to-transparent rounded-2xl" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent rounded-2xl" />
               <div className="absolute bottom-4 left-4 right-4">
                 <p className="text-white font-bold text-sm">Data Science & ML</p>
                 <p className="text-slate-300 text-xs mt-1">De l'analyse de données aux modèles de production</p>
@@ -228,9 +228,9 @@ export default function Home() {
                   alt="Développement web et code"
                   width={360}
                   height={400}
-                  className="w-full object-cover rounded-2xl opacity-75"
+                  className="w-full object-cover rounded-2xl"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-ink-950/10 to-transparent rounded-2xl" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent rounded-2xl" />
                 <div className="absolute bottom-4 left-4 right-4">
                   <p className="text-white font-bold text-sm">Web Full Stack</p>
                   <p className="text-slate-300 text-xs mt-1">React, Next.js, API, déploiement</p>
@@ -248,13 +248,13 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
         <div className="relative rounded-3xl overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&q=75"
-            alt="Intelligence artificielle et apprentissage automatique"
+            src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&q=80"
+            alt="Espace de travail d'un développeur — objectif ML Engineer"
             width={1200}
             height={400}
             className="w-full object-cover h-64 sm:h-80"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-ink-950/90 via-ink-950/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/92 via-slate-950/65 to-slate-950/20" />
           <div className="absolute inset-0 flex items-center px-8 sm:px-12">
             <div className="max-w-lg">
               <p className="text-accent-light text-sm font-semibold mb-2">Votre objectif</p>
