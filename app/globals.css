@@ -4,37 +4,114 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* ─────────────────────────────────────────────────────────────────────────────
+   THÈME SOMBRE (défaut)
+   ───────────────────────────────────────────────────────────────────────────── */
+:root,
+html.dark {
   color-scheme: dark;
+  /* Backgrounds */
+  --ink-950: 10 14 26;
+  --ink-900: 15 21 37;
+  --ink-800: 22 30 51;
+  --ink-700: 31 42 71;
+  /* Textes */
+  --color-text-primary:   255 255 255;
+  --color-text-secondary: 226 232 240;  /* slate-200 */
+  --color-text-muted:     148 163 184;  /* slate-400 */
+  --color-text-subtle:    100 116 139;  /* slate-500 */
+  /* Scrollbar */
+  --scrollbar-track: #0f1525;
+  --scrollbar-thumb: #1f2a47;
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   THÈME CLAIR
+   ───────────────────────────────────────────────────────────────────────────── */
+html.light {
+  color-scheme: light;
+  /* Backgrounds */
+  --ink-950: 248 250 252;  /* slate-50  */
+  --ink-900: 241 245 249;  /* slate-100 */
+  --ink-800: 226 232 240;  /* slate-200 */
+  --ink-700: 203 213 225;  /* slate-300 */
+  /* Textes */
+  --color-text-primary:   15 23 42;    /* slate-900 */
+  --color-text-secondary: 30 41 59;    /* slate-800 */
+  --color-text-muted:     71 85 105;   /* slate-600 */
+  --color-text-subtle:    100 116 139; /* slate-500 */
+  /* Scrollbar */
+  --scrollbar-track: #f1f5f9;
+  --scrollbar-thumb: #cbd5e1;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   BASE
+   ───────────────────────────────────────────────────────────────────────────── */
 body {
-  @apply bg-ink-950 text-slate-200 antialiased;
+  background-color: rgb(var(--ink-950));
+  color: rgb(var(--color-text-secondary));
+  @apply antialiased;
 }
 
+/* Surcharge textes en mode CLAIR */
+html.light .text-white  { color: rgb(var(--color-text-primary))   !important; }
+html.light .text-slate-100 { color: rgb(var(--color-text-primary)) !important; }
+html.light .text-slate-200 { color: rgb(var(--color-text-secondary)) !important; }
+html.light .text-slate-300 { color: 51 65 85 !important; } /* slate-700 */
+html.light .text-slate-400 { color: rgb(var(--color-text-muted))   !important; }
+html.light .text-slate-500 { color: rgb(var(--color-text-subtle))  !important; }
+html.light .text-slate-600 { color: rgb(var(--color-text-subtle))  !important; }
+
+/* Boutons blancs — restent blancs même en mode clair */
+html.light .btn-primary .text-white,
+html.light button.bg-accent .text-white,
+html.light .bg-accent { /* le texte sur fond accent reste blanc */ }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   COMPOSANTS SÉMANTIQUES
+   ───────────────────────────────────────────────────────────────────────────── */
 .card {
   @apply bg-ink-900 border border-ink-700 rounded-2xl;
 }
 
+html.light .card {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+}
+
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-light text-white font-semibold transition-colors;
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-light font-semibold transition-colors;
+  color: #ffffff !important;
 }
 
 .btn-secondary {
-  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-ink-700 hover:border-accent text-slate-200 font-semibold transition-colors;
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-ink-700 font-semibold transition-colors;
 }
+
+html.dark  .btn-secondary { @apply text-slate-200 hover:border-accent; }
+html.light .btn-secondary { color: rgb(var(--color-text-secondary)); }
+html.light .btn-secondary:hover { border-color: #6366f1; }
 
 .gradient-text {
   @apply bg-gradient-to-r from-accent-light to-accent-cyan bg-clip-text text-transparent;
 }
 
-::-webkit-scrollbar {
-  width: 8px;
+/* ─────────────────────────────────────────────────────────────────────────────
+   SCROLLBAR
+   ───────────────────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track  { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb  { background: var(--scrollbar-thumb); border-radius: 4px; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   TRANSITIONS DE THÈME (smooth)
+   ───────────────────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
 }
-::-webkit-scrollbar-track {
-  background: #0f1525;
-}
-::-webkit-scrollbar-thumb {
-  background: #1f2a47;
-  border-radius: 4px;
+/* Éviter les transitions sur les animations intentionnelles */
+.no-theme-transition, .no-theme-transition * {
+  transition: none !important;
 }

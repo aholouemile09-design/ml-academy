@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState, useRef } from "react";
 import { useProgress } from "@/lib/progress";
 import { useProfiles, AVATAR_COLORS, getAvatarEmoji } from "@/lib/profiles";
+import { useTheme } from "@/lib/theme";
 
 const NAV_GROUPS = [
   {
@@ -50,6 +51,7 @@ export default function Navbar() {
   const closeTimer = useRef(null);
   const profileTimer = useRef(null);
   const { profiles, activeProfile, switchProfile } = useProfiles() || {};
+  const { theme, toggleTheme } = useTheme();
 
   const profileColor = activeProfile
     ? AVATAR_COLORS.find(c => c.id === activeProfile.colorId) || AVATAR_COLORS[0]
@@ -167,8 +169,18 @@ export default function Navbar() {
             </div>
           )}
 
+          {/* Bouton thème sombre / clair */}
           <button
-            className="lg:hidden p-2 text-slate-300 hover:text-white"
+            onClick={toggleTheme}
+            className="p-2 rounded-lg border border-ink-700 hover:border-accent/50 transition-colors text-slate-400 hover:text-accent-light"
+            title={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
+            aria-label="Changer le thème"
+          >
+            {theme === "dark" ? "☀️" : "🌙"}
+          </button>
+
+          <button
+            className="lg:hidden p-2 text-slate-400 hover:text-white"
             onClick={() => setOpen(!open)}
             aria-label="Menu"
           >

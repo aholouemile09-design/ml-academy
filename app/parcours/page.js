@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { CURRICULUM, LEVELS } from "@/lib/curriculum";
 import { useProgress } from "@/lib/progress";
 
@@ -9,10 +10,23 @@ export default function Parcours() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-      <h1 className="text-3xl font-bold text-white mb-1">Parcours d'apprentissage</h1>
-      <p className="text-slate-400 mb-10">
-        Suivez les modules dans l'ordre — chaque module se valide par un quiz.
-      </p>
+      {/* Banner */}
+      <div className="relative rounded-2xl overflow-hidden mb-8 h-40 sm:h-52">
+        <Image
+          src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=900&q=75"
+          alt="Parcours Machine Learning"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink-950/90 via-ink-950/50 to-transparent" />
+        <div className="absolute inset-0 flex flex-col justify-center px-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">🤖 Parcours ML & Data Science</h1>
+          <p className="text-slate-300 text-sm">
+            Suivez les modules dans l'ordre — chaque module se valide par un quiz.
+          </p>
+        </div>
+      </div>
 
       <div className="relative">
         <div className="absolute left-6 top-0 bottom-0 w-px bg-ink-700 hidden sm:block" />

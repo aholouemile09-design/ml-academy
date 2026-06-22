@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { PROJECTS, PROJECT_LEVELS } from "@/lib/projects";
 import Link from "next/link";
 
@@ -65,8 +66,23 @@ export default function Projets() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+      {/* Banner */}
+      <div className="relative rounded-2xl overflow-hidden mb-8 h-40 sm:h-52">
+        <Image
+          src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=75"
+          alt="Projets pratiques Machine Learning"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink-950/90 via-ink-950/60 to-transparent" />
+        <div className="absolute inset-0 flex flex-col justify-center px-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">🛠 Projets pratiques</h1>
+          <p className="text-slate-300 text-sm">Construis ton portfolio avec des projets guidés, de débutant à expert.</p>
+        </div>
+      </div>
+
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">🛠 Projets pratiques</h1>
         <p className="text-slate-400 mb-4">
           Construis ton portfolio avec des projets guidés. Chaque niveau d'assistance est adapté à ta progression.
         </p>

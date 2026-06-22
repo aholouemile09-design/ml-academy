@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Structure prête à compléter — les catégories sont là, les contenus viendront
@@ -84,10 +85,16 @@ const CATEGORIES = [
     title: "Projets ambitieux",
     color: "border-indigo-500/30 bg-indigo-500/5",
     titleColor: "text-indigo-400",
-    description: "Des idées de projets de niveau senior pour vraiment marquer ton portfolio — à remplir ensemble.",
-    status: "à compléter",
-    items: [],
-    placeholder: "Cette section sera complétée lors de notre prochaine session.",
+    description: "Projets de niveau senior pour un portfolio qui se démarque — au-delà des tutoriels, des vrais systèmes.",
+    status: "coming",
+    items: [
+      { label: "🏠 Système de recommandation end-to-end", url: "https://github.com/topics/recommendation-system", note: "Data → modèle collaboratif → API FastAPI → dashboard Streamlit. Tech: pandas, surprise, scikit-learn, FastAPI." },
+      { label: "🔍 Moteur de recherche sémantique (RAG)", url: "https://python.langchain.com/docs/tutorials/rag/", note: "Vectorisation documents → ChromaDB → LLM (Llama2 ou Claude) → interface chat. Tech: LangChain, FAISS, HuggingFace." },
+      { label: "📈 Détection de fraude bancaire en temps réel", url: "https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud", note: "Stream Kafka → modèle ML → alertes. Dataset Kaggle Credit Card. Tech: Kafka, PySpark, XGBoost, Redis." },
+      { label: "🤖 Agent AI autonome avec outils", url: "https://docs.anthropic.com/en/docs/build-with-claude/tool-use", note: "Agent qui navigue le web, lit des fichiers et répond à des questions complexes. Tech: Claude API, LangGraph, Python." },
+      { label: "🌍 Pipeline MLOps complet avec CI/CD", url: "https://mlflow.org/docs/latest/index.html", note: "Train → track avec MLflow → Docker → deploy AWS Lambda → monitoring Grafana. Montre la prod complète." },
+      { label: "📷 Application Computer Vision déployée", url: "https://pytorch.org/tutorials/intermediate/torchvision_tutorial.html", note: "Détection d'objets YOLO fine-tuné sur dataset custom → API → interface web. Tech: PyTorch, FastAPI, React." },
+    ],
   },
   {
     id: "specialisations",
@@ -110,10 +117,16 @@ const CATEGORIES = [
     title: "Contribuer à l'open source",
     color: "border-teal-500/30 bg-teal-500/5",
     titleColor: "text-teal-400",
-    description: "Comment commencer à contribuer à scikit-learn, HuggingFace, PyTorch ou d'autres projets ML open source.",
-    status: "à compléter",
-    items: [],
-    placeholder: "Guide de contribution à remplir — première contribution GitHub recommandée après le module MLOps.",
+    description: "Comment faire sa première contribution à un projet ML open source et construire sa réputation dans la communauté.",
+    status: "coming",
+    items: [
+      { label: "📘 Guide officiel GitHub — Comment contribuer à l'open source", url: "https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project", note: "Étape 1 : fork → branch → commit → PR. La base absolue." },
+      { label: "🐛 scikit-learn — issues labelisées 'good first issue'", url: "https://github.com/scikit-learn/scikit-learn/labels/good%20first%20issue", note: "Niveau idéal après le parcours ML. Amélioration de docs, corrections de bugs mineurs." },
+      { label: "🤗 HuggingFace Transformers — première contribution", url: "https://github.com/huggingface/transformers/blob/main/CONTRIBUTING.md", note: "Guide de contribution officiel. Focus sur les tests et la documentation d'abord." },
+      { label: "⚡ FastAPI — issues débutant", url: "https://github.com/fastapi/fastapi/labels/good%20first%20issue", note: "Très actif, mainteneur réactif, idéal pour débuter. Améliore tes skills web + ML API." },
+      { label: "🔥 PyTorch — écosystème et tutoriels", url: "https://github.com/pytorch/tutorials/blob/main/CONTRIBUTING.md", note: "Contribuer à la documentation et aux tutoriels est souvent plus accessible que le code C++." },
+      { label: "🗂 First Contributions — parcours guidé pour ta toute première PR", url: "https://github.com/firstcontributions/first-contributions", note: "Repo dédié aux débutants. Parfait pour pratiquer le workflow GitHub avant de toucher un vrai projet." },
+    ],
   },
 ];
 
@@ -126,17 +139,24 @@ const STATUS_BADGE = {
 export default function AllerPlusLoinPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-      {/* Header */}
-      <div className="mb-10">
-        <span className="inline-block px-3 py-1 rounded-full border border-accent/30 bg-accent/10 text-accent-light text-xs font-semibold mb-4">
-          🚀 Section évolutive — se complète au fil du parcours
-        </span>
-        <h1 className="text-3xl font-bold text-white mb-3">Aller plus loin</h1>
-        <p className="text-slate-400 max-w-2xl">
-          Une fois les bases maîtrisées, ce n'est que le début. Cette section regroupe les ressources avancées,
-          les communautés, les compétitions et les projets ambitieux qui font la différence entre un praticien
-          et un expert reconnu.
-        </p>
+      {/* Banner image */}
+      <div className="relative rounded-3xl overflow-hidden mb-10 h-48 sm:h-64">
+        <Image
+          src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1200&q=75"
+          alt="Aller plus loin — ressources avancées ML"
+          fill
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink-950/90 via-ink-950/60 to-transparent" />
+        <div className="absolute inset-0 flex flex-col justify-center px-8">
+          <span className="inline-block px-3 py-1 rounded-full border border-accent/30 bg-accent/10 text-accent-light text-xs font-semibold mb-3 w-fit">
+            🚀 Section évolutive — se complète au fil du parcours
+          </span>
+          <h1 className="text-3xl font-bold text-white mb-2">Aller plus loin</h1>
+          <p className="text-slate-300 max-w-xl text-sm">
+            Ressources avancées, communautés, compétitions, projets ambitieux et parcours Master — tout ce qui distingue un praticien d'un expert reconnu.
+          </p>
+        </div>
       </div>
 
       {/* Grille de catégories */}

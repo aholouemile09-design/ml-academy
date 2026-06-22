@@ -1,7 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import { CURRICULUM, LEVELS } from "@/lib/curriculum";
 import { WEB_CURRICULUM } from "@/lib/webdev";
-import { NeuralNetworkIllustration, WebDevIllustration, DashboardIllustration } from "@/components/Illustrations";
+import { NeuralNetworkIllustration, WebDevIllustration } from "@/components/Illustrations";
 import ProfileWidget from "@/components/ProfileWidget";
 
 const features = [
@@ -11,8 +12,23 @@ const features = [
   { icon: "📚", title: "Bibliothèque de ressources", desc: "41 ressources vérifiées, gratuites et légales — documentation officielle, livres open-access, cours reconnus." },
   { icon: "✅", title: "Quiz et validation", desc: "Chaque module se valide par un quiz corrigé. On n'avance que sur des bases solides." },
   { icon: "🏅", title: "Certifications guidées", desc: "Ordre réaliste des certifications — chaque cert suit une pratique concrète, pas l'inverse." },
-  { icon: "🛠", title: "Projets de portfolio", desc: "8 projets guidés ML + 6 projets web pour un GitHub solide et crédible." },
+  { icon: "🛠", title: "Projets de portfolio", desc: "15 projets guidés (6 débutant, 5 intermédiaire, 4 avancé) pour un GitHub solide et crédible." },
   { icon: "📊", title: "Suivi de progression", desc: "XP, niveaux, badges et dashboard. Ta progression est sauvegardée dans ton navigateur." },
+];
+
+// Stats bar
+const STATS = [
+  { val: "9", label: "modules ML" },
+  { val: "6", label: "modules Web" },
+  { val: "15", label: "projets portfolio" },
+  { val: "5 ans", label: "plan structuré" },
+];
+
+// Témoignages / citations motivantes
+const QUOTES = [
+  { text: "L'intelligence artificielle est la nouvelle électricité.", author: "Andrew Ng, co-fondateur de Coursera" },
+  { text: "Les données sont le pétrole du 21e siècle, et l'analytics en est le moteur à combustion.", author: "Peter Sondergaard, Gartner" },
+  { text: "Le machine learning, c'est l'avenir. Celui qui ne l'apprend pas aujourd'hui sera dépassé demain.", author: "ML Academy" },
 ];
 
 const ML_MODULES = CURRICULUM.slice(0, 5);
@@ -44,13 +60,9 @@ export default function Home() {
                 <Link href="/webdev" className="btn-secondary text-base px-7 py-3">Parcours Web</Link>
                 <Link href="/calendrier" className="btn-secondary text-base px-7 py-3">📅 Mon plan</Link>
               </div>
+              {/* Stats */}
               <div className="mt-10 grid grid-cols-4 gap-4 text-center">
-                {[
-                  { val: `${CURRICULUM.length}`, label: "modules ML" },
-                  { val: `${WEB_CURRICULUM.length}`, label: "modules Web" },
-                  { val: `${CURRICULUM.reduce((a, m) => a + m.lessons.length, 0) + WEB_CURRICULUM.reduce((a, m) => a + m.lessons.length, 0)}`, label: "leçons" },
-                  { val: "5 ans", label: "plan structuré" },
-                ].map((s) => (
+                {STATS.map(s => (
                   <div key={s.label}>
                     <div className="text-2xl font-extrabold gradient-text">{s.val}</div>
                     <div className="text-xs text-slate-500 mt-1">{s.label}</div>
@@ -58,11 +70,30 @@ export default function Home() {
                 ))}
               </div>
             </div>
-            {/* Illustration */}
-            <div className="hidden lg:flex items-center justify-center">
-              <div className="relative">
-                <div className="absolute inset-0 rounded-3xl bg-accent/5 blur-2xl" />
-                <NeuralNetworkIllustration className="w-full max-w-md relative" />
+
+            {/* Hero image + illustration */}
+            <div className="hidden lg:block relative">
+              {/* Image photo réelle — ML / data science */}
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                <Image
+                  src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=700&q=80"
+                  alt="Intelligence artificielle et machine learning"
+                  width={600}
+                  height={420}
+                  className="w-full object-cover rounded-3xl opacity-80"
+                  priority
+                />
+                {/* Overlay gradient pour intégrer dans le design */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-ink-950/70 via-transparent to-accent/10 rounded-3xl" />
+                {/* Badge flottant */}
+                <div className="absolute bottom-4 left-4 px-4 py-2 rounded-2xl bg-ink-900/90 border border-ink-700 backdrop-blur-sm">
+                  <p className="text-xs text-slate-400">Alimenté par</p>
+                  <p className="text-sm font-bold gradient-text">Claude Opus · Anthropic</p>
+                </div>
+              </div>
+              {/* Petite illustration SVG en surimpression */}
+              <div className="absolute -bottom-4 -right-4 w-32 h-32 opacity-60">
+                <NeuralNetworkIllustration className="w-full" />
               </div>
             </div>
           </div>
@@ -72,6 +103,17 @@ export default function Home() {
       {/* ── PROFIL WIDGET ────────────────────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-4">
         <ProfileWidget />
+      </section>
+
+      {/* ── CITATION ─────────────────────────────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+        <div className="rounded-2xl border border-accent/20 bg-accent/5 px-8 py-6 flex gap-6 items-start">
+          <span className="text-4xl shrink-0">💡</span>
+          <div>
+            <p className="text-lg font-medium text-white italic">"{QUOTES[0].text}"</p>
+            <p className="text-sm text-slate-500 mt-2">— {QUOTES[0].author}</p>
+          </div>
+        </div>
       </section>
 
       {/* ── FEATURES ─────────────────────────────────────────────────────── */}
@@ -92,35 +134,57 @@ export default function Home() {
 
       {/* ── TRACK ML ─────────────────────────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-white">🤖 Track ML & Data Science</h2>
-          <Link href="/parcours" className="text-sm text-accent-light hover:underline">Voir tout →</Link>
-        </div>
-        <div className="space-y-3">
-          {ML_MODULES.map((m, i) => (
-            <Link
-              key={m.id}
-              href={`/parcours/${m.id}`}
-              className="card p-5 flex items-center gap-4 hover:border-accent/50 transition-colors group"
-            >
-              <div className="w-10 h-10 rounded-xl bg-ink-800 flex items-center justify-center text-xl shrink-0">{m.icon}</div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-slate-500 text-xs font-mono">0{i + 1}</span>
-                  <h3 className="font-semibold text-white group-hover:text-accent-light text-sm">{m.title}</h3>
-                  <span className={`px-2 py-0.5 rounded-full border text-xs ${LEVELS[m.level].badge} ${LEVELS[m.level].color}`}>
-                    {LEVELS[m.level].label}
-                  </span>
-                </div>
+        <div className="grid lg:grid-cols-[1fr_340px] gap-10 items-start">
+          <div>
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold text-white">🤖 Track ML & Data Science</h2>
+              <Link href="/parcours" className="text-sm text-accent-light hover:underline">Voir tout →</Link>
+            </div>
+            <div className="space-y-3">
+              {ML_MODULES.map((m, i) => (
+                <Link
+                  key={m.id}
+                  href={`/parcours/${m.id}`}
+                  className="card p-5 flex items-center gap-4 hover:border-accent/50 transition-colors group"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-ink-800 flex items-center justify-center text-xl shrink-0">{m.icon}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-slate-500 text-xs font-mono">0{i + 1}</span>
+                      <h3 className="font-semibold text-white group-hover:text-accent-light text-sm">{m.title}</h3>
+                      <span className={`px-2 py-0.5 rounded-full border text-xs ${LEVELS[m.level].badge} ${LEVELS[m.level].color}`}>
+                        {LEVELS[m.level].label}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-slate-600 group-hover:text-accent-light">→</span>
+                </Link>
+              ))}
+              {CURRICULUM.length > ML_MODULES.length && (
+                <Link href="/parcours" className="block text-center py-3 text-sm text-slate-500 hover:text-accent-light">
+                  + {CURRICULUM.length - ML_MODULES.length} modules supplémentaires →
+                </Link>
+              )}
+            </div>
+          </div>
+
+          {/* Image ML / data science */}
+          <div className="hidden lg:block">
+            <div className="relative rounded-2xl overflow-hidden">
+              <Image
+                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=80"
+                alt="Data science et visualisation de données"
+                width={340}
+                height={420}
+                className="w-full object-cover rounded-2xl opacity-75"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-ink-950/20 to-transparent rounded-2xl" />
+              <div className="absolute bottom-4 left-4 right-4">
+                <p className="text-white font-bold text-sm">Data Science & ML</p>
+                <p className="text-slate-300 text-xs mt-1">De l'analyse de données aux modèles de production</p>
               </div>
-              <span className="text-slate-600 group-hover:text-accent-light">→</span>
-            </Link>
-          ))}
-          {CURRICULUM.length > ML_MODULES.length && (
-            <Link href="/parcours" className="block text-center py-3 text-sm text-slate-500 hover:text-accent-light">
-              + {CURRICULUM.length - ML_MODULES.length} modules supplémentaires →
-            </Link>
-          )}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -154,11 +218,53 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          {/* Web illustration */}
+
+          {/* Image Web Dev */}
           <div className="hidden lg:flex items-center justify-center">
             <div className="relative">
-              <div className="absolute inset-0 rounded-2xl bg-blue-500/5 blur-xl" />
-              <WebDevIllustration className="w-full max-w-sm relative opacity-90" />
+              <div className="relative rounded-2xl overflow-hidden shadow-xl">
+                <Image
+                  src="https://images.unsplash.com/photo-1593720213428-28a5b9e94613?w=500&q=80"
+                  alt="Développement web et code"
+                  width={360}
+                  height={400}
+                  className="w-full object-cover rounded-2xl opacity-75"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-ink-950/10 to-transparent rounded-2xl" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <p className="text-white font-bold text-sm">Web Full Stack</p>
+                  <p className="text-slate-300 text-xs mt-1">React, Next.js, API, déploiement</p>
+                </div>
+              </div>
+              <div className="absolute -bottom-3 -left-3 w-24 h-24 opacity-50">
+                <WebDevIllustration className="w-full" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SECTION IMAGE LARGE — ENVIRONNEMENT ──────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
+        <div className="relative rounded-3xl overflow-hidden">
+          <Image
+            src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&q=75"
+            alt="Intelligence artificielle et apprentissage automatique"
+            width={1200}
+            height={400}
+            className="w-full object-cover h-64 sm:h-80"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-ink-950/90 via-ink-950/60 to-transparent" />
+          <div className="absolute inset-0 flex items-center px-8 sm:px-12">
+            <div className="max-w-lg">
+              <p className="text-accent-light text-sm font-semibold mb-2">Votre objectif</p>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight mb-4">
+                De zéro à <span className="gradient-text">ML Engineer</span> en 5 ans
+              </h2>
+              <p className="text-slate-300 text-sm mb-5">
+                Pas de raccourcis. Un plan solide, des projets réels sur GitHub, et un tuteur AI disponible à toute heure.
+              </p>
+              <Link href="/calendrier" className="btn-primary">Voir le plan complet →</Link>
             </div>
           </div>
         </div>
