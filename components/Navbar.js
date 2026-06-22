@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useRef } from "react";
 import { useProgress } from "@/lib/progress";
+import { useProfiles, AVATAR_COLORS } from "@/lib/profiles";
 
 const NAV_GROUPS = [
   {
@@ -13,6 +14,7 @@ const NAV_GROUPS = [
       { href: "/projets", label: "Projets" },
       { href: "/certifications", label: "Certifications" },
       { href: "/certifications/prep/c6", label: "🎯 Prép AWS CLF" },
+      { href: "/profils", label: "👤 Profils" },
     ],
   },
   {
@@ -40,7 +42,17 @@ export default function Navbar() {
   const progress = useProgress();
   const [open, setOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState(null);
+  const [profileOpen, setProfileOpen] = useState(false);
   const closeTimer = useRef(null);
+  const profileTimer = useRef(null);
+  const { profiles, activeProfile, switchProfile } = useProfiles() || {};
+
+  const profileColor = activeProfile
+    ? AVATAR_COLORS.find(c => c.id === activeProfile.colorId) || AVATAR_COLORS[0]
+    : null;
+  const initials = activeProfile
+    ? activeProfile.name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()
+    : "?";
 
   const handleEnter = (label) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -109,13 +121,50 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* XP + mobile menu */}
+        {/* XP + Profile switcher + mobile menu */}
         <div className="flex items-center gap-3">
           {progress && (
             <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/30 text-accent-light text-xs font-bold">
-              ⚡ {progress.xp} XP
+              ⚡ {activeProfile?.xp ?? progress.xp} XP
             </span>
           )}
+
+          {/* Profile avatar dropdown */}
+          {profiles && profiles.length > 0 && (
+            <div className="relative hidden sm:block"
+              onMouseEnter={() => { if (profileTimer.current) clearTimeout(profileTimer.current); setProfileOpen(true); }}
+              onMouseLeave={() => { profileTimer.current = setTimeout(() => setProfileOpen(false), 150); }}>
+              <button className={`w-8 h-8 rounded-full ${profileColor?.bg || "bg-slate-600"} flex items-center justify-center text-xs font-bold text-white ring-2 ring-offset-1 ring-offset-ink-950 ${profileColor?.ring || "ring-slate-500"}`}>
+                {initials}
+              </button>
+              {profileOpen && (
+                <div className="absolute right-0 top-full mt-1 bg-ink-900 border border-ink-700 rounded-xl shadow-2xl py-2 min-w-[180px] z-50"
+                  onMouseEnter={() => { if (profileTimer.current) clearTimeout(profileTimer.current); }}
+                  onMouseLeave={() => { profileTimer.current = setTimeout(() => setProfileOpen(false), 150); }}>
+                  <p className="px-4 py-1 text-xs text-slate-600 uppercase font-semibold">Changer de profil</p>
+                  {profiles.map(p => {
+                    const col = AVATAR_COLORS.find(c => c.id === p.colorId) || AVATAR_COLORS[0];
+                    const ini = p.name.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase();
+                    return (
+                      <button key={p.id} onClick={() => { switchProfile(p.id); setProfileOpen(false); }}
+                        className={`w-full text-left px-4 py-2 text-sm flex items-center gap-3 transition-colors ${p.id === activeProfile?.id ? "bg-accent/10 text-white" : "text-slate-300 hover:bg-ink-800"}`}>
+                        <span className={`w-6 h-6 rounded-full ${col.bg} flex items-center justify-center text-xs font-bold text-white shrink-0`}>{ini}</span>
+                        <span className="flex-1 truncate">{p.name}</span>
+                        {p.id === activeProfile?.id && <span className="text-emerald-400 text-xs">✓</span>}
+                      </button>
+                    );
+                  })}
+                  <div className="border-t border-ink-700 mt-1 pt-1">
+                    <Link href="/profils" onClick={() => setProfileOpen(false)}
+                      className="block px-4 py-2 text-xs text-slate-400 hover:text-accent-light hover:bg-ink-800 transition-colors">
+                      Gérer les profils →
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           <button
             className="lg:hidden p-2 text-slate-300 hover:text-white"
             onClick={() => setOpen(!open)}

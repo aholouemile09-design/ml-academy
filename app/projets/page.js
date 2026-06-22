@@ -1,24 +1,98 @@
 "use client";
 
 import { useState } from "react";
-import { PROJECTS } from "@/lib/projects";
-import { LEVELS } from "@/lib/curriculum";
+import { PROJECTS, PROJECT_LEVELS } from "@/lib/projects";
+import Link from "next/link";
+
+const FILTERS = ["tous", "debutant", "intermediaire", "avance"];
+
+function HintBadge({ level }) {
+  const map = {
+    high:   { label: "💡 Assistance maximale", cls: "text-emerald-400 border-emerald-500/30 bg-emerald-500/5" },
+    medium: { label: "🔦 Astuces légères",     cls: "text-amber-400   border-amber-500/30   bg-amber-500/5"   },
+    none:   { label: "🧠 Autonomie totale",    cls: "text-rose-400    border-rose-500/30    bg-rose-500/5"    },
+  };
+  const b = map[level] || map.none;
+  return (
+    <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${b.cls}`}>{b.label}</span>
+  );
+}
+
+function HintsPanel({ hints, steps }) {
+  const [openHint, setOpenHint] = useState(null);
+  if (!hints || hints.length === 0) return null;
+
+  return (
+    <div className="mt-4 pt-4 border-t border-ink-700">
+      <p className="text-xs text-slate-500 uppercase font-semibold mb-3">Astuces disponibles</p>
+      <div className="space-y-2">
+        {hints.map((h, i) => (
+          <div key={i} className="rounded-xl border border-amber-500/20 bg-amber-500/5 overflow-hidden">
+            <button
+              onClick={() => setOpenHint(openHint === i ? null : i)}
+              className="w-full text-left px-4 py-2.5 flex items-center justify-between gap-3 hover:bg-amber-500/10 transition-colors"
+            >
+              <span className="text-sm font-medium text-amber-300">
+                💡 Étape {h.step + 1} — {h.title}
+              </span>
+              <span className="text-amber-500 text-xs shrink-0">{openHint === i ? "▲" : "▼"}</span>
+            </button>
+            {openHint === i && (
+              <div className="px-4 pb-3">
+                <p className="text-sm text-slate-300 leading-relaxed">{h.hint}</p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Projets() {
-  const [filter, setFilter] = useState("tous");
+  const [filter, setFilter]     = useState("tous");
   const [expanded, setExpanded] = useState(null);
 
-  const filtered = filter === "tous" ? PROJECTS : PROJECTS.filter((p) => p.level === filter);
+  const filtered = filter === "tous"
+    ? PROJECTS
+    : PROJECTS.filter(p => p.level === filter);
+
+  const levelCounts = {
+    debutant:      PROJECTS.filter(p => p.level === "debutant").length,
+    intermediaire: PROJECTS.filter(p => p.level === "intermediaire").length,
+    avance:        PROJECTS.filter(p => p.level === "avance").length,
+  };
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-      <h1 className="text-3xl font-bold text-white mb-1">Projets pratiques</h1>
-      <p className="text-slate-400 mb-8">
-        Construisez votre portfolio avec des projets guidés, du débutant à l'avancé.
-      </p>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-white mb-2">🛠 Projets pratiques</h1>
+        <p className="text-slate-400 mb-4">
+          Construis ton portfolio avec des projets guidés. Chaque niveau d'assistance est adapté à ta progression.
+        </p>
+        {/* Compteurs */}
+        <div className="flex flex-wrap gap-3">
+          {Object.entries(PROJECT_LEVELS).map(([key, lvl]) => (
+            <div key={key} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium ${lvl.badge} ${lvl.color}`}>
+              {lvl.label} — {levelCounts[key]} projets
+            </div>
+          ))}
+        </div>
+      </div>
 
+      {/* Règle IA — important */}
+      <div className="card p-4 mb-8 border-accent/20 bg-accent/5">
+        <p className="text-sm text-slate-300">
+          <span className="text-accent-light font-semibold">🤖 Règle du tuteur AI :</span>{" "}
+          Tu peux demander de l'aide au tuteur pour comprendre un concept ou débloquer une erreur.
+          Mais le tuteur ne fera jamais le projet à ta place — il te guidera pour que TU apprennes.
+          C'est comme ça qu'on devient un vrai ingénieur ML.
+        </p>
+      </div>
+
+      {/* Filtres */}
       <div className="flex gap-2 mb-8 flex-wrap">
-        {["tous", "debutant", "intermediaire", "avance"].map((f) => (
+        {FILTERS.map(f => (
           <button
             key={f}
             onClick={() => setFilter(f)}
@@ -28,51 +102,114 @@ export default function Projets() {
                 : "border-ink-700 text-slate-400 hover:border-accent/50"
             }`}
           >
-            {f === "tous" ? "Tous" : LEVELS[f].label}
+            {f === "tous" ? `Tous (${PROJECTS.length})` : `${PROJECT_LEVELS[f]?.label} (${levelCounts[f]})`}
           </button>
         ))}
       </div>
 
+      {/* Grille de projets */}
       <div className="grid sm:grid-cols-2 gap-5">
-        {filtered.map((p) => (
-          <div key={p.id} className="card p-6 flex flex-col">
-            <div className="flex items-start justify-between gap-3 mb-2">
-              <h2 className="font-bold text-white">{p.title}</h2>
-              <span
-                className={`px-2 py-0.5 rounded-full border text-xs font-medium whitespace-nowrap ${LEVELS[p.level].badge} ${LEVELS[p.level].color}`}
-              >
-                {LEVELS[p.level].label}
-              </span>
-            </div>
-            <p className="text-sm text-slate-400 mb-4 flex-1">{p.description}</p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {p.skills.map((s) => (
-                <span key={s} className="px-2 py-1 rounded-lg bg-ink-800 text-xs text-slate-300">
-                  {s}
+        {filtered.map(p => {
+          const lvl = PROJECT_LEVELS[p.level];
+          const isOpen = expanded === p.id;
+          return (
+            <div key={p.id} className="card p-6 flex flex-col">
+              {/* Header */}
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">{p.icon}</span>
+                  <h2 className="font-bold text-white">{p.title}</h2>
+                </div>
+                <span className={`px-2 py-0.5 rounded-full border text-xs font-medium whitespace-nowrap ${lvl.badge} ${lvl.color}`}>
+                  {lvl.label}
                 </span>
-              ))}
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-slate-500">⏱ {p.duration}</span>
-              <button
-                onClick={() => setExpanded(expanded === p.id ? null : p.id)}
-                className="text-sm text-accent-light hover:text-accent-cyan font-medium"
-              >
-                {expanded === p.id ? "Masquer les étapes ↑" : "Voir les étapes →"}
-              </button>
-            </div>
-            {expanded === p.id && (
-              <ol className="mt-4 pt-4 border-t border-ink-700 space-y-2">
-                {p.steps.map((s, i) => (
-                  <li key={i} className="text-sm text-slate-400 flex gap-3">
-                    <span className="text-accent-light font-mono shrink-0">{i + 1}.</span>
-                    {s}
-                  </li>
+              </div>
+
+              {/* Badge d'assistance */}
+              <div className="mb-3">
+                <HintBadge level={p.hint_level} />
+              </div>
+
+              <p className="text-sm text-slate-400 mb-3 flex-1">{p.description}</p>
+
+              {/* Objectif d'apprentissage */}
+              <p className="text-xs text-slate-500 mb-4 italic">🎯 {p.learning_goal}</p>
+
+              {/* Skills */}
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {p.skills.map(s => (
+                  <span key={s} className="px-2 py-1 rounded-lg bg-ink-800 text-xs text-slate-300">{s}</span>
                 ))}
-              </ol>
-            )}
-          </div>
-        ))}
+              </div>
+
+              {/* Footer */}
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs text-slate-500">⏱ {p.duration}</span>
+                <button
+                  onClick={() => setExpanded(isOpen ? null : p.id)}
+                  className="text-sm text-accent-light hover:text-accent-cyan font-medium transition-colors"
+                >
+                  {isOpen ? "Masquer ↑" : "Voir les détails →"}
+                </button>
+              </div>
+
+              {/* Expanded panel */}
+              {isOpen && (
+                <div className="mt-2">
+                  {/* Étapes */}
+                  <div className="pt-4 border-t border-ink-700">
+                    <p className="text-xs text-slate-500 uppercase font-semibold mb-3">Étapes</p>
+                    <ol className="space-y-2">
+                      {p.steps.map((s, i) => (
+                        <li key={i} className="text-sm text-slate-400 flex gap-3">
+                          <span className="text-accent-light font-mono shrink-0 min-w-[1.2rem]">{i + 1}.</span>
+                          {s}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+
+                  {/* Astuces (débutant et intermédiaire uniquement) */}
+                  {p.hint_level !== "none" && p.hints?.length > 0 && (
+                    <HintsPanel hints={p.hints} steps={p.steps} />
+                  )}
+
+                  {/* Message avancé */}
+                  {p.hint_level === "none" && (
+                    <div className="mt-4 pt-4 border-t border-ink-700">
+                      <p className="text-xs text-rose-400 bg-rose-500/5 border border-rose-500/20 rounded-xl px-4 py-3">
+                        <strong>🧠 Niveau avancé :</strong> Pas d'astuces — c'est toi qui dois chercher, décomposer et itérer. C'est exactement ce qu'on attend d'un ML Engineer.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Ressources */}
+                  {p.resources?.length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-ink-700">
+                      <p className="text-xs text-slate-500 uppercase font-semibold mb-2">Ressources</p>
+                      <div className="flex flex-wrap gap-2">
+                        {p.resources.map(r => (
+                          <a key={r.url} href={r.url} target="_blank" rel="noopener noreferrer"
+                            className="text-xs text-accent-light hover:text-accent-cyan underline underline-offset-2">
+                            {r.label} ↗
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Lien tuteur */}
+                  <div className="mt-4">
+                    <Link href="/tuteur"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-accent/10 border border-accent/30 text-accent-light text-sm font-semibold hover:bg-accent/20 transition-colors">
+                      🤖 Poser une question au tuteur AI
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
