@@ -180,8 +180,8 @@ export default function Home() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent rounded-2xl" />
               <div className="absolute bottom-4 left-4 right-4">
-                <p className="text-white font-bold text-sm">Data Science & ML</p>
-                <p className="text-slate-300 text-xs mt-1">De l'analyse de données aux modèles de production</p>
+                <p className="text-slate-50 font-bold text-sm">Data Science & ML</p>
+                <p className="text-slate-200/90 text-xs mt-1">De l'analyse de données aux modèles de production</p>
               </div>
             </div>
           </div>
@@ -232,8 +232,8 @@ export default function Home() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent rounded-2xl" />
                 <div className="absolute bottom-4 left-4 right-4">
-                  <p className="text-white font-bold text-sm">Web Full Stack</p>
-                  <p className="text-slate-300 text-xs mt-1">React, Next.js, API, déploiement</p>
+                  <p className="text-slate-50 font-bold text-sm">Web Full Stack</p>
+                  <p className="text-slate-200/90 text-xs mt-1">React, Next.js, API, déploiement</p>
                 </div>
               </div>
               <div className="absolute -bottom-3 -left-3 w-24 h-24 opacity-50">
@@ -254,14 +254,14 @@ export default function Home() {
             height={400}
             className="w-full object-cover h-64 sm:h-80"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/92 via-slate-950/65 to-slate-950/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
           <div className="absolute inset-0 flex items-center px-8 sm:px-12">
-            <div className="max-w-lg">
+            <div className="max-w-lg [text-shadow:0_2px_8px_rgba(0,0,0,0.85)]">
               <p className="text-accent-light text-sm font-semibold mb-2">Votre objectif</p>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight mb-4">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-50 leading-tight mb-4">
                 De zéro à <span className="gradient-text">ML Engineer</span> en 5 ans
               </h2>
-              <p className="text-slate-300 text-sm mb-5">
+              <p className="text-slate-200/90 text-sm mb-5">
                 Pas de raccourcis. Un plan solide, des projets réels sur GitHub, et un tuteur AI disponible à toute heure.
               </p>
               <Link href="/calendrier" className="btn-primary">Voir le plan complet →</Link>
