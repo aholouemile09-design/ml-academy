@@ -31,6 +31,7 @@ const NAV_GROUPS = [
       { href: "/calendrier", label: "Plan général" },
       { href: "/ressources", label: "Ressources" },
       { href: "/aller-plus-loin", label: "🚀 Aller plus loin" },
+      { href: "/aller-plus-loin/masters", label: "🎓 Masters spécialisés" },
       { href: "/tuteur", label: "Tuteur AI" },
       { href: "/dashboard", label: "Dashboard" },
       { href: "/parametres", label: "Paramètres" },

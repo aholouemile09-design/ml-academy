@@ -91,14 +91,18 @@ const CATEGORIES = [
   },
   {
     id: "specialisations",
-    icon: "🎯",
-    title: "Spécialisations avancées",
-    color: "border-slate-500/30 bg-slate-500/5",
-    titleColor: "text-slate-300",
-    description: "Robotique, RL, Computer Vision avancée, LLMs — les domaines de spécialisation après les fondations.",
-    status: "à compléter",
-    items: [],
-    placeholder: "À développer après la phase 1 du plan (2027+).",
+    icon: "🎓",
+    title: "Spécialisations — Master",
+    color: "border-sky-500/30 bg-sky-500/5",
+    titleColor: "text-sky-400",
+    description: "Cloud, Robotique, Pipelines MLOps — 3 voies de Master après le parcours ML/Web, avec universités, conditions d'admission et bourses.",
+    status: "disponible",
+    link: "/aller-plus-loin/masters",
+    items: [
+      { label: "☁️ Cloud Computing & Architecture — parcours + universités Canada", url: "/aller-plus-loin/masters", note: "Waterloo, UBC, Concordia + Georgia Tech en ligne" },
+      { label: "🤖 Robotique & Systèmes Autonomes — ROS2, Vision, autonomie", url: "/aller-plus-loin/masters", note: "UofT, McGill, Polytechnique, CMU, TU Munich" },
+      { label: "🔁 Data Engineering & Pipelines ML — Spark, Kafka, Airflow", url: "/aller-plus-loin/masters", note: "UBC MDS, UofT, McGill, Georgia Tech OMSA" },
+    ],
   },
   {
     id: "contribuer",
@@ -115,6 +119,7 @@ const CATEGORIES = [
 
 const STATUS_BADGE = {
   "coming":       { cls: "border-emerald-500/30 bg-emerald-500/5 text-emerald-400",  label: "✓ Disponible"   },
+  "disponible":   { cls: "border-sky-500/30     bg-sky-500/5     text-sky-400",      label: "✓ Disponible"   },
   "à compléter":  { cls: "border-amber-500/30  bg-amber-500/5  text-amber-400",      label: "🔜 À compléter" },
 };
 
@@ -155,20 +160,37 @@ export default function AllerPlusLoinPage() {
 
               {/* Items */}
               {cat.items.length > 0 ? (
-                <ul className="space-y-2">
-                  {cat.items.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="text-slate-600 mt-0.5 shrink-0">›</span>
-                      <div>
-                        <a href={item.url} target="_blank" rel="noopener noreferrer"
-                          className="text-sm text-accent-light hover:text-accent-cyan hover:underline">
-                          {item.label}
-                        </a>
-                        {item.note && <p className="text-xs text-slate-600 mt-0.5">{item.note}</p>}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="space-y-2">
+                    {cat.items.map((item, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <span className="text-slate-600 mt-0.5 shrink-0">›</span>
+                        <div>
+                          {item.url.startsWith("/") ? (
+                            <Link href={item.url}
+                              className="text-sm text-accent-light hover:text-accent-cyan hover:underline">
+                              {item.label}
+                            </Link>
+                          ) : (
+                            <a href={item.url} target="_blank" rel="noopener noreferrer"
+                              className="text-sm text-accent-light hover:text-accent-cyan hover:underline">
+                              {item.label}
+                            </a>
+                          )}
+                          {item.note && <p className="text-xs text-slate-600 mt-0.5">{item.note}</p>}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  {cat.link && (
+                    <div className="mt-4">
+                      <Link href={cat.link}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500/10 border border-sky-500/30 text-sky-400 text-sm font-semibold hover:bg-sky-500/20 transition-colors">
+                        Voir les 3 parcours Master complets →
+                      </Link>
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="rounded-xl border border-dashed border-ink-600 p-4 text-center">
                   <p className="text-sm text-slate-600 italic">{cat.placeholder}</p>
