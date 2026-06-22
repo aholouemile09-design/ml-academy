@@ -102,7 +102,7 @@ export default function Navbar() {
               </button>
               {activeGroup === group.label && (
                 <div
-                  className="absolute left-0 top-full bg-ink-900 border border-ink-700 rounded-xl shadow-2xl py-2 min-w-[160px] z-50"
+                  className="absolute left-0 top-full nav-dropdown bg-ink-900 border border-ink-700 rounded-xl shadow-2xl py-2 min-w-[160px] z-50"
                   onMouseEnter={() => handleEnter(group.label)}
                   onMouseLeave={handleLeave}
                 >
@@ -142,7 +142,7 @@ export default function Navbar() {
                 {avatarEmoji}
               </button>
               {profileOpen && (
-                <div className="absolute right-0 top-full mt-1 bg-ink-900 border border-ink-700 rounded-xl shadow-2xl py-2 min-w-[180px] z-50"
+                <div className="absolute right-0 top-full mt-1 nav-dropdown bg-ink-900 border border-ink-700 rounded-xl shadow-2xl py-2 min-w-[180px] z-50"
                   onMouseEnter={() => { if (profileTimer.current) clearTimeout(profileTimer.current); }}
                   onMouseLeave={() => { profileTimer.current = setTimeout(() => setProfileOpen(false), 150); }}>
                   <p className="px-4 py-1 text-xs text-slate-600 uppercase font-semibold">Changer de profil</p>
