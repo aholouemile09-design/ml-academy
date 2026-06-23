@@ -24,7 +24,7 @@ const SPECIALIZATIONS = [
     description: "Le Cloud est devenu l'épine dorsale de toute organisation tech. Un Master en Cloud t'ouvre les portes des postes de Cloud Architect, DevOps Senior ou Site Reliability Engineer — avec des salaires parmi les plus élevés du secteur tech au Canada.",
 
     prerequisites: [
-      "Maîtrise de Linux & Shell (module Setup Pro ML Academy)",
+      "Maîtrise de Linux & Shell (module Setup Pro CodeGraft Academy)",
       "Docker & Kubernetes (module MLOps)",
       "Notions de réseau (TCP/IP, DNS, load balancers)",
       "AWS Cloud Practitioner ou Azure Fundamentals obtenu",
@@ -33,7 +33,7 @@ const SPECIALIZATIONS = [
     ],
 
     roadmapAfterMLAcademy: [
-      { step: "1", label: "Compléter le module Cloud/AWS de ML Academy", duration: "4 sem.", detail: "Fondations AWS, IAM, EC2, S3, Lambda, RDS" },
+      { step: "1", label: "Compléter le module Cloud/AWS de CodeGraft Academy", duration: "4 sem.", detail: "Fondations AWS, IAM, EC2, S3, Lambda, RDS" },
       { step: "2", label: "AWS Solutions Architect Associate", duration: "2-3 mois", detail: "Certification reconnue mondialement — score minimum 720/1000" },
       { step: "3", label: "Kubernetes & Terraform", duration: "2 mois", detail: "Orchestration de conteneurs + IaC. Cours: KodeKloud ou A Cloud Guru" },
       { step: "4", label: "Projet capstone cloud", duration: "1 mois", detail: "Architecture complète (multi-tier app, CI/CD, monitoring, coûts optimisés)" },
@@ -199,7 +199,7 @@ const SPECIALIZATIONS = [
     description: "La robotique est l'intersection de l'IA, du contrôle, de la mécanique et de l'électronique. Le Canada investit massivement dans ce domaine (véhicules autonomes, drones industriels, chirurgie robotique). Un Master en robotique te positionne pour des carrières de pointe à salaires très élevés.",
 
     prerequisites: [
-      "Deep Learning et Computer Vision (modules ML Academy)",
+      "Deep Learning et Computer Vision (modules CodeGraft Academy)",
       "Python solide — NumPy, OpenCV",
       "Notions de physique / mécanique (cinématique)",
       "Bases Linux et systèmes embarqués",
@@ -374,9 +374,9 @@ const SPECIALIZATIONS = [
     description: "Le Data Engineer est l'un des rôles les plus demandés et les mieux payés du secteur tech. Il conçoit et maintient les pipelines qui alimentent les modèles ML, les dashboards et les décisions business. Un Master en Data Engineering te positionne pour des postes d'architecte données ou de Lead Data Engineer en 3-5 ans.",
 
     prerequisites: [
-      "SQL avancé (module SQL de ML Academy + fenêtres, CTEs, optimisation)",
+      "SQL avancé (module SQL de CodeGraft Academy + fenêtres, CTEs, optimisation)",
       "Python solid — pandas, PySpark basique",
-      "Docker & CI/CD (module MLOps ML Academy)",
+      "Docker & CI/CD (module MLOps CodeGraft Academy)",
       "Notions de bases de données (relationnelles + NoSQL)",
       "Un pipeline ETL fonctionnel sur projet portfolio",
       "Algèbre relationnelle et modélisation de données",
@@ -669,7 +669,7 @@ function SpecializationTab({ spec }) {
       {section === "chemin" && (
         <div className="space-y-3">
           <p className="text-sm text-slate-400 mb-4">
-            Itinéraire recommandé après avoir terminé le parcours ML Academy, avant de postuler au Master.
+            Itinéraire recommandé après avoir terminé le parcours CodeGraft Academy, avant de postuler au Master.
           </p>
           {spec.roadmapAfterMLAcademy.map((step, i) => (
             <div key={i} className="flex gap-4">
@@ -750,7 +750,7 @@ export default function MastersPage() {
       <div className="mb-10">
         <Link href="/aller-plus-loin" className="text-sm text-slate-400 hover:text-white mb-4 inline-block">← Aller plus loin</Link>
         <span className="inline-block px-3 py-1 rounded-full border border-accent/30 bg-accent/10 text-accent-light text-xs font-semibold mb-4">
-          🎓 Après le parcours ML Academy — Phase 2+
+          🎓 Après le parcours CodeGraft Academy — Phase 2+
         </span>
         <h1 className="text-3xl font-bold text-white mb-3">Se spécialiser — Master</h1>
         <p className="text-slate-400 max-w-2xl leading-relaxed">

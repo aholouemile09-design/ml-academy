@@ -2,11 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { CURRICULUM, LEVELS } from "@/lib/curriculum";
 import { WEB_CURRICULUM } from "@/lib/webdev";
+import { PMP_CURRICULUM, PMP_LEVELS } from "@/lib/pmp";
 import { NeuralNetworkIllustration, WebDevIllustration } from "@/components/Illustrations";
 import ProfileWidget from "@/components/ProfileWidget";
 
 const features = [
-  { icon: "🗺", title: "Deux parcours complets", desc: "Track ML/Data Science (9 modules) + Track Web Full Stack (6 modules). Complémentaires et progressifs." },
+  { icon: "🗺", title: "Trois parcours complets", desc: "ML/Data Science (9 modules), Web Full Stack (6 modules) et préparation PMP (8 modules). Complémentaires et progressifs." },
   { icon: "🤖", title: "Tuteur AI personnel", desc: "Expert ML et web disponible 24/7. Mode simulé sans clé API, mode Claude complet avec votre clé Anthropic." },
   { icon: "📅", title: "Calendrier de discipline", desc: "Plan 2026-2031 avec rythme réaliste (7-9h/semaine), tracker mensuel et roadmap 5 ans." },
   { icon: "📚", title: "Bibliothèque de ressources", desc: "41 ressources vérifiées, gratuites et légales — documentation officielle, livres open-access, cours reconnus." },
@@ -28,11 +29,12 @@ const STATS = [
 const QUOTES = [
   { text: "L'intelligence artificielle est la nouvelle électricité.", author: "Andrew Ng, co-fondateur de Coursera" },
   { text: "Les données sont le pétrole du 21e siècle, et l'analytics en est le moteur à combustion.", author: "Peter Sondergaard, Gartner" },
-  { text: "Le machine learning, c'est l'avenir. Celui qui ne l'apprend pas aujourd'hui sera dépassé demain.", author: "ML Academy" },
+  { text: "Le machine learning, c'est l'avenir. Celui qui ne l'apprend pas aujourd'hui sera dépassé demain.", author: "CodeGraft Academy" },
 ];
 
 const ML_MODULES = CURRICULUM.slice(0, 5);
 const WEB_MODULES = WEB_CURRICULUM.slice(0, 4);
+const PMP_MODULES = PMP_CURRICULUM.slice(0, 5);
 
 export default function Home() {
   return (
@@ -244,6 +246,62 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── TRACK PMP ────────────────────────────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
+        <div className="grid lg:grid-cols-[1fr_340px] gap-10 items-start">
+          <div>
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold text-white">📋 Parcours PMP — Gestion de projet</h2>
+              <Link href="/pmp" className="text-sm text-accent-light hover:underline">Voir tout →</Link>
+            </div>
+            <div className="space-y-3">
+              {PMP_MODULES.map((m, i) => (
+                <Link
+                  key={m.id}
+                  href={`/pmp/${m.id}`}
+                  className="card p-5 flex items-center gap-4 hover:border-accent/50 transition-colors group"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-ink-800 flex items-center justify-center text-xl shrink-0">{m.icon}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-slate-500 text-xs font-mono">PMP {i + 1}</span>
+                      <h3 className="font-semibold text-white group-hover:text-accent-light text-sm">{m.title}</h3>
+                      <span className={`px-2 py-0.5 rounded-full border text-xs ${PMP_LEVELS[m.level].badge} ${PMP_LEVELS[m.level].color}`}>
+                        {PMP_LEVELS[m.level].label}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-slate-600 group-hover:text-accent-light">→</span>
+                </Link>
+              ))}
+              <Link href="/pmp" className="block text-center py-3 text-sm text-slate-500 hover:text-accent-light">
+                + {PMP_CURRICULUM.length - PMP_MODULES.length} modules supplémentaires →
+              </Link>
+            </div>
+          </div>
+
+          {/* Carte highlight PMP */}
+          <div className="hidden lg:block">
+            <div className="card p-6 bg-accent/5 border-accent/20">
+              <div className="text-3xl mb-3">🎓</div>
+              <h3 className="font-bold text-white mb-2">Certification PMP — examen 2026</h3>
+              <p className="text-sm text-slate-400 mb-4">
+                Prépare le Project Management Professional du PMI (PMBOK 8) : 180 questions, 240 min, domaines People · Process · Business.
+              </p>
+              <div className="space-y-2 text-xs text-slate-400">
+                <div>→ 8 modules · 33 leçons · quiz par module</div>
+                <div>→ Agile, hybride et prédictif</div>
+                <div>→ Examen blanc chronométré</div>
+                <div>→ 8 à 12 semaines de préparation</div>
+              </div>
+              <Link href="/pmp/examen-blanc" className="btn-secondary text-sm mt-5 w-full justify-center">
+                🎯 Tester avec l'examen blanc
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── SECTION IMAGE LARGE — ENVIRONNEMENT ──────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
         <div className="relative rounded-3xl overflow-hidden">
@@ -280,10 +338,4 @@ export default function Home() {
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/calendrier" className="btn-primary">Voir mon plan 2026-2031</Link>
             <Link href="/tuteur" className="btn-secondary">Parler au tuteur AI</Link>
-            <Link href="/ressources" className="btn-secondary">Bibliothèque de ressources</Link>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-}
+            <Link href="/ressources" className="btn-secondary">Bibliothèq

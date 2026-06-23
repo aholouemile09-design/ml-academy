@@ -15,7 +15,7 @@ export default function Dashboard() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
       <h1 className="text-3xl font-bold text-white mb-1">Tableau de bord</h1>
-      <p className="text-slate-400 mb-10">Votre progression dans le parcours ML Academy.</p>
+      <p className="text-slate-400 mb-10">Votre progression dans le parcours CodeGraft Academy.</p>
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">

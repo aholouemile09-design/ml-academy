@@ -1,4 +1,4 @@
-# ML Academy 🎓
+# CodeGraft Academy 🎓
 
 École en ligne de machine learning et programmation avec **tuteur AI personnel** — un site complet construit avec Next.js et Tailwind CSS.
 

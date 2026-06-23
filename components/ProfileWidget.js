@@ -14,7 +14,7 @@ export default function ProfileWidget() {
     return (
       <div className="card p-5 border-accent/20 bg-accent/5 flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <p className="text-white font-semibold text-sm">👋 Bienvenue sur ML Academy !</p>
+          <p className="text-white font-semibold text-sm">👋 Bienvenue sur CodeGraft Academy !</p>
           <p className="text-slate-400 text-xs mt-0.5">Crée ton profil pour sauvegarder ta progression.</p>
         </div>
         <Link href="/profils" className="btn-primary text-sm shrink-0">Créer mon profil →</Link>

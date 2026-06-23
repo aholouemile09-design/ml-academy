@@ -26,7 +26,7 @@ export async function POST(req) {
       },
       body: JSON.stringify({
         name: repoName,
-        description: description || "Projet ML Academy",
+        description: description || "Projet CodeGraft Academy",
         private: false,
         auto_init: false,
       }),
@@ -43,7 +43,7 @@ export async function POST(req) {
     const repoUrl = `https://github.com/${me.login}/${repoName}`;
 
     // 3. Pousser le README (base64)
-    const readmeContent = readme || `# ${repoName}\n\nProjet réalisé dans le cadre de ML Academy.\n`;
+    const readmeContent = readme || `# ${repoName}\n\nProjet réalisé dans le cadre de CodeGraft Academy.\n`;
     const readmeB64 = Buffer.from(readmeContent).toString("base64");
 
     await fetch(`https://api.github.com/repos/${me.login}/${repoName}/contents/README.md`, {
@@ -54,7 +54,7 @@ export async function POST(req) {
         "User-Agent": "ML-Academy",
       },
       body: JSON.stringify({
-        message: "Ajout README — ML Academy",
+        message: "Ajout README — CodeGraft Academy",
         content: readmeB64,
       }),
     });
@@ -72,7 +72,7 @@ export async function POST(req) {
             "User-Agent": "ML-Academy",
           },
           body: JSON.stringify({
-            message: `Ajout ${f.path} — ML Academy`,
+            message: `Ajout ${f.path} — CodeGraft Academy`,
             content: contentB64,
           }),
         });

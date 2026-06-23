@@ -26,6 +26,13 @@ const NAV_GROUPS = [
     ],
   },
   {
+    label: "PMP",
+    links: [
+      { href: "/pmp", label: "📋 Parcours PMP" },
+      { href: "/pmp/examen-blanc", label: "🎯 Examen blanc" },
+    ],
+  },
+  {
     label: "Outils",
     links: [
       { href: "/espace", label: "🏠 Mon Espace" },
@@ -72,12 +79,27 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 backdrop-blur-lg bg-ink-950/85 border-b border-ink-700">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-extrabold text-lg shrink-0">
-          <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-accent-cyan flex items-center justify-center text-white text-sm font-black">
-            ML
-          </span>
+        <Link href="/" className="flex items-center gap-2 font-extrabold text-lg shrink-0" aria-label="CodeGraft Academy — accueil">
+          <svg viewBox="0 0 32 32" className="w-8 h-8 shrink-0" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="logo-g" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#6366f1" />
+                <stop offset="100%" stopColor="#06b6d4" />
+              </linearGradient>
+            </defs>
+            <rect width="32" height="32" rx="8" fill="url(#logo-g)" />
+            <g stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" fill="none">
+              <path d="M11 25 V12" />
+              <path d="M11 18 Q11 11 21 9.5" />
+            </g>
+            <g fill="#ffffff">
+              <circle cx="11" cy="25" r="2.7" />
+              <circle cx="11" cy="10" r="2.7" />
+              <circle cx="22" cy="9.3" r="2.7" />
+            </g>
+          </svg>
           <span className="hidden sm:block">
-            ML <span className="gradient-text">Academy</span>
+            Code<span className="gradient-text">Graft</span>
           </span>
         </Link>
 

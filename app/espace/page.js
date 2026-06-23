@@ -16,7 +16,7 @@ const QUOTES = [
   { text: "Il n'y a pas de raccourci vers un endroit qui vaut le déplacement.", author: "Beverly Sills" },
   { text: "Data is the new oil — but like oil, it needs to be refined.", author: "Clive Humby" },
   { text: "Ce qui ne se mesure pas ne peut pas être amélioré.", author: "W. Edwards Deming" },
-  { text: "7 heures par semaine, 52 semaines, 5 ans. C'est comme ça qu'on change de vie.", author: "ML Academy" },
+  { text: "7 heures par semaine, 52 semaines, 5 ans. C'est comme ça qu'on change de vie.", author: "CodeGraft Academy" },
   { text: "If you can't explain it simply, you don't understand it well enough.", author: "Albert Einstein" },
   { text: "La discipline est choisir entre ce que tu veux maintenant et ce que tu veux le plus.", author: "Abraham Lincoln" },
 ];

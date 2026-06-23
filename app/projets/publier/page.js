@@ -11,7 +11,7 @@ function buildReadme(project, code, username) {
   const date = new Date().toLocaleDateString("fr-FR", { year: "numeric", month: "long" });
   return `# ${project.icon} ${project.title}
 
-> Projet réalisé dans le cadre de **ML Academy** — ${date}
+> Projet réalisé dans le cadre de **CodeGraft Academy** — ${date}
 
 ## 🎯 Objectif
 
@@ -33,11 +33,11 @@ ${project.resources?.map(r => `- [${r.label}](${r.url})`).join("\n") || "- Docum
 
 ## 🏷 Niveau
 
-**${levelInfo?.label}** — parcours ML Academy
+**${levelInfo?.label}** — parcours CodeGraft Academy
 
 ---
 
-*Projet publié automatiquement depuis [ML Academy](https://ml-academy-psi.vercel.app/)*${username ? ` par @${username}` : ""}
+*Projet publié automatiquement depuis [CodeGraft Academy](https://ml-academy-psi.vercel.app/)*${username ? ` par @${username}` : ""}
 `;
 }
 
@@ -90,7 +90,7 @@ function PublierContent() {
         },
         body: JSON.stringify({
           repoName: repoSlug,
-          description: `${project.title} — ML Academy`,
+          description: `${project.title} — CodeGraft Academy`,
           readme,
           files,
         }),
@@ -114,7 +114,7 @@ function PublierContent() {
       <div className="mb-8">
         <Link href="/projets" className="text-sm text-slate-400 hover:text-white mb-4 inline-block">← Retour aux projets</Link>
         <h1 className="text-3xl font-bold text-white mb-2">🐙 Publier sur GitHub</h1>
-        <p className="text-slate-400">Crée un repo GitHub pour ton projet directement depuis ML Academy.</p>
+        <p className="text-slate-400">Crée un repo GitHub pour ton projet directement depuis CodeGraft Academy.</p>
       </div>
 
       {status === "success" && result ? (
