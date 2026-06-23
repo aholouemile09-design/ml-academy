@@ -338,4 +338,10 @@ export default function Home() {
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/calendrier" className="btn-primary">Voir mon plan 2026-2031</Link>
             <Link href="/tuteur" className="btn-secondary">Parler au tuteur AI</Link>
-            <Link href="/ressources" className="btn-secondary">Bibliothèq
+            <Link href="/ressources" className="btn-secondary">Bibliothèque de ressources</Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
