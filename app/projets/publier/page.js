@@ -37,7 +37,7 @@ ${project.resources?.map(r => `- [${r.label}](${r.url})`).join("\n") || "- Docum
 
 ---
 
-*Projet publié automatiquement depuis [CodeGraft Academy](https://ml-academy-psi.vercel.app/)*${username ? ` par @${username}` : ""}
+*Projet publié automatiquement depuis [CodeGraft Academy](https://codegraft.vercel.app/)*${username ? ` par @${username}` : ""}
 `;
 }
 
@@ -67,7 +67,7 @@ function PublierContent() {
   }, []);
 
   const project = PROJECTS.find(p => p.id === projectId);
-  const repoSlug = project ? `ml-academy-${toSlug(project.title)}` : "";
+  const repoSlug = project ? `codegraft-${toSlug(project.title)}` : "";
 
   const handlePublish = async (e) => {
     e.preventDefault();

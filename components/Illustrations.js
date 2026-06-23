@@ -132,7 +132,7 @@ export function WebDevIllustration({ className = "" }) {
 
       {/* URL bar */}
       <rect x="125" y="40" width="200" height="20" rx="4" fill="#0f172a" stroke="#334155" strokeWidth="1" />
-      <text x="225" y="54" textAnchor="middle" fill="#64748b" fontSize="10" fontFamily="monospace">ml-academy.vercel.app</text>
+      <text x="225" y="54" textAnchor="middle" fill="#64748b" fontSize="10" fontFamily="monospace">codegraft.vercel.app</text>
 
       {/* Code lines in browser */}
       {[
