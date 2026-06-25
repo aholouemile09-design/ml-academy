@@ -51,7 +51,7 @@ export default function ConfidentialitePage() {
         <p>
           Les données étant stockées localement et non sur nos serveurs, l'utilisateur garde un contrôle total :
           il peut les supprimer à tout moment via les paramètres de son navigateur. Pour toute question, contactez
-          [adresse e-mail à compléter].
+          aholou.emile09@gmail.com.
         </p>
       </section>
     </div>

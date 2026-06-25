@@ -7,16 +7,12 @@ export default function MentionsLegalesPage() {
     <div className="max-w-3xl mx-auto px-6 py-16 text-slate-300 space-y-6">
       <h1 className="text-3xl font-bold text-white">Mentions légales</h1>
 
-      <p className="text-sm text-amber-400 bg-amber-400/10 border border-amber-400/30 rounded-lg p-4">
-        ⚠️ Modèle générique à compléter avec tes informations réelles (éditeur, contact, hébergeur) avant publication.
-      </p>
-
       <section>
         <h2 className="text-xl font-semibold text-white mb-2">Éditeur du site</h2>
         <p>
-          CodeGraft Academy est édité par : [Nom / raison sociale à compléter].
+          CodeGraft Academy est édité par : Aholou Emile, exploitant sous le nom commercial « Codegraft ».
           <br />
-          Contact : [adresse e-mail à compléter]
+          Contact : aholou.emile09@gmail.com
         </p>
       </section>
 
