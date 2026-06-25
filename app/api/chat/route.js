@@ -2,6 +2,11 @@
 // La clé vient soit de l'en-tête x-user-api-key (saisie dans Paramètres),
 // soit de la variable d'environnement ANTHROPIC_API_KEY.
 
+import { rateLimit, getClientKey } from "../../../lib/rateLimit";
+
+const MAX_MESSAGES = 50;
+const MAX_MESSAGE_LENGTH = 8000;
+
 const SYSTEM_PROMPT = `Tu es le tuteur AI de CodeGraft Academy, une école en ligne de machine learning et programmation.
 Tu es un expert pédagogue en ML, deep learning, NLP, MLOps, Python et programmation en général.
 
@@ -32,8 +37,37 @@ Réponds en français, de façon structurée mais concise. Utilise des blocs de 
 
 export async function POST(req) {
   try {
-    const { messages } = await req.json();
     const userKey = req.headers.get("x-user-api-key");
+
+    // Le rate-limit ne s'applique qu'à l'usage de la clé serveur partagée :
+    // un utilisateur qui fournit sa propre clé consomme son propre quota.
+    if (!userKey) {
+      const { allowed } = rateLimit(getClientKey(req), { limit: 20, windowMs: 60_000 });
+      if (!allowed) {
+        return Response.json({ error: "rate_limited" }, { status: 429 });
+      }
+    }
+
+    const body = await req.json();
+    const messages = Array.isArray(body?.messages) ? body.messages : null;
+
+    if (!messages || messages.length === 0) {
+      return Response.json({ error: "invalid_messages" }, { status: 400 });
+    }
+    if (messages.length > MAX_MESSAGES) {
+      return Response.json({ error: "too_many_messages" }, { status: 400 });
+    }
+    for (const m of messages) {
+      if (
+        !m ||
+        (m.role !== "user" && m.role !== "assistant") ||
+        typeof m.content !== "string" ||
+        m.content.length > MAX_MESSAGE_LENGTH
+      ) {
+        return Response.json({ error: "invalid_message_format" }, { status: 400 });
+      }
+    }
+
     const apiKey = userKey || process.env.ANTHROPIC_API_KEY;
 
     if (!apiKey) {
@@ -56,8 +90,8 @@ export async function POST(req) {
     });
 
     if (!res.ok) {
-      const err = await res.text();
-      return Response.json({ error: "api_error", detail: err }, { status: res.status });
+      console.error("Anthropic API error:", res.status, await res.text());
+      return Response.json({ error: "api_error" }, { status: res.status });
     }
 
     const data = await res.json();
@@ -68,6 +102,7 @@ export async function POST(req) {
 
     return Response.json({ reply: text });
   } catch (e) {
-    return Response.json({ error: "server_error", detail: String(e) }, { status: 500 });
+    console.error("Chat route error:", e);
+    return Response.json({ error: "server_error" }, { status: 500 });
   }
 }

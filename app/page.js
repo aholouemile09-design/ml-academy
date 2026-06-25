@@ -294,8 +294,8 @@ export default function Home() {
                 <div>→ Examen blanc chronométré</div>
                 <div>→ 8 à 12 semaines de préparation</div>
               </div>
-              <Link href="/pmp/examen-blanc" className="btn-secondary text-sm mt-5 w-full justify-center">
-                🎯 Tester avec l'examen blanc
+              <Link href="/pmp" className="btn-secondary text-sm mt-5 w-full justify-center">
+                🎯 Découvrir le parcours PMP
               </Link>
             </div>
           </div>
