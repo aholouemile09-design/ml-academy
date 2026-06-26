@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { CURRICULUM, LEVELS } from "@/lib/curriculum";
-import { useProgress } from "@/lib/progress";
+import { useUserProgress as useProgress } from "@/lib/userProgress";
 
 export default function Parcours() {
   const progress = useProgress();

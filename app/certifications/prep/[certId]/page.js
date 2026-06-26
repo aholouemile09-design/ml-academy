@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { getCertPrep } from "@/lib/certPrep";
-import { useProgress } from "@/lib/progress";
+import { useUserProgress as useProgress } from "@/lib/userProgress";
 
 const DIFFICULTY_LABELS = { 1: "Très facile", 2: "Facile", 3: "Moyen", 4: "Difficile", 5: "Expert" };
 const DIFF_COLORS = {

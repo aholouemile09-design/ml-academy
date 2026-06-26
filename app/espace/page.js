@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useProfiles, getAvatarEmoji, AVATAR_COLORS } from "@/lib/profiles";
+import { useUserProgress } from "@/lib/userProgress";
+import { getAvatarEmoji, AVATAR_COLORS } from "@/lib/avatars";
 import { MODULE_PLAN, TOTAL_WEEKS_ML, TOTAL_WEEKS_WEB } from "@/lib/calendar";
 import Link from "next/link";
 
@@ -333,20 +334,21 @@ function PersonalCalendar({ profile, onUpdate }) {
 // Page principale Mon Espace
 // ─────────────────────────────────────────────────────────────────────────────
 export default function EspacePage() {
-  const ctx = useProfiles();
-  const { activeProfile, updateActiveProfile, ready } = ctx || {};
-  const color = AVATAR_COLORS.find(c => c.id === activeProfile?.colorId) || AVATAR_COLORS[0];
+  const ctx = useUserProgress();
+  const { user, displayName, colorId, avatarId, updateProfile, ready } = ctx || {};
+  const profile = { name: displayName, colorId, avatarId };
+  const color = AVATAR_COLORS.find(c => c.id === colorId) || AVATAR_COLORS[0];
 
-  const xp      = activeProfile?.xp || 0;
-  const lessons = activeProfile?.completedLessons?.length || 0;
+  const xp      = ctx?.xp || 0;
+  const lessons = ctx?.completedLessons?.length || 0;
   const level   = xp < 200 ? "Débutant" : xp < 600 ? "Intermédiaire" : xp < 1200 ? "Avancé" : "Expert";
 
   if (!ready) return <div className="max-w-5xl mx-auto px-6 py-20 text-center text-slate-500">Chargement…</div>;
 
-  if (!activeProfile) return (
+  if (!user) return (
     <div className="max-w-2xl mx-auto px-6 py-20 text-center">
-      <p className="text-slate-400 mb-4">Crée un profil pour accéder à ton espace personnel.</p>
-      <Link href="/profils" className="btn-primary">Créer mon profil →</Link>
+      <p className="text-slate-400 mb-4">Connecte-toi pour accéder à ton espace personnel.</p>
+      <Link href="/connexion" className="btn-primary">Se connecter →</Link>
     </div>
   );
 
@@ -355,13 +357,13 @@ export default function EspacePage() {
       {/* Header profil */}
       <div className="flex items-center gap-4 mb-8">
         <div className={`w-14 h-14 rounded-2xl ${color.bg} flex items-center justify-center text-3xl`}>
-          {getAvatarEmoji(activeProfile)}
+          {getAvatarEmoji(profile)}
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">Mon Espace — {activeProfile.name}</h1>
+          <h1 className="text-2xl font-bold text-white">Mon Espace — {displayName || user.email}</h1>
           <p className="text-slate-400 text-sm">{level} · ⚡ {xp} XP · 📚 {lessons} leçons</p>
         </div>
-        <Link href="/profils" className="ml-auto text-xs text-slate-400 hover:text-white">Changer de profil →</Link>
+        <Link href="/profils" className="ml-auto text-xs text-slate-400 hover:text-white">Mon compte →</Link>
       </div>
 
       {/* Grille widgets */}
@@ -380,7 +382,7 @@ export default function EspacePage() {
             {[
               { label: "XP total", val: `${xp} XP`, icon: "⚡" },
               { label: "Leçons complétées", val: lessons, icon: "📚" },
-              { label: "Quiz réussis", val: Object.keys(activeProfile.quizScores || {}).length, icon: "✅" },
+              { label: "Quiz réussis", val: Object.keys(ctx.quizScores || {}).length, icon: "✅" },
               { label: "Niveau actuel", val: level, icon: "🏆" },
             ].map(s => (
               <div key={s.label} className="flex items-center justify-between">
@@ -400,7 +402,7 @@ export default function EspacePage() {
       </div>
 
       {/* Calendrier personnel */}
-      <PersonalCalendar profile={activeProfile} onUpdate={updateActiveProfile} />
+      <PersonalCalendar profile={{ calendarStart: ctx.calendarStart, trackPreference: ctx.trackPreference }} onUpdate={updateProfile} />
 
       {/* Liens rapides */}
       <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">

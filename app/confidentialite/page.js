@@ -13,21 +13,38 @@ export default function ConfidentialitePage() {
       </p>
 
       <section>
-        <h2 className="text-xl font-semibold text-white mb-2">Données stockées localement</h2>
+        <h2 className="text-xl font-semibold text-white mb-2">Compte utilisateur et données sauvegardées</h2>
         <p>
-          CodeGraft Academy ne dispose pas de compte utilisateur côté serveur. Les données suivantes sont stockées
-          uniquement dans le navigateur (localStorage), sur l'appareil de l'utilisateur, et ne sont jamais transmises
-          à nos serveurs :
+          La création d'un compte (email + mot de passe) permet de sauvegarder votre progression de façon à y
+          accéder depuis n'importe quel appareil. Ces données sont hébergées par notre prestataire technique
+          Supabase (Supabase Inc., infrastructure cloud avec base de données PostgreSQL), localisé selon la région
+          choisie pour le projet, et sont protégées par un contrôle d'accès strict (chaque utilisateur ne peut lire
+          ou modifier que ses propres données — politique de sécurité au niveau des lignes / RLS).
         </p>
         <ul className="list-disc list-inside mt-2 space-y-1">
-          <li>Progression dans les parcours (modules terminés, quiz)</li>
+          <li>Adresse email et mot de passe (haché, jamais stocké en clair, géré par Supabase Auth)</li>
+          <li>Progression dans les parcours (modules terminés, quiz, XP)</li>
+          <li>Nom affiché, avatar et couleur choisis</li>
+        </ul>
+        <p className="mt-2">
+          Le mot de passe n'est jamais visible ni accessible par l'éditeur du site : son traitement (hachage,
+          vérification) est entièrement délégué à Supabase Auth.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-xl font-semibold text-white mb-2">Données stockées localement (navigateur)</h2>
+        <p>
+          Certaines données restent uniquement dans le navigateur (localStorage) et ne sont jamais transmises à nos
+          serveurs ni à Supabase :
+        </p>
+        <ul className="list-disc list-inside mt-2 space-y-1">
           <li>Préférences de thème (clair/sombre)</li>
-          <li>Profil pédagogique choisi</li>
           <li>Clé API personnelle Anthropic et token GitHub, si renseignés dans Paramètres</li>
         </ul>
         <p className="mt-2">
           Ces données restent sur l'appareil de l'utilisateur et sont supprimées en vidant le cache du navigateur ou
-          le localStorage du site. Elles ne sont jamais envoyées à CodeGraft Academy.
+          le localStorage du site.
         </p>
       </section>
 
@@ -37,21 +54,27 @@ export default function ConfidentialitePage() {
           Si l'utilisateur renseigne une clé API Anthropic dans Paramètres et utilise le tuteur IA, les messages
           échangés sont envoyés directement à l'API Anthropic via notre serveur, qui ne les conserve pas en base.
           De même, si l'utilisateur fournit un token GitHub pour publier un projet, ce token est utilisé uniquement
-          pour l'appel à l'API GitHub côté serveur, le temps de la requête, et n'est jamais stocké.
+          pour l'appel à l'API GitHub côté serveur, le temps de la requête, et n'est jamais stocké. L'authentification
+          et la base de données de progression sont hébergées par Supabase, sous-traitant technique de CodeGraft
+          Academy, soumis à sa propre politique de confidentialité.
         </p>
       </section>
 
       <section>
         <h2 className="text-xl font-semibold text-white mb-2">Cookies</h2>
-        <p>Ce site n'utilise pas de cookies de suivi publicitaire ni d'analytics tiers à ce jour.</p>
+        <p>
+          Le site utilise des cookies techniques strictement nécessaires au maintien de la session de connexion
+          (gérés par Supabase Auth). Aucun cookie de suivi publicitaire ni d'analytics tiers n'est utilisé.
+        </p>
       </section>
 
       <section>
         <h2 className="text-xl font-semibold text-white mb-2">Droits des utilisateurs</h2>
         <p>
-          Les données étant stockées localement et non sur nos serveurs, l'utilisateur garde un contrôle total :
-          il peut les supprimer à tout moment via les paramètres de son navigateur. Pour toute question, contactez
-          aholou.emile09@gmail.com.
+          Conformément à la réglementation applicable (RGPD pour les utilisateurs de l'UE), vous pouvez demander
+          l'accès, la rectification ou la suppression de votre compte et de vos données à tout moment en nous
+          contactant à aholou.emile09@gmail.com. La suppression du compte entraîne la suppression de l'ensemble des
+          données de progression associées dans notre base.
         </p>
       </section>
     </div>

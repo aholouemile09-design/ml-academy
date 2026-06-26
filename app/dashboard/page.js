@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useProgress, computeStats } from "@/lib/progress";
+import { useUserProgress as useProgress, computeStats } from "@/lib/userProgress";
 import { LEVELS } from "@/lib/curriculum";
 
 export default function Dashboard() {

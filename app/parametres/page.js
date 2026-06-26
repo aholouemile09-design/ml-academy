@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useProgress } from "@/lib/progress";
+import { useUserProgress as useProgress } from "@/lib/userProgress";
 
 export default function Parametres() {
   const [key, setKey] = useState("");

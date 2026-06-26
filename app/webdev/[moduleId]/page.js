@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { getWebModule, WEB_LEVELS } from "@/lib/webdev";
-import { useProgress } from "@/lib/progress";
+import { useUserProgress as useProgress } from "@/lib/userProgress";
 import Markdown from "@/components/Markdown";
 import QuizPlayer from "@/components/QuizPlayer";
 

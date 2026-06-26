@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { PMP_CURRICULUM, PMP_LEVELS } from "@/lib/pmp";
-import { useProgress } from "@/lib/progress";
+import { useUserProgress as useProgress } from "@/lib/userProgress";
 
 export default function Pmp() {
   const progress = useProgress();

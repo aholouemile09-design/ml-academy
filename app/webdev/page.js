@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { WEB_CURRICULUM, WEB_LEVELS } from "@/lib/webdev";
-import { useProgress } from "@/lib/progress";
+import { useUserProgress as useProgress } from "@/lib/userProgress";
 
 export default function WebDev() {
   const progress = useProgress();

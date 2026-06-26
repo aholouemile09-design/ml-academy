@@ -39,8 +39,9 @@ export default function MentionsLegalesPage() {
         <h2 className="text-xl font-semibold text-white mb-2">Services tiers utilisés</h2>
         <p>
           Le site fait appel, à la demande de l'utilisateur, à l'API Anthropic (Claude) pour le tuteur IA et à l'API
-          GitHub pour la publication de projets. Ces services sont soumis à leurs propres conditions d'utilisation
-          et politiques de confidentialité.
+          GitHub pour la publication de projets. Il utilise également Supabase (Supabase Inc.) pour la gestion des
+          comptes utilisateurs (authentification) et le stockage de la progression pédagogique. Ces services sont
+          soumis à leurs propres conditions d'utilisation et politiques de confidentialité.
         </p>
       </section>
     </div>

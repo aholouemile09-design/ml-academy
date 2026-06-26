@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useProgress } from "@/lib/progress";
+import { useUserProgress as useProgress } from "@/lib/userProgress";
 
 export default function QuizPlayer({ moduleId, questions }) {
   const { saveQuiz } = useProgress();

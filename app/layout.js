@@ -1,8 +1,8 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import { ProgressProvider } from "@/lib/progress";
-import { ProfileProvider } from "@/lib/profiles";
+import { UserProgressProvider } from "@/lib/userProgress";
 import { ThemeProvider } from "@/lib/theme";
+import LegacyImportPrompt from "@/components/LegacyImportPrompt";
 
 const SITE_URL = "https://codegraft.vercel.app";
 const TITLE = "CodeGraft Academy — Machine Learning & Web Full Stack";
@@ -54,25 +54,24 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <ThemeProvider>
-          <ProfileProvider>
-            <ProgressProvider>
-              <Navbar />
-              <main className="min-h-[calc(100vh-4rem)]">{children}</main>
-              <footer className="border-t border-ink-700 py-8 text-center text-sm text-slate-500">
-                <p>
-                  CodeGraft Academy — Apprenez le machine learning et le développement web comme à l'école, avec votre tuteur AI personnel.
-                </p>
-                <nav className="mt-3 flex justify-center gap-4">
-                  <a href="/mentions-legales" className="hover:text-slate-300 underline">
-                    Mentions légales
-                  </a>
-                  <a href="/confidentialite" className="hover:text-slate-300 underline">
-                    Confidentialité
-                  </a>
-                </nav>
-              </footer>
-            </ProgressProvider>
-          </ProfileProvider>
+          <UserProgressProvider>
+            <Navbar />
+            <LegacyImportPrompt />
+            <main className="min-h-[calc(100vh-4rem)]">{children}</main>
+            <footer className="border-t border-ink-700 py-8 text-center text-sm text-slate-500">
+              <p>
+                CodeGraft Academy — Apprenez le machine learning et le développement web comme à l'école, avec votre tuteur AI personnel.
+              </p>
+              <nav className="mt-3 flex justify-center gap-4">
+                <a href="/mentions-legales" className="hover:text-slate-300 underline">
+                  Mentions légales
+                </a>
+                <a href="/confidentialite" className="hover:text-slate-300 underline">
+                  Confidentialité
+                </a>
+              </nav>
+            </footer>
+          </UserProgressProvider>
         </ThemeProvider>
       </body>
     </html>

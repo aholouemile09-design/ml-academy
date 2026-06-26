@@ -1,3 +1,14 @@
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseHost = (() => {
+  try {
+    return new URL(supabaseUrl).host;
+  } catch {
+    return "";
+  }
+})();
+const supabaseConnect = supabaseHost ? `https://${supabaseHost} wss://${supabaseHost}` : "";
+const isDev = process.env.NODE_ENV !== "production";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -27,10 +38,11 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline'",
-              "style-src 'self' 'unsafe-inline'",
+              `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https://images.unsplash.com https://plus.unsplash.com",
-              "connect-src 'self' https://api.anthropic.com https://api.github.com",
+              `connect-src 'self' https://api.anthropic.com https://api.github.com ${supabaseConnect}`.trim(),
               "frame-ancestors 'none'",
             ].join("; "),
           },
