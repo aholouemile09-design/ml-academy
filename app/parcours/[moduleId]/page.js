@@ -7,6 +7,7 @@ import { getModule, LEVELS } from "@/lib/curriculum";
 import { useUserProgress as useProgress } from "@/lib/userProgress";
 import Markdown from "@/components/Markdown";
 import QuizPlayer from "@/components/QuizPlayer";
+import ReflectionPrompt from "@/components/ReflectionPrompt";
 
 export default function ModulePage() {
   const { moduleId } = useParams();
@@ -91,7 +92,10 @@ export default function ModulePage() {
         {/* Content */}
         <div>
           {showQuiz ? (
-            <QuizPlayer moduleId={mod.id} questions={mod.quiz} track="ml" />
+            <>
+              <QuizPlayer moduleId={mod.id} questions={mod.quiz} track="ml" />
+              <ReflectionPrompt moduleId={mod.id} track="ml" moduleTitle={mod.title} />
+            </>
           ) : (
             <article className="card p-6 sm:p-8">
               <div className="flex items-center justify-between flex-wrap gap-3 mb-6">

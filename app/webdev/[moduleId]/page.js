@@ -7,6 +7,7 @@ import { getWebModule, WEB_LEVELS } from "@/lib/webdev";
 import { useUserProgress as useProgress } from "@/lib/userProgress";
 import Markdown from "@/components/Markdown";
 import QuizPlayer from "@/components/QuizPlayer";
+import ReflectionPrompt from "@/components/ReflectionPrompt";
 
 export default function WebModulePage() {
   const { moduleId } = useParams();
@@ -80,7 +81,10 @@ export default function WebModulePage() {
 
         <div>
           {showQuiz && mod.quiz?.length > 0 ? (
-            <QuizPlayer moduleId={mod.id} questions={mod.quiz} track="web" />
+            <>
+              <QuizPlayer moduleId={mod.id} questions={mod.quiz} track="web" />
+              <ReflectionPrompt moduleId={mod.id} track="web" moduleTitle={mod.title} />
+            </>
           ) : (
             <article className="card p-6 sm:p-8">
               <div className="flex items-center justify-between flex-wrap gap-3 mb-6">

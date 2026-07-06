@@ -7,6 +7,7 @@ import { getPmpModule, PMP_LEVELS } from "@/lib/pmp";
 import { useUserProgress as useProgress } from "@/lib/userProgress";
 import Markdown from "@/components/Markdown";
 import QuizPlayer from "@/components/QuizPlayer";
+import ReflectionPrompt from "@/components/ReflectionPrompt";
 
 export default function PmpModulePage() {
   const { moduleId } = useParams();
@@ -81,7 +82,10 @@ export default function PmpModulePage() {
 
         <div>
           {showQuiz && mod.quiz?.length > 0 ? (
-            <QuizPlayer moduleId={mod.id} questions={mod.quiz} track="pmp" />
+            <>
+              <QuizPlayer moduleId={mod.id} questions={mod.quiz} track="pmp" />
+              <ReflectionPrompt moduleId={mod.id} track="pmp" moduleTitle={mod.title} />
+            </>
           ) : (
             <article className="card p-6 sm:p-8">
               <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
