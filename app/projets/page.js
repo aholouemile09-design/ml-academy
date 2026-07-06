@@ -220,6 +220,10 @@ export default function Projets() {
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-accent/10 border border-accent/30 text-accent-light text-sm font-semibold hover:bg-accent/20 transition-colors">
                       🤖 Demander de l'aide au tuteur
                     </Link>
+                    <Link href={`/projets/${p.id}/feedback`}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-semibold hover:bg-emerald-500/20 transition-colors">
+                      📋 Soumettre pour feedback
+                    </Link>
                     <Link href={`/projets/publier?id=${p.id}`}
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-ink-800 border border-ink-700 text-slate-300 text-sm font-semibold hover:border-accent/40 hover:text-white transition-colors">
                       🐙 Publier sur GitHub
