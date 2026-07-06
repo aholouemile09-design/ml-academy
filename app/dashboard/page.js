@@ -6,6 +6,7 @@ import { LEVELS } from "@/lib/curriculum";
 import { useEffect, useState } from "react";
 import MasteryMap from "@/components/MasteryMap";
 import { computeMlMastery } from "@/lib/mastery";
+import { computeStreak } from "@/lib/streak";
 
 function ReviewWidget() {
   const [count, setCount] = useState(null);
@@ -36,6 +37,52 @@ function ReviewWidget() {
   );
 }
 
+function WeeklyGoalWidget({ progress }) {
+  const today = new Date();
+  const dayOfWeek = today.getDay();
+  const startOfWeek = new Date(today);
+  startOfWeek.setDate(today.getDate() - ((dayOfWeek + 6) % 7));
+  const startStr = startOfWeek.toISOString().split("T")[0];
+  const todayStr = today.toISOString().split("T")[0];
+
+  const goalType = progress.weeklyGoalType || "lessons";
+  const goalTarget = progress.weeklyGoalTarget || 5;
+
+  let done = 0;
+  if (goalType === "lessons") {
+    // count lessons completed this week — approximate via activityDates (we don't track per-day lessons)
+    const activeDays = (progress.activityDates || []).filter(d => d >= startStr && d <= todayStr).length;
+    done = activeDays;
+  } else {
+    done = (progress.activityDates || []).filter(d => d >= startStr && d <= todayStr).length;
+  }
+
+  const pct = Math.min(100, Math.round((done / goalTarget) * 100));
+
+  return (
+    <div className="card p-5 mb-6">
+      <div className="flex items-center justify-between mb-3">
+        <div>
+          <p className="text-sm font-semibold text-white">🎯 Objectif de la semaine</p>
+          <p className="text-xs text-slate-500 mt-0.5">{done} / {goalTarget} jours actifs</p>
+        </div>
+        <Link href="/parametres" className="text-xs text-slate-500 hover:text-accent-light transition-colors">
+          Modifier →
+        </Link>
+      </div>
+      <div className="w-full h-2.5 bg-ink-800 rounded-full overflow-hidden">
+        <div
+          className={`h-full rounded-full transition-all ${pct >= 100 ? "bg-emerald-500" : "bg-gradient-to-r from-accent to-accent-cyan"}`}
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+      {pct >= 100 && (
+        <p className="text-xs text-emerald-400 mt-2">✅ Objectif atteint cette semaine !</p>
+      )}
+    </div>
+  );
+}
+
 export default function Dashboard() {
   const progress = useProgress();
   if (!progress || !progress.loaded) {
@@ -61,16 +108,18 @@ export default function Dashboard() {
         </div>
         <div className="card p-5">
           <div className="text-xs text-slate-500 mb-1">Leçons complétées</div>
-          <div className="text-2xl font-extrabold text-white">
-            {stats.done}/{stats.total}
-          </div>
+          <div className="text-2xl font-extrabold text-white">{stats.done}/{stats.total}</div>
         </div>
         <div className="card p-5">
-          <div className="text-xs text-slate-500 mb-1">Progression globale</div>
-          <div className="text-2xl font-extrabold text-white">{stats.pct}%</div>
+          <div className="text-xs text-slate-500 mb-1">Série actuelle</div>
+          <div className="text-2xl font-extrabold text-white">
+            🔥 {computeStreak(progress.activityDates || []).current} j.
+          </div>
+          <div className="text-xs text-slate-600 mt-0.5">Record : {progress.streakRecord || 0} j.</div>
         </div>
       </div>
 
+      <WeeklyGoalWidget progress={progress} />
       <ReviewWidget />
 
       {/* Global progress bar */}

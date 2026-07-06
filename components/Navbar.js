@@ -6,6 +6,7 @@ import { useState, useRef } from "react";
 import { useUserProgress } from "@/lib/userProgress";
 import { AVATAR_COLORS, getAvatarEmoji } from "@/lib/avatars";
 import { useTheme } from "@/lib/theme";
+import { computeStreak } from "@/lib/streak";
 
 const NAV_GROUPS = [
   {
@@ -151,6 +152,11 @@ export default function Navbar() {
           {user && (
             <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/30 text-accent-light text-xs font-bold">
               ⚡ {progress.xp} XP
+            </span>
+          )}
+          {user && computeStreak(progress.activityDates || []).current > 0 && (
+            <span className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400 text-xs font-bold" title="Série de jours consécutifs">
+              🔥 {computeStreak(progress.activityDates || []).current}
             </span>
           )}
 
