@@ -232,6 +232,55 @@ export default function ComptePage() {
           Se déconnecter
         </button>
       </form>
+
+      <DeleteAccountSection />
+    </div>
+  );
+}
+
+function DeleteAccountSection() {
+  const [confirming, setConfirming] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleDelete = async () => {
+    setLoading(true);
+    setError("");
+    const res = await fetch("/api/account/delete", { method: "POST" });
+    const data = await res.json();
+    if (!res.ok) {
+      setError(data.error || "Une erreur est survenue.");
+      setLoading(false);
+      return;
+    }
+    window.location.href = "/";
+  };
+
+  if (!confirming) {
+    return (
+      <div className="mt-4">
+        <button onClick={() => setConfirming(true)}
+          className="w-full text-xs text-slate-600 hover:text-rose-400 transition-colors py-2">
+          Supprimer mon compte
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-4 card p-5 border-rose-500/30 bg-rose-500/5 space-y-3">
+      <p className="text-sm text-rose-300 font-semibold">Supprimer mon compte</p>
+      <p className="text-xs text-slate-400">
+        Cette action est irréversible. Ton compte et toute ta progression seront définitivement supprimés.
+      </p>
+      {error && <p className="text-xs text-rose-400">{error}</p>}
+      <div className="flex gap-3">
+        <button onClick={handleDelete} disabled={loading}
+          className="btn-secondary text-rose-400 border-rose-500/30 hover:border-rose-500 text-sm disabled:opacity-50">
+          {loading ? "Suppression…" : "Confirmer la suppression"}
+        </button>
+        <button onClick={() => setConfirming(false)} className="btn-secondary text-sm">Annuler</button>
+      </div>
     </div>
   );
 }
