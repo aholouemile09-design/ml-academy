@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { WEB_CURRICULUM, WEB_LEVELS } from "@/lib/webdev";
 import { useUserProgress as useProgress } from "@/lib/userProgress";
+import MasteryMap from "@/components/MasteryMap";
+import { computeWebMastery } from "@/lib/mastery";
 
 export default function WebDev() {
   const progress = useProgress();
@@ -35,6 +37,8 @@ export default function WebDev() {
           <div className="text-xs text-slate-500 mt-1">gratuit & open source</div>
         </div>
       </div>
+
+      {progress && <MasteryMap modules={computeWebMastery(progress.quizScores || {})} title="Ta maîtrise par module" />}
 
       <div className="relative">
         <div className="absolute left-6 top-0 bottom-0 w-px bg-ink-700 hidden sm:block" />

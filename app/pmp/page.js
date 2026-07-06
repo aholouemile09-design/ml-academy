@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { PMP_CURRICULUM, PMP_LEVELS } from "@/lib/pmp";
 import { useUserProgress as useProgress } from "@/lib/userProgress";
+import MasteryMap from "@/components/MasteryMap";
+import PmpReadiness from "@/components/PmpReadiness";
+import { computePmpMastery, computePmpReadiness } from "@/lib/mastery";
 
 export default function Pmp() {
   const progress = useProgress();
@@ -38,6 +41,13 @@ export default function Pmp() {
           <div className="text-xs text-slate-500 mt-1">examen à jour</div>
         </div>
       </div>
+
+      {progress && (
+        <>
+          <PmpReadiness readiness={computePmpReadiness(progress.quizScores || {})} />
+          <MasteryMap modules={computePmpMastery(progress.quizScores || {})} title="Maîtrise par module PMP" />
+        </>
+      )}
 
       <div className="relative">
         <div className="absolute left-6 top-0 bottom-0 w-px bg-ink-700 hidden sm:block" />

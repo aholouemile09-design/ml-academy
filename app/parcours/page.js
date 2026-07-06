@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { CURRICULUM, LEVELS } from "@/lib/curriculum";
 import { useUserProgress as useProgress } from "@/lib/userProgress";
+import MasteryMap from "@/components/MasteryMap";
+import { computeMlMastery } from "@/lib/mastery";
 
 export default function Parcours() {
   const progress = useProgress();
@@ -27,6 +29,8 @@ export default function Parcours() {
           </p>
         </div>
       </div>
+
+      {progress && <MasteryMap modules={computeMlMastery(progress.quizScores || {})} title="Ta maîtrise par module" />}
 
       <div className="relative">
         <div className="absolute left-6 top-0 bottom-0 w-px bg-ink-700 hidden sm:block" />

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useUserProgress as useProgress, computeStats } from "@/lib/userProgress";
 import { LEVELS } from "@/lib/curriculum";
 import { useEffect, useState } from "react";
+import MasteryMap from "@/components/MasteryMap";
+import { computeMlMastery } from "@/lib/mastery";
 
 function ReviewWidget() {
   const [count, setCount] = useState(null);
@@ -84,6 +86,8 @@ export default function Dashboard() {
           />
         </div>
       </div>
+
+      <MasteryMap modules={computeMlMastery(progress.quizScores)} title="Maîtrise par module (ML)" />
 
       {/* Modules */}
       <h2 className="text-xl font-bold text-white mb-4">Modules</h2>
