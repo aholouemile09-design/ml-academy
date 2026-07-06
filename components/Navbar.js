@@ -166,9 +166,13 @@ export default function Navbar() {
             <div className="relative hidden sm:block"
               onMouseEnter={() => { if (profileTimer.current) clearTimeout(profileTimer.current); setProfileOpen(true); }}
               onMouseLeave={() => { profileTimer.current = setTimeout(() => setProfileOpen(false), 150); }}>
-              <button className={`w-8 h-8 rounded-full ${profileColor?.bg || "bg-slate-600"} flex items-center justify-center text-base ring-2 ring-offset-1 ring-offset-ink-950 ${profileColor?.ring || "ring-slate-500"}`}>
-                {avatarEmoji}
-              </button>
+              {progress?.avatarUrl ? (
+                <img src={progress.avatarUrl} alt="avatar" className={`w-8 h-8 rounded-full object-cover ring-2 ring-offset-1 ring-offset-ink-950 ${profileColor?.ring || "ring-slate-500"}`} />
+              ) : (
+                <button className={`w-8 h-8 rounded-full ${profileColor?.bg || "bg-slate-600"} flex items-center justify-center text-base ring-2 ring-offset-1 ring-offset-ink-950 ${profileColor?.ring || "ring-slate-500"}`}>
+                  {avatarEmoji}
+                </button>
+              )}
               {profileOpen && (
                 <div className="absolute right-0 top-full mt-1 nav-dropdown bg-ink-900 border border-ink-700 rounded-xl shadow-2xl py-2 min-w-[180px] z-50"
                   onMouseEnter={() => { if (profileTimer.current) clearTimeout(profileTimer.current); }}

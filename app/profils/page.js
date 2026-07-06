@@ -17,6 +17,16 @@ export function ProfileAvatar({ profile, size = "lg" }) {
     xl: "w-20 h-20 text-4xl",
   }[size] || "w-10 h-10 text-lg";
 
+  if (profile?.avatarUrl) {
+    return (
+      <img
+        src={profile.avatarUrl}
+        alt="Photo de profil"
+        className={`${sz} rounded-full object-cover shrink-0 ring-2 ${color.ring}`}
+      />
+    );
+  }
+
   return (
     <div className={`${sz} ${color.bg} rounded-full flex items-center justify-center shrink-0 select-none`}>
       {emoji}
@@ -24,32 +34,90 @@ export function ProfileAvatar({ profile, size = "lg" }) {
   );
 }
 
+function PhotoUploader({ currentUrl, onUploaded, onRemove }) {
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) { setError("Photo trop lourde (max 2 Mo)."); return; }
+    if (!file.type.startsWith("image/")) { setError("Fichier non supporté."); return; }
+
+    setError("");
+    setUploading(true);
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { setUploading(false); return; }
+
+    const ext = file.name.split(".").pop();
+    const path = `${user.id}/avatar.${ext}`;
+
+    const { error: uploadError } = await supabase.storage.from("avatars").upload(path, file, { upsert: true });
+    if (uploadError) { setError(uploadError.message); setUploading(false); return; }
+
+    const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
+    onUploaded(publicUrl + `?t=${Date.now()}`);
+    setUploading(false);
+  };
+
+  return (
+    <div className="space-y-2">
+      <p className="text-xs text-slate-500">Photo de profil</p>
+      <div className="flex items-center gap-3">
+        {currentUrl && (
+          <img src={currentUrl} alt="aperçu" className="w-12 h-12 rounded-full object-cover ring-2 ring-accent/40" />
+        )}
+        <label className={`btn-secondary text-sm cursor-pointer ${uploading ? "opacity-50 pointer-events-none" : ""}`}>
+          {uploading ? "Upload…" : currentUrl ? "Changer la photo" : "📷 Importer une photo"}
+          <input type="file" accept="image/*" className="hidden" onChange={handleFile} disabled={uploading} />
+        </label>
+        {currentUrl && (
+          <button type="button" onClick={onRemove} className="text-xs text-rose-400 hover:underline">Supprimer</button>
+        )}
+      </div>
+      {error && <p className="text-xs text-rose-400">{error}</p>}
+    </div>
+  );
+}
+
 function AvatarPicker({ selectedAvatar, selectedColor, onSelectAvatar, onSelectColor }) {
+  const GROUPS = [
+    { label: "Tech & Humains", ids: ["robot","scientist","hacker","astronaut","wizard","ninja","alien","cyborg","detective","pilot","superhero","artist","teacher","student","chef"] },
+    { label: "Animaux", ids: ["owl","fox","panda","lion","wolf","dragon","eagle","cat","penguin","brain"] },
+    { label: "Symboles", ids: ["rocket","lightning","star","fire","diamond","trophy","target","crystal","infinity","atom"] },
+  ];
+
   return (
     <div className="space-y-4">
       <div>
-        <p className="text-xs text-slate-500 mb-2">Choisis ton avatar</p>
-        <div className="grid grid-cols-8 gap-2">
-          {AVATAR_OPTIONS.map(opt => (
-            <button
-              key={opt.id}
-              type="button"
-              onClick={() => onSelectAvatar(opt.id)}
-              title={opt.label}
-              className={`w-10 h-10 rounded-xl text-xl flex items-center justify-center transition-all hover:scale-110 ${
-                selectedAvatar === opt.id
-                  ? "ring-2 ring-accent scale-110 bg-accent/20"
-                  : "bg-ink-800 hover:bg-ink-700"
-              }`}
-            >
-              {opt.emoji}
-            </button>
-          ))}
-        </div>
+        <p className="text-xs text-slate-500 mb-2">Choisis ton avatar emoji</p>
+        {GROUPS.map(group => (
+          <div key={group.label} className="mb-3">
+            <p className="text-xs text-slate-600 mb-1.5">{group.label}</p>
+            <div className="flex flex-wrap gap-1.5">
+              {AVATAR_OPTIONS.filter(opt => group.ids.includes(opt.id)).map(opt => (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => onSelectAvatar(opt.id)}
+                  title={opt.label}
+                  className={`w-9 h-9 rounded-xl text-lg flex items-center justify-center transition-all hover:scale-110 ${
+                    selectedAvatar === opt.id
+                      ? "ring-2 ring-accent scale-110 bg-accent/20"
+                      : "bg-ink-800 hover:bg-ink-700"
+                  }`}
+                >
+                  {opt.emoji}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
       <div>
         <p className="text-xs text-slate-500 mb-2">Couleur de fond</p>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {AVATAR_COLORS.map(c => (
             <button key={c.id} type="button" onClick={() => onSelectColor(c.id)}
               className={`w-8 h-8 rounded-full ${c.bg} transition-all ${
@@ -140,6 +208,7 @@ export default function ComptePage() {
   const [name, setName] = useState("");
   const [colorId, setColorId] = useState("indigo");
   const [avatarId, setAvatarId] = useState("robot");
+  const [avatarUrl, setAvatarUrl] = useState(null);
   const [editing, setEditing] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -154,18 +223,19 @@ export default function ComptePage() {
     );
   }
 
-  const profile = { name: ctx.displayName, colorId: ctx.colorId, avatarId: ctx.avatarId };
+  const profile = { name: ctx.displayName, colorId: ctx.colorId, avatarId: ctx.avatarId, avatarUrl: ctx.avatarUrl };
 
   const startEdit = () => {
     setName(ctx.displayName);
     setColorId(ctx.colorId);
     setAvatarId(ctx.avatarId);
+    setAvatarUrl(ctx.avatarUrl || null);
     setEditing(true);
   };
 
   const handleSave = (e) => {
     e.preventDefault();
-    ctx.updateProfile({ displayName: name.trim(), colorId, avatarId });
+    ctx.updateProfile({ displayName: name.trim(), colorId, avatarId, avatarUrl });
     setEditing(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 1500);
@@ -206,12 +276,19 @@ export default function ComptePage() {
             className="w-full bg-ink-950 border border-ink-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent placeholder:text-slate-600"
             autoFocus
           />
-          <AvatarPicker
-            selectedAvatar={avatarId}
-            selectedColor={colorId}
-            onSelectAvatar={setAvatarId}
-            onSelectColor={setColorId}
+          <PhotoUploader
+            currentUrl={avatarUrl}
+            onUploaded={(url) => { setAvatarUrl(url); }}
+            onRemove={() => setAvatarUrl(null)}
           />
+          {!avatarUrl && (
+            <AvatarPicker
+              selectedAvatar={avatarId}
+              selectedColor={colorId}
+              onSelectAvatar={setAvatarId}
+              onSelectColor={setColorId}
+            />
+          )}
           <div className="flex gap-3">
             <button type="submit" disabled={!name.trim()} className="btn-primary disabled:opacity-40">Enregistrer</button>
             <button type="button" onClick={() => setEditing(false)} className="btn-secondary">Annuler</button>

@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import { UserProgressProvider } from "@/lib/userProgress";
 import { ThemeProvider } from "@/lib/theme";
 import LegacyImportPrompt from "@/components/LegacyImportPrompt";
+import RobotMascot from "@/components/RobotMascot";
 
 const SITE_URL = "https://codegraft.vercel.app";
 const TITLE = "CodeGraft Academy — Machine Learning & Web Full Stack";
@@ -58,6 +59,7 @@ export default function RootLayout({ children }) {
             <Navbar />
             <LegacyImportPrompt />
             <main className="min-h-[calc(100vh-4rem)]">{children}</main>
+            <RobotMascot />
             <footer className="border-t border-ink-700 py-8 text-center text-sm text-slate-500">
               <p>
                 CodeGraft Academy — Apprenez le machine learning et le développement web comme à l'école, avec votre tuteur AI personnel.
