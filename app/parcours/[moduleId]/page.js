@@ -91,7 +91,7 @@ export default function ModulePage() {
         {/* Content */}
         <div>
           {showQuiz ? (
-            <QuizPlayer moduleId={mod.id} questions={mod.quiz} />
+            <QuizPlayer moduleId={mod.id} questions={mod.quiz} track="ml" />
           ) : (
             <article className="card p-6 sm:p-8">
               <div className="flex items-center justify-between flex-wrap gap-3 mb-6">

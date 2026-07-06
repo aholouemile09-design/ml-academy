@@ -81,7 +81,7 @@ export default function PmpModulePage() {
 
         <div>
           {showQuiz && mod.quiz?.length > 0 ? (
-            <QuizPlayer moduleId={`pmp-${mod.id}`} questions={mod.quiz} />
+            <QuizPlayer moduleId={mod.id} questions={mod.quiz} track="pmp" />
           ) : (
             <article className="card p-6 sm:p-8">
               <div className="flex items-center justify-between flex-wrap gap-3 mb-6">

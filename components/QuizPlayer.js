@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useUserProgress as useProgress } from "@/lib/userProgress";
 
-export default function QuizPlayer({ moduleId, questions }) {
+export default function QuizPlayer({ moduleId, questions, track = "ml" }) {
   const { saveQuiz } = useProgress();
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
@@ -13,10 +13,21 @@ export default function QuizPlayer({ moduleId, questions }) {
 
   const q = questions[current];
 
+  const pushToReview = (questionIndex, correct) => {
+    const question_ref = `${track}:${moduleId}:${questionIndex}`;
+    fetch("/api/review", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question_ref, quality: correct ? 1 : 0 }),
+    }).catch(() => {});
+  };
+
   const validate = () => {
     if (selected === null) return;
+    const correct = selected === q.answer;
     setValidated(true);
-    if (selected === q.answer) setScore((s) => s + 1);
+    if (correct) setScore((s) => s + 1);
+    pushToReview(current, correct);
   };
 
   const next = () => {

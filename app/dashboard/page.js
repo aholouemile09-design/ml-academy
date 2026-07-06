@@ -3,6 +3,36 @@
 import Link from "next/link";
 import { useUserProgress as useProgress, computeStats } from "@/lib/userProgress";
 import { LEVELS } from "@/lib/curriculum";
+import { useEffect, useState } from "react";
+
+function ReviewWidget() {
+  const [count, setCount] = useState(null);
+  useEffect(() => {
+    fetch("/api/review")
+      .then(r => r.json())
+      .then(d => setCount(d.cards?.length ?? 0))
+      .catch(() => setCount(0));
+  }, []);
+
+  if (count === null) return null;
+
+  return (
+    <Link href="/reviser" className="card p-5 flex items-center gap-4 hover:border-accent/50 transition-colors mb-10">
+      <div className="text-3xl">🃏</div>
+      <div className="flex-1">
+        <div className="font-semibold text-white">
+          {count === 0 ? "Aucune révision aujourd'hui" : `${count} carte${count > 1 ? "s" : ""} à réviser`}
+        </div>
+        <div className="text-xs text-slate-400 mt-0.5">
+          {count === 0 ? "Tout est à jour ✅" : "Clique pour réviser maintenant →"}
+        </div>
+      </div>
+      {count > 0 && (
+        <span className="text-xs font-bold px-2 py-1 rounded-full bg-accent text-white">{count}</span>
+      )}
+    </Link>
+  );
+}
 
 export default function Dashboard() {
   const progress = useProgress();
@@ -38,6 +68,8 @@ export default function Dashboard() {
           <div className="text-2xl font-extrabold text-white">{stats.pct}%</div>
         </div>
       </div>
+
+      <ReviewWidget />
 
       {/* Global progress bar */}
       <div className="card p-6 mb-10">

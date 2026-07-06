@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "portfolio-static",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8124", "--directory", "C:/Users/User 1/Portfolio-v1"],
+      "port": 8124
+    }
+  ]
+}

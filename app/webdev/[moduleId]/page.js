@@ -80,7 +80,7 @@ export default function WebModulePage() {
 
         <div>
           {showQuiz && mod.quiz?.length > 0 ? (
-            <QuizPlayer moduleId={`web-${mod.id}`} questions={mod.quiz} />
+            <QuizPlayer moduleId={mod.id} questions={mod.quiz} track="web" />
           ) : (
             <article className="card p-6 sm:p-8">
               <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
