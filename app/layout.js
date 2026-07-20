@@ -4,6 +4,7 @@ import { UserProgressProvider } from "@/lib/userProgress";
 import { ThemeProvider } from "@/lib/theme";
 import LegacyImportPrompt from "@/components/LegacyImportPrompt";
 import RobotMascot from "@/components/RobotMascot";
+import StudyTimer from "@/components/StudyTimer";
 
 const SITE_URL = "https://codegraft.vercel.app";
 const TITLE = "CodeGraft Academy — Machine Learning & Web Full Stack";
@@ -59,6 +60,7 @@ export default function RootLayout({ children }) {
             <Navbar />
             <LegacyImportPrompt />
             <main className="min-h-[calc(100vh-4rem)]">{children}</main>
+            <StudyTimer />
             <RobotMascot />
             <footer className="border-t border-ink-700 py-8 text-center text-sm text-slate-500">
               <p>
