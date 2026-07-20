@@ -8,6 +8,7 @@ import { useUserProgress as useProgress } from "@/lib/userProgress";
 import Markdown from "@/components/Markdown";
 import QuizPlayer from "@/components/QuizPlayer";
 import ReflectionPrompt from "@/components/ReflectionPrompt";
+import LessonChat from "@/components/LessonChat";
 
 export default function PmpModulePage() {
   const { moduleId } = useParams();
@@ -117,14 +118,12 @@ export default function PmpModulePage() {
           <div className="mt-6 card p-5 flex items-center gap-4">
             <span className="text-2xl">🤖</span>
             <p className="text-sm text-slate-400 flex-1">
-              Une question sur la gestion de projet, l'agile ou un concept PMI ? Le tuteur AI t'explique.
+              Question sur cette leçon ? Clique sur <strong className="text-white">💬 Demander au tuteur</strong> en bas à droite.
             </p>
-            <Link href="/tuteur" className="btn-secondary text-sm whitespace-nowrap">
-              Poser une question
-            </Link>
           </div>
         </div>
       </div>
+      <LessonChat moduleTitle={mod.title} lessonTitle={lesson.title} track="PMP 2026" />
     </div>
   );
 }

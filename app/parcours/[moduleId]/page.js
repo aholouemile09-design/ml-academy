@@ -8,6 +8,7 @@ import { useUserProgress as useProgress } from "@/lib/userProgress";
 import Markdown from "@/components/Markdown";
 import QuizPlayer from "@/components/QuizPlayer";
 import ReflectionPrompt from "@/components/ReflectionPrompt";
+import LessonChat from "@/components/LessonChat";
 
 export default function ModulePage() {
   const { moduleId } = useParams();
@@ -129,14 +130,12 @@ export default function ModulePage() {
           <div className="mt-6 card p-5 flex items-center gap-4">
             <span className="text-2xl">🤖</span>
             <p className="text-sm text-slate-400 flex-1">
-              Un point pas clair ? Demandez à votre tuteur AI de vous l'expliquer autrement.
+              Un point pas clair ? Clique sur <strong className="text-white">💬 Demander au tuteur</strong> en bas à droite.
             </p>
-            <Link href="/tuteur" className="btn-secondary text-sm whitespace-nowrap">
-              Poser une question
-            </Link>
           </div>
         </div>
       </div>
+      <LessonChat moduleTitle={mod.title} lessonTitle={lesson.title} track="ML & Data Science" />
     </div>
   );
 }

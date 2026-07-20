@@ -50,6 +50,7 @@ export async function POST(req) {
 
     const body = await req.json();
     const messages = Array.isArray(body?.messages) ? body.messages : null;
+    const lessonContext = typeof body?.lessonContext === "string" ? body.lessonContext.slice(0, 500) : null;
 
     if (!messages || messages.length === 0) {
       return Response.json({ error: "invalid_messages" }, { status: 400 });
@@ -74,6 +75,10 @@ export async function POST(req) {
       return Response.json({ error: "no_api_key" }, { status: 401 });
     }
 
+    const systemPrompt = lessonContext
+      ? `${SYSTEM_PROMPT}\n\nCONTEXTE ACTUEL : L'apprenant est en train d'étudier la leçon suivante — adapte tes réponses à ce contexte précis :\n${lessonContext}`
+      : SYSTEM_PROMPT;
+
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -84,7 +89,7 @@ export async function POST(req) {
       body: JSON.stringify({
         model: "claude-opus-4-5",
         max_tokens: 1500,
-        system: SYSTEM_PROMPT,
+        system: systemPrompt,
         messages: messages.slice(-12).map((m) => ({ role: m.role, content: m.content })),
       }),
     });
