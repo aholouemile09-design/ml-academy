@@ -54,6 +54,7 @@ export default function PlanPage() {
   const [preferredDays, setPreferredDays] = useState([1, 2, 3, 4, 5]);
   const [plan, setPlan] = useState(ctx?.studyPlan || null);
   const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   if (!ctx?.loaded) return <div className="max-w-2xl mx-auto px-6 py-20 text-center text-slate-500">Chargement…</div>;
 
@@ -83,6 +84,8 @@ export default function PlanPage() {
     setSaving(true);
     await ctx.saveStudyPlan(plan);
     setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
   };
 
   const handleExportIcs = () => {
@@ -184,8 +187,8 @@ export default function PlanPage() {
             </div>
             <div className="flex gap-2 flex-wrap">
               <button onClick={handleExportIcs} className="btn-secondary text-sm">⬇ Export .ics</button>
-              <button onClick={handleSave} disabled={saving} className="btn-primary text-sm disabled:opacity-50">
-                {saving ? "Sauvegarde…" : "💾 Sauvegarder"}
+              <button onClick={handleSave} disabled={saving || saved} className="btn-primary text-sm disabled:opacity-50">
+                {saving ? "Sauvegarde…" : saved ? "✓ Sauvegardé !" : "💾 Sauvegarder"}
               </button>
               <button onClick={handleReset} className="btn-secondary text-sm text-slate-500">Recréer</button>
             </div>
