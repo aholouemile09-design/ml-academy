@@ -6,6 +6,18 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "8124", "--directory", "C:/Users/User 1/Portfolio-v1"],
       "port": 8124
+    },
+    {
+      "name": "tcf-tef-canada",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "cd", "/d", "C:\\Users\\User 1\\tcf-tef-canada", "&&", "npm", "run", "dev"],
+      "port": 3000
+    }
+    ,{
+      "name": "ml-academy",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3001
     }
   ]
 }

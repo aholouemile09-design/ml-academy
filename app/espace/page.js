@@ -5,6 +5,7 @@ import { useUserProgress } from "@/lib/userProgress";
 import { getAvatarEmoji, AVATAR_COLORS } from "@/lib/avatars";
 import { MODULE_PLAN, TOTAL_WEEKS_ML, TOTAL_WEEKS_WEB } from "@/lib/calendar";
 import Link from "next/link";
+import StreakWidget from "@/components/StreakWidget";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Citations motivantes (ML / tech / discipline)
@@ -373,6 +374,11 @@ export default function EspacePage() {
         <QuoteWidget />
       </div>
 
+      {/* Streak */}
+      <div className="mb-4">
+        <StreakWidget activityDates={ctx?.activityDates || []} streakRecord={ctx?.streakRecord || 0} />
+      </div>
+
       <div className="grid lg:grid-cols-2 gap-4 mb-8">
         <PomodoroWidget />
         {/* Widget stats rapides */}
@@ -409,7 +415,9 @@ export default function EspacePage() {
         {[
           { href: "/parcours",   icon: "🤖", label: "Cours ML"       },
           { href: "/webdev",     icon: "🌐", label: "Cours Web"      },
-          { href: "/projets",    icon: "🛠", label: "Projets"        },
+          { href: "/projets",    icon: "🛠",  label: "Projets"        },
+          { href: "/certificat", icon: "🏆", label: "Certificats"    },
+          { href: "/recherche",  icon: "🔍", label: "Recherche"      },
           { href: "/calendrier", icon: "📅", label: "Plan général"   },
         ].map(l => (
           <Link key={l.href} href={l.href}

@@ -7,6 +7,13 @@ import Link from "next/link";
 
 const FILTERS = ["tous", "debutant", "intermediaire", "avance"];
 
+const TRACKS = [
+  { id: "tous",  label: "Tous les tracks",  icon: "🎓" },
+  { id: "ml",   label: "ML & Data Science", icon: "🤖" },
+  { id: "web",  label: "Web Full Stack",    icon: "🌐" },
+  { id: "pmp",  label: "PMP 2026",          icon: "📋" },
+];
+
 function HintBadge({ level }) {
   const map = {
     high:   { label: "💡 Assistance maximale", cls: "text-emerald-400 border-emerald-500/30 bg-emerald-500/5" },
@@ -50,18 +57,23 @@ function HintsPanel({ hints, steps }) {
   );
 }
 
+const TRACK_LABELS = { ml: "ML & Data", web: "Web Full Stack", pmp: "PMP 2026" };
+
 export default function Projets() {
+  const [track, setTrack]       = useState("tous");
   const [filter, setFilter]     = useState("tous");
   const [expanded, setExpanded] = useState(null);
 
+  const byTrack = track === "tous" ? PROJECTS : PROJECTS.filter(p => p.track === track);
+
   const filtered = filter === "tous"
-    ? PROJECTS
-    : PROJECTS.filter(p => p.level === filter);
+    ? byTrack
+    : byTrack.filter(p => p.level === filter);
 
   const levelCounts = {
-    debutant:      PROJECTS.filter(p => p.level === "debutant").length,
-    intermediaire: PROJECTS.filter(p => p.level === "intermediaire").length,
-    avance:        PROJECTS.filter(p => p.level === "avance").length,
+    debutant:      byTrack.filter(p => p.level === "debutant").length,
+    intermediaire: byTrack.filter(p => p.level === "intermediaire").length,
+    avance:        byTrack.filter(p => p.level === "avance").length,
   };
 
   return (
@@ -102,11 +114,31 @@ export default function Projets() {
           <span className="text-accent-light font-semibold">🤖 Règle du tuteur AI :</span>{" "}
           Tu peux demander de l'aide au tuteur pour comprendre un concept ou débloquer une erreur.
           Mais le tuteur ne fera jamais le projet à ta place — il te guidera pour que TU apprennes.
-          C'est comme ça qu'on devient un vrai ingénieur ML.
+          C'est comme ça qu'on devient un vrai professionnel.
         </p>
       </div>
 
-      {/* Filtres */}
+      {/* Filtre par track */}
+      <div className="flex gap-2 mb-4 flex-wrap">
+        {TRACKS.map(t => {
+          const count = t.id === "tous" ? PROJECTS.length : PROJECTS.filter(p => p.track === t.id).length;
+          return (
+            <button
+              key={t.id}
+              onClick={() => { setTrack(t.id); setFilter("tous"); setExpanded(null); }}
+              className={`px-4 py-2 rounded-xl border text-sm font-medium transition-colors flex items-center gap-1.5 ${
+                track === t.id
+                  ? "border-accent bg-accent/10 text-white"
+                  : "border-ink-700 text-slate-400 hover:border-accent/50"
+              }`}
+            >
+              <span>{t.icon}</span> {t.label} <span className="text-xs opacity-60">({count})</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Filtres par niveau */}
       <div className="flex gap-2 mb-8 flex-wrap">
         {FILTERS.map(f => (
           <button
@@ -118,7 +150,7 @@ export default function Projets() {
                 : "border-ink-700 text-slate-400 hover:border-accent/50"
             }`}
           >
-            {f === "tous" ? `Tous (${PROJECTS.length})` : `${PROJECT_LEVELS[f]?.label} (${levelCounts[f]})`}
+            {f === "tous" ? `Tous niveaux (${byTrack.length})` : `${PROJECT_LEVELS[f]?.label} (${levelCounts[f]})`}
           </button>
         ))}
       </div>
@@ -136,9 +168,16 @@ export default function Projets() {
                   <span className="text-2xl">{p.icon}</span>
                   <h2 className="font-bold text-white">{p.title}</h2>
                 </div>
-                <span className={`px-2 py-0.5 rounded-full border text-xs font-medium whitespace-nowrap ${lvl.badge} ${lvl.color}`}>
-                  {lvl.label}
-                </span>
+                <div className="flex flex-col items-end gap-1 shrink-0">
+                  <span className={`px-2 py-0.5 rounded-full border text-xs font-medium whitespace-nowrap ${lvl.badge} ${lvl.color}`}>
+                    {lvl.label}
+                  </span>
+                  {p.track && (
+                    <span className="text-xs text-slate-500 font-medium">
+                      {TRACKS.find(t => t.id === p.track)?.icon} {TRACK_LABELS[p.track]}
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Badge d'assistance */}
@@ -194,7 +233,7 @@ export default function Projets() {
                   {p.hint_level === "none" && (
                     <div className="mt-4 pt-4 border-t border-ink-700">
                       <p className="text-xs text-rose-400 bg-rose-500/5 border border-rose-500/20 rounded-xl px-4 py-3">
-                        <strong>🧠 Niveau avancé :</strong> Pas d'astuces — c'est toi qui dois chercher, décomposer et itérer. C'est exactement ce qu'on attend d'un ML Engineer.
+                        <strong>🧠 Niveau avancé :</strong> Pas d'astuces — c'est toi qui dois chercher, décomposer et itérer. C'est exactement ce qu'on attend d'un professionnel confirmé.
                       </p>
                     </div>
                   )}

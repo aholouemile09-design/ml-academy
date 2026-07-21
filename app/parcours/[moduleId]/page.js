@@ -9,6 +9,8 @@ import Markdown from "@/components/Markdown";
 import QuizPlayer from "@/components/QuizPlayer";
 import ReflectionPrompt from "@/components/ReflectionPrompt";
 import LessonChat from "@/components/LessonChat";
+import LessonResources from "@/components/LessonResources";
+import LessonNotes from "@/components/LessonNotes";
 
 export default function ModulePage() {
   const { moduleId } = useParams();
@@ -105,6 +107,8 @@ export default function ModulePage() {
               </div>
 
               <Markdown text={lesson.content} />
+              <LessonResources resources={lesson.resources} />
+              <LessonNotes lessonId={lesson.id} />
 
               <div className="mt-8 pt-6 border-t border-ink-700 flex items-center justify-between flex-wrap gap-3">
                 {isDone(lesson.id) ? (

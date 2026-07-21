@@ -9,6 +9,8 @@ import Markdown from "@/components/Markdown";
 import QuizPlayer from "@/components/QuizPlayer";
 import ReflectionPrompt from "@/components/ReflectionPrompt";
 import LessonChat from "@/components/LessonChat";
+import LessonResources from "@/components/LessonResources";
+import LessonNotes from "@/components/LessonNotes";
 
 export default function PmpModulePage() {
   const { moduleId } = useParams();
@@ -94,6 +96,8 @@ export default function PmpModulePage() {
                 <span className="text-xs text-slate-500">⏱ {lesson.duration}</span>
               </div>
               <Markdown text={lesson.content} />
+              <LessonResources resources={lesson.resources} />
+              <LessonNotes lessonId={lesson.id} />
               <div className="mt-8 pt-6 border-t border-ink-700 flex items-center justify-between flex-wrap gap-3">
                 {isDone(lesson.id) ? (
                   <span className="text-emerald-400 text-sm font-semibold">✅ Leçon complétée (+50 XP)</span>
