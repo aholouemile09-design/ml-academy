@@ -1,22 +1,46 @@
 import Link from "next/link";
 import Image from "next/image";
-import { CURRICULUM, LEVELS } from "@/lib/curriculum";
+import { CURRICULUM } from "@/lib/curriculum";
 import { WEB_CURRICULUM } from "@/lib/webdev";
-import { PMP_CURRICULUM, PMP_LEVELS } from "@/lib/pmp";
-import { NeuralNetworkIllustration, WebDevIllustration } from "@/components/Illustrations";
+import { PMP_CURRICULUM } from "@/lib/pmp";
 import ProfileWidget from "@/components/ProfileWidget";
 import Reveal from "@/components/Reveal";
 import AnimatedCounter from "@/components/AnimatedCounter";
+import HeroPreview from "@/components/HeroPreview";
+import TrackTabs from "@/components/TrackTabs";
+import HowItWorks from "@/components/HowItWorks";
+import FAQ from "@/components/FAQ";
 
+// Grille bento : les tailles encodent l'importance. `span` = classes de grille.
 const features = [
-  { icon: "🗺", title: "Trois parcours complets", desc: "ML/Data Science (9 modules), Web Full Stack (6 modules) et préparation PMP (8 modules). Complémentaires et progressifs." },
-  { icon: "🤖", title: "Tuteur AI personnel", desc: "Expert ML et web disponible 24/7. Mode simulé sans clé API, mode Claude complet avec votre clé Anthropic." },
-  { icon: "📅", title: "Calendrier de discipline", desc: "Plan 2026-2031 avec rythme réaliste (7-9h/semaine), tracker mensuel et roadmap 5 ans." },
-  { icon: "📚", title: "Bibliothèque de ressources", desc: "41 ressources vérifiées, gratuites et légales — documentation officielle, livres open-access, cours reconnus." },
-  { icon: "✅", title: "Quiz et validation", desc: "Chaque module se valide par un quiz corrigé. On n'avance que sur des bases solides." },
-  { icon: "🏅", title: "Certifications guidées", desc: "Ordre réaliste des certifications — chaque cert suit une pratique concrète, pas l'inverse." },
-  { icon: "🛠", title: "Projets de portfolio", desc: "15 projets guidés (6 débutant, 5 intermédiaire, 4 avancé) pour un GitHub solide et crédible." },
-  { icon: "📊", title: "Suivi de progression", desc: "XP, niveaux, badges et dashboard. Ta progression est sauvegardée dans ton navigateur." },
+  {
+    icon: "🤖", title: "Tuteur AI personnel", span: "lg:col-span-2 lg:row-span-2", featured: true,
+    desc: "Un expert disponible 24/7 qui connaît la leçon que tu consultes. Il explique, décortique tes erreurs, propose des pistes — mais ne fera jamais tes projets à ta place.",
+  },
+  {
+    icon: "🧪", title: "Problem sets notés", span: "lg:col-span-2",
+    desc: "Une évaluation pratique sur 100 par module, avec sa grille de notation, ancrée dans un cas réel — scoring crédit, détection de fraude, imagerie médicale.",
+  },
+  {
+    icon: "🗺", title: "Trois parcours", span: "",
+    desc: "ML & Data Science, Web Full Stack et préparation PMP 2026.",
+  },
+  {
+    icon: "🛠", title: "27 projets portfolio", span: "",
+    desc: "Guidés, de débutant à expert, pour un GitHub crédible.",
+  },
+  {
+    icon: "📖", title: "Lectures de référence", span: "lg:col-span-2",
+    desc: "Une sélection par module, gratuites signalées comme telles — MIT, Stanford, Hugging Face — avec la raison précise de chaque recommandation.",
+  },
+  {
+    icon: "🔥", title: "Streak & régularité", span: "",
+    desc: "Ta constance mesurée jour après jour.",
+  },
+  {
+    icon: "🎓", title: "Certificats vérifiables", span: "",
+    desc: "Partageables sur LinkedIn, adossés à tes projets.",
+  },
 ];
 
 // Stats bar
@@ -34,9 +58,60 @@ const QUOTES = [
   { text: "Le machine learning, c'est l'avenir. Celui qui ne l'apprend pas aujourd'hui sera dépassé demain.", author: "CodeGraft Academy" },
 ];
 
-const ML_MODULES = CURRICULUM.slice(0, 5);
-const WEB_MODULES = WEB_CURRICULUM.slice(0, 4);
-const PMP_MODULES = PMP_CURRICULUM.slice(0, 5);
+// Données des onglets de parcours.
+const TRACKS = [
+  {
+    id: "ml",
+    icon: "🤖",
+    label: "ML & Data",
+    title: "Machine Learning & Data Science",
+    basePath: "/parcours",
+    pitch:
+      "De Python aux modèles en production : statistiques, ML classique, deep learning, NLP et MLOps.",
+    highlights: [
+      "Problem sets ancrés dans des cas réels",
+      "XGBoost, PyTorch, transformers, MLflow",
+      "Éthique et équité algorithmique incluses",
+      "Livres MIT et Stanford, gratuits",
+    ],
+    total: CURRICULUM.length,
+    modules: CURRICULUM.slice(0, 5),
+  },
+  {
+    id: "web",
+    icon: "🌐",
+    label: "Web Full Stack",
+    title: "Développement Web Full Stack",
+    basePath: "/webdev",
+    pitch:
+      "Du HTML sémantique au déploiement supervisé, en passant par React, les bases de données et la sécurité.",
+    highlights: [
+      "Bases de données avant le backend",
+      "TypeScript strict et validation Zod",
+      "Revue OWASP Top 10 obligatoire",
+      "CI/CD, supervision et post-mortem",
+    ],
+    total: WEB_CURRICULUM.length,
+    modules: WEB_CURRICULUM.slice(0, 5),
+  },
+  {
+    id: "pmp",
+    icon: "📋",
+    label: "PMP 2026",
+    title: "Certification PMP — examen 2026",
+    basePath: "/pmp",
+    pitch:
+      "Préparation complète au Project Management Professional du PMI : People, Process et Business Environment.",
+    highlights: [
+      "Aligné sur l'ECO 2026 officiel",
+      "Prédictif, agile et hybride",
+      "Calculs EVM et analyse de risques",
+      "Examen blanc chronométré de 180 questions",
+    ],
+    total: PMP_CURRICULUM.length,
+    modules: PMP_CURRICULUM.slice(0, 5),
+  },
+];
 
 export default function Home() {
   return (
@@ -103,34 +178,9 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Hero image + illustration */}
-            <div className="hidden lg:block relative animate-scale-in delay-150 glow">
-              {/* Image photo réelle — ML / data science */}
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10">
-                <Image
-                  src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=700&q=80"
-                  alt="Intelligence artificielle et machine learning"
-                  width={600}
-                  height={420}
-                  className="w-full object-cover rounded-3xl scale-105"
-                  priority
-                />
-                {/* Voile léger : assez pour asseoir le badge, sans éteindre la photo */}
-                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-ink-950/10 to-transparent rounded-3xl" />
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-transparent to-accent-cyan/15 rounded-3xl" />
-                {/* Badge flottant en verre dépoli */}
-                <div className="absolute bottom-4 left-4 px-4 py-2 rounded-2xl glass animate-float">
-                  <p className="text-xs text-slate-400">Alimenté par</p>
-                  <p className="text-sm font-bold gradient-text">Claude Sonnet · Anthropic</p>
-                </div>
-              </div>
-              {/* Petite illustration SVG en surimpression */}
-              <div
-                className="absolute -bottom-4 -right-4 w-32 h-32 opacity-70 animate-float"
-                style={{ animationDelay: "-3s" }}
-              >
-                <NeuralNetworkIllustration className="w-full" />
-              </div>
+            {/* Aperçu produit : l'interface réelle, pas une photo d'illustration */}
+            <div className="hidden lg:block animate-scale-in delay-150">
+              <HeroPreview />
             </div>
           </div>
         </div>
@@ -157,185 +207,64 @@ export default function Home() {
         <Reveal as="h2" className="text-3xl font-bold text-white text-center mb-12">
           Tout ce qu'il faut pour <span className="gradient-text">progresser comme à l'école</span>
         </Reveal>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[minmax(150px,auto)]">
           {features.map((f, i) => (
-            <Reveal key={f.title} delay={i * 70} className="card card-hover p-5">
-              <div className="text-3xl mb-3">{f.icon}</div>
-              <h3 className="font-bold text-white mb-1 text-sm">{f.title}</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">{f.desc}</p>
+            <Reveal
+              key={f.title}
+              delay={i * 70}
+              className={`card card-hover p-6 flex flex-col ${f.span} ${
+                f.featured ? "gradient-border justify-center" : ""
+              }`}
+            >
+              <div className={f.featured ? "text-5xl mb-4" : "text-3xl mb-3"}>{f.icon}</div>
+              <h3 className={`font-bold text-white mb-2 ${f.featured ? "text-xl" : "text-sm"}`}>
+                {f.title}
+              </h3>
+              <p className={`text-slate-400 leading-relaxed ${f.featured ? "text-sm" : "text-xs"}`}>
+                {f.desc}
+              </p>
+              {f.featured && (
+                <Link
+                  href="/tuteur"
+                  className="mt-5 text-sm text-accent-light font-semibold link-underline w-fit"
+                >
+                  Parler au tuteur →
+                </Link>
+              )}
             </Reveal>
           ))}
         </div>
       </section>
 
-      {/* ── TRACK ML ─────────────────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
-        <div className="grid lg:grid-cols-[1fr_340px] gap-10 items-start">
-          <div>
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-white">🤖 Track ML & Data Science</h2>
-              <Link href="/parcours" className="text-sm text-accent-light hover:underline">Voir tout →</Link>
-            </div>
-            <div className="space-y-3">
-              {ML_MODULES.map((m, i) => (
-                <Link
-                  key={m.id}
-                  href={`/parcours/${m.id}`}
-                  className="card card-hover p-5 flex items-center gap-4 group"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-ink-800 flex items-center justify-center text-xl shrink-0">{m.icon}</div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-slate-500 text-xs font-mono">0{i + 1}</span>
-                      <h3 className="font-semibold text-white group-hover:text-accent-light text-sm">{m.title}</h3>
-                      <span className={`px-2 py-0.5 rounded-full border text-xs ${LEVELS[m.level].badge} ${LEVELS[m.level].color}`}>
-                        {LEVELS[m.level].label}
-                      </span>
-                    </div>
-                  </div>
-                  <span className="text-slate-600 group-hover:text-accent-light">→</span>
-                </Link>
-              ))}
-              {CURRICULUM.length > ML_MODULES.length && (
-                <Link href="/parcours" className="block text-center py-3 text-sm text-slate-500 hover:text-accent-light">
-                  + {CURRICULUM.length - ML_MODULES.length} modules supplémentaires →
-                </Link>
-              )}
-            </div>
-          </div>
-
-          {/* Image ML / data science */}
-          <div className="hidden lg:block">
-            <div className="relative rounded-2xl overflow-hidden">
-              <Image
-                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=80"
-                alt="Data science et visualisation de données"
-                width={340}
-                height={420}
-                className="w-full object-cover rounded-2xl"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-ink-950/25 to-transparent rounded-2xl" />
-              <div className="absolute bottom-4 left-4 right-4">
-                <p className="text-slate-50 font-bold text-sm">Data Science & ML</p>
-                <p className="text-slate-200/90 text-xs mt-1">De l'analyse de données aux modèles de production</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* ── COMMENT ÇA MARCHE ────────────────────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+        <Reveal className="text-center mb-14">
+          <h2 className="text-3xl font-bold text-white mb-3">
+            Comment <span className="gradient-text">ça marche</span>
+          </h2>
+          <p className="text-slate-400 max-w-xl mx-auto">
+            Le même déroulé que dans une université : objectifs, cours, évaluation, certification.
+          </p>
+        </Reveal>
+        <Reveal delay={100}>
+          <HowItWorks />
+        </Reveal>
       </section>
 
-      {/* ── TRACK WEB ────────────────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
-        <div className="grid lg:grid-cols-[1fr_380px] gap-10 items-start">
-          <div>
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-white">🌐 Track Web Full Stack</h2>
-              <Link href="/webdev" className="text-sm text-accent-light hover:underline">Voir tout →</Link>
-            </div>
-            <div className="space-y-3">
-              {WEB_MODULES.map((m, i) => (
-                <Link
-                  key={m.id}
-                  href={`/webdev/${m.id}`}
-                  className="card card-hover p-5 flex items-center gap-4 group hover:!border-blue-500/60"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-ink-800 flex items-center justify-center text-xl shrink-0">{m.icon}</div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-slate-500 text-xs font-mono">Web {i + 1}</span>
-                      <h3 className="font-semibold text-white group-hover:text-blue-400 text-sm">{m.title}</h3>
-                    </div>
-                  </div>
-                  <span className="text-slate-600 group-hover:text-blue-400">→</span>
-                </Link>
-              ))}
-              <Link href="/webdev" className="block text-center py-3 text-sm text-slate-500 hover:text-accent-light">
-                + {WEB_CURRICULUM.length - WEB_MODULES.length} modules supplémentaires →
-              </Link>
-            </div>
-          </div>
-
-          {/* Image Web Dev */}
-          <div className="hidden lg:flex items-center justify-center">
-            <div className="relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-xl">
-                <Image
-                  src="https://images.unsplash.com/photo-1593720213428-28a5b9e94613?w=500&q=80"
-                  alt="Développement web et code"
-                  width={360}
-                  height={400}
-                  className="w-full object-cover rounded-2xl"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-ink-950/20 to-transparent rounded-2xl" />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <p className="text-slate-50 font-bold text-sm">Web Full Stack</p>
-                  <p className="text-slate-200/90 text-xs mt-1">React, Next.js, API, déploiement</p>
-                </div>
-              </div>
-              <div className="absolute -bottom-3 -left-3 w-24 h-24 opacity-50">
-                <WebDevIllustration className="w-full" />
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* ── LES TROIS PARCOURS (onglets) ─────────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+        <Reveal className="text-center mb-10">
+          <h2 className="text-3xl font-bold text-white mb-3">
+            Trois <span className="gradient-text">parcours complets</span>
+          </h2>
+          <p className="text-slate-400 max-w-xl mx-auto">
+            Complémentaires et progressifs. Choisis ton point d'entrée.
+          </p>
+        </Reveal>
+        <Reveal delay={100}>
+          <TrackTabs tracks={TRACKS} />
+        </Reveal>
       </section>
-
-      {/* ── TRACK PMP ────────────────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
-        <div className="grid lg:grid-cols-[1fr_340px] gap-10 items-start">
-          <div>
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-white">📋 Parcours PMP — Gestion de projet</h2>
-              <Link href="/pmp" className="text-sm text-accent-light hover:underline">Voir tout →</Link>
-            </div>
-            <div className="space-y-3">
-              {PMP_MODULES.map((m, i) => (
-                <Link
-                  key={m.id}
-                  href={`/pmp/${m.id}`}
-                  className="card card-hover p-5 flex items-center gap-4 group"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-ink-800 flex items-center justify-center text-xl shrink-0">{m.icon}</div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-slate-500 text-xs font-mono">PMP {i + 1}</span>
-                      <h3 className="font-semibold text-white group-hover:text-accent-light text-sm">{m.title}</h3>
-                      <span className={`px-2 py-0.5 rounded-full border text-xs ${PMP_LEVELS[m.level].badge} ${PMP_LEVELS[m.level].color}`}>
-                        {PMP_LEVELS[m.level].label}
-                      </span>
-                    </div>
-                  </div>
-                  <span className="text-slate-600 group-hover:text-accent-light">→</span>
-                </Link>
-              ))}
-              <Link href="/pmp" className="block text-center py-3 text-sm text-slate-500 hover:text-accent-light">
-                + {PMP_CURRICULUM.length - PMP_MODULES.length} modules supplémentaires →
-              </Link>
-            </div>
-          </div>
-
-          {/* Carte highlight PMP */}
-          <div className="hidden lg:block">
-            <div className="card p-6 bg-accent/5 border-accent/20">
-              <div className="text-3xl mb-3">🎓</div>
-              <h3 className="font-bold text-white mb-2">Certification PMP — examen 2026</h3>
-              <p className="text-sm text-slate-400 mb-4">
-                Prépare le Project Management Professional du PMI (PMBOK 8) : 180 questions, 240 min, domaines People · Process · Business.
-              </p>
-              <div className="space-y-2 text-xs text-slate-400">
-                <div>→ 8 modules · 33 leçons · quiz par module</div>
-                <div>→ Agile, hybride et prédictif</div>
-                <div>→ Examen blanc chronométré</div>
-                <div>→ 8 à 12 semaines de préparation</div>
-              </div>
-              <Link href="/pmp" className="btn-secondary text-sm mt-5 w-full justify-center">
-                🎯 Découvrir le parcours PMP
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ── SECTION IMAGE LARGE — ENVIRONNEMENT ──────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
         <div className="relative rounded-3xl overflow-hidden">
@@ -360,6 +289,18 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* ── FAQ ──────────────────────────────────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+        <Reveal className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-white mb-3">
+            Questions <span className="gradient-text">fréquentes</span>
+          </h2>
+        </Reveal>
+        <Reveal delay={100}>
+          <FAQ />
+        </Reveal>
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
