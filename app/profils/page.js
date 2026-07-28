@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useUserProgress } from "@/lib/userProgress";
 import { AVATAR_COLORS, AVATAR_OPTIONS, getAvatarEmoji } from "@/lib/avatars";
 import { createClient } from "@/lib/supabase/client";
+import { validatePassword, PASSWORD_MIN_LENGTH } from "@/lib/passwordPolicy";
+import PasswordStrength from "@/components/PasswordStrength";
 import Link from "next/link";
 
 export function ProfileAvatar({ profile, size = "lg" }) {
@@ -145,8 +147,9 @@ function ChangePasswordForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    if (newPassword.length < 6) {
-      setError("Le mot de passe doit contenir au moins 6 caractères.");
+    const check = validatePassword(newPassword);
+    if (!check.valid) {
+      setError(check.message);
       return;
     }
     if (newPassword !== confirmPassword) {
@@ -184,12 +187,15 @@ function ChangePasswordForm() {
     <form onSubmit={handleSubmit} className="card p-5 border-dashed border-ink-600 space-y-4 mt-3">
       <div>
         <label className="text-xs text-slate-500 mb-1 block">Nouveau mot de passe</label>
-        <input type="password" required minLength={6} value={newPassword} onChange={e => setNewPassword(e.target.value)}
+        <input type="password" required minLength={PASSWORD_MIN_LENGTH} autoComplete="new-password"
+          value={newPassword} onChange={e => setNewPassword(e.target.value)}
           className="w-full bg-ink-950 border border-ink-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent" autoFocus />
+        <PasswordStrength password={newPassword} />
       </div>
       <div>
         <label className="text-xs text-slate-500 mb-1 block">Confirmer le mot de passe</label>
-        <input type="password" required minLength={6} value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
+        <input type="password" required minLength={PASSWORD_MIN_LENGTH} autoComplete="new-password"
+          value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
           className="w-full bg-ink-950 border border-ink-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent" />
       </div>
       {error && <p className="text-sm text-rose-400">{error}</p>}

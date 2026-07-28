@@ -5,6 +5,7 @@ import { WEB_CURRICULUM } from "@/lib/webdev";
 import { PMP_CURRICULUM, PMP_LEVELS } from "@/lib/pmp";
 import { NeuralNetworkIllustration, WebDevIllustration } from "@/components/Illustrations";
 import ProfileWidget from "@/components/ProfileWidget";
+import Reveal from "@/components/Reveal";
 
 const features = [
   { icon: "🗺", title: "Trois parcours complets", desc: "ML/Data Science (9 modules), Web Full Stack (6 modules) et préparation PMP (8 modules). Complémentaires et progressifs." },
@@ -41,29 +42,49 @@ export default function Home() {
     <div>
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(99,102,241,0.18),transparent_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(6,182,212,0.08),transparent_55%)]" />
+        {/* Fond aurora animé */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div
+            className="aurora-bg animate-aurora"
+            style={{ background: "radial-gradient(ellipse 50% 45% at 20% 15%, rgba(99,102,241,0.45), transparent 70%)" }}
+          />
+          <div
+            className="aurora-bg animate-aurora"
+            style={{
+              background: "radial-gradient(ellipse 45% 40% at 80% 70%, rgba(34,211,238,0.28), transparent 70%)",
+              animationDelay: "-6s",
+            }}
+          />
+          <div
+            className="aurora-bg animate-aurora"
+            style={{
+              background: "radial-gradient(ellipse 40% 35% at 60% 20%, rgba(168,85,247,0.22), transparent 70%)",
+              animationDelay: "-12s",
+            }}
+          />
+        </div>
+
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Text */}
             <div>
-              <span className="inline-block px-4 py-1.5 rounded-full border border-accent/30 bg-accent/10 text-accent-light text-xs font-semibold mb-6">
+              <span className="inline-block px-4 py-1.5 rounded-full border border-accent/30 bg-accent/10 text-accent-light text-xs font-semibold mb-6 animate-fade-up">
                 🚀 École ML + Web Dev avec tuteur AI — plan 2026-2031
               </span>
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-white leading-tight">
+              <h1 className="text-4xl sm:text-5xl font-extrabold text-white leading-tight animate-fade-up delay-75">
                 Maîtrisez le <span className="gradient-text">Machine Learning</span>{" "}
                 et le <span className="gradient-text">Web Full Stack</span>
               </h1>
-              <p className="mt-6 text-lg text-slate-400 leading-relaxed">
+              <p className="mt-6 text-lg text-slate-400 leading-relaxed animate-fade-up delay-150">
                 Un curriculum complet, un tuteur AI expert, un plan de discipline sur 5 ans et une progression visible sur votre GitHub.
               </p>
-              <div className="mt-8 flex flex-wrap gap-4">
+              <div className="mt-8 flex flex-wrap gap-4 animate-fade-up delay-225">
                 <Link href="/parcours" className="btn-primary text-base px-7 py-3">Parcours ML →</Link>
                 <Link href="/webdev" className="btn-secondary text-base px-7 py-3">Parcours Web</Link>
                 <Link href="/calendrier" className="btn-secondary text-base px-7 py-3">📅 Mon plan</Link>
               </div>
               {/* Stats */}
-              <div className="mt-10 grid grid-cols-4 gap-4 text-center">
+              <div className="mt-10 grid grid-cols-4 gap-4 text-center animate-fade-up delay-300">
                 {STATS.map(s => (
                   <div key={s.label}>
                     <div className="text-2xl font-extrabold gradient-text">{s.val}</div>
@@ -74,7 +95,7 @@ export default function Home() {
             </div>
 
             {/* Hero image + illustration */}
-            <div className="hidden lg:block relative">
+            <div className="hidden lg:block relative animate-scale-in delay-150">
               {/* Image photo réelle — ML / data science */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <Image
@@ -90,11 +111,11 @@ export default function Home() {
                 {/* Badge flottant */}
                 <div className="absolute bottom-4 left-4 px-4 py-2 rounded-2xl bg-ink-900/90 border border-ink-700 backdrop-blur-sm">
                   <p className="text-xs text-slate-400">Alimenté par</p>
-                  <p className="text-sm font-bold gradient-text">Claude Opus · Anthropic</p>
+                  <p className="text-sm font-bold gradient-text">Claude Sonnet · Anthropic</p>
                 </div>
               </div>
               {/* Petite illustration SVG en surimpression */}
-              <div className="absolute -bottom-4 -right-4 w-32 h-32 opacity-60">
+              <div className="absolute -bottom-4 -right-4 w-32 h-32 opacity-60 animate-float">
                 <NeuralNetworkIllustration className="w-full" />
               </div>
             </div>
@@ -120,16 +141,16 @@ export default function Home() {
 
       {/* ── FEATURES ─────────────────────────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-        <h2 className="text-3xl font-bold text-white text-center mb-12">
+        <Reveal as="h2" className="text-3xl font-bold text-white text-center mb-12">
           Tout ce qu'il faut pour <span className="gradient-text">progresser comme à l'école</span>
-        </h2>
+        </Reveal>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {features.map((f) => (
-            <div key={f.title} className="card p-5 hover:border-accent/50 transition-colors">
+          {features.map((f, i) => (
+            <Reveal key={f.title} delay={i * 70} className="card card-hover p-5">
               <div className="text-3xl mb-3">{f.icon}</div>
               <h3 className="font-bold text-white mb-1 text-sm">{f.title}</h3>
               <p className="text-xs text-slate-400 leading-relaxed">{f.desc}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -147,7 +168,7 @@ export default function Home() {
                 <Link
                   key={m.id}
                   href={`/parcours/${m.id}`}
-                  className="card p-5 flex items-center gap-4 hover:border-accent/50 transition-colors group"
+                  className="card card-hover p-5 flex items-center gap-4 group"
                 >
                   <div className="w-10 h-10 rounded-xl bg-ink-800 flex items-center justify-center text-xl shrink-0">{m.icon}</div>
                   <div className="flex-1 min-w-0">
@@ -203,7 +224,7 @@ export default function Home() {
                 <Link
                   key={m.id}
                   href={`/webdev/${m.id}`}
-                  className="card p-5 flex items-center gap-4 hover:border-blue-500/50 transition-colors group"
+                  className="card card-hover p-5 flex items-center gap-4 group hover:!border-blue-500/60"
                 >
                   <div className="w-10 h-10 rounded-xl bg-ink-800 flex items-center justify-center text-xl shrink-0">{m.icon}</div>
                   <div className="flex-1 min-w-0">
@@ -259,7 +280,7 @@ export default function Home() {
                 <Link
                   key={m.id}
                   href={`/pmp/${m.id}`}
-                  className="card p-5 flex items-center gap-4 hover:border-accent/50 transition-colors group"
+                  className="card card-hover p-5 flex items-center gap-4 group"
                 >
                   <div className="w-10 h-10 rounded-xl bg-ink-800 flex items-center justify-center text-xl shrink-0">{m.icon}</div>
                   <div className="flex-1 min-w-0">
@@ -330,7 +351,7 @@ export default function Home() {
 
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-24">
-        <div className="card p-10 text-center bg-gradient-to-b from-accent/5 to-transparent border-accent/20">
+        <Reveal className="card gradient-border p-10 text-center bg-gradient-to-b from-accent/5 to-transparent border-accent/20">
           <h2 className="text-2xl font-bold text-white mb-3">Prêt à commencer ?</h2>
           <p className="text-slate-400 mb-8 max-w-lg mx-auto">
             Consulte ton calendrier de discipline, choisis ton premier module et commence à construire des preuves sur GitHub.
@@ -340,7 +361,7 @@ export default function Home() {
             <Link href="/tuteur" className="btn-secondary">Parler au tuteur AI</Link>
             <Link href="/ressources" className="btn-secondary">Bibliothèque de ressources</Link>
           </div>
-        </div>
+        </Reveal>
       </section>
     </div>
   );

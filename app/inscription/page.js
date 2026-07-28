@@ -3,10 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { validatePassword, PASSWORD_MIN_LENGTH } from "@/lib/passwordPolicy";
+import PasswordStrength from "@/components/PasswordStrength";
 
 export default function InscriptionPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState("");
   const [sent, setSent] = useState(false);
@@ -15,6 +18,18 @@ export default function InscriptionPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    // Politique de mot de passe appliquée avant tout appel réseau.
+    const check = validatePassword(password);
+    if (!check.valid) {
+      setError(check.message);
+      return;
+    }
+    if (password !== confirm) {
+      setError("Les deux mots de passe ne correspondent pas.");
+      return;
+    }
+
     setLoading(true);
     const supabase = createClient();
     const { error: signUpError } = await supabase.auth.signUp({
@@ -64,8 +79,32 @@ export default function InscriptionPage() {
         </div>
         <div>
           <label className="text-xs text-slate-500 mb-1 block">Mot de passe</label>
-          <input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-ink-950 border border-ink-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent" />
+          <input
+            type="password"
+            required
+            minLength={PASSWORD_MIN_LENGTH}
+            autoComplete="new-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full bg-ink-950 border border-ink-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent"
+          />
+          <PasswordStrength password={password} />
+        </div>
+        <div>
+          <label className="text-xs text-slate-500 mb-1 block">Confirme le mot de passe</label>
+          <input
+            type="password"
+            required
+            autoComplete="new-password"
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            className={`w-full bg-ink-950 border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent ${
+              confirm && confirm !== password ? "border-rose-500/60" : "border-ink-700"
+            }`}
+          />
+          {confirm && confirm !== password && (
+            <p className="text-xs text-rose-400 mt-1.5">Les deux mots de passe ne correspondent pas.</p>
+          )}
         </div>
         {error && <p className="text-sm text-rose-400">{error}</p>}
         <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-50">

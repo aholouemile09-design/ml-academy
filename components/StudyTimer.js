@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useUserProgress } from "@/lib/userProgress";
 import { usePathname } from "next/navigation";
+import { loadTimerState, saveTimerState, clearTimerState } from "@/lib/studyTime";
 
 const HIDDEN_PATHS = ["/connexion", "/inscription"];
 
@@ -39,37 +40,73 @@ export default function StudyTimer() {
   const [running, setRunning] = useState(false);
   const [finished, setFinished] = useState(false);
   const [customInput, setCustomInput] = useState(String(defaultMinutes));
+  const [hydrated, setHydrated] = useState(false);
+
+  // « Vierge » = l'utilisateur n'a ni démarré ni changé la durée. Seul un
+  // minuteur vierge se réaligne automatiquement sur le plan du jour ; sinon
+  // une pause réinitialiserait la session en cours (c'était le bug).
+  const [pristine, setPristine] = useState(true);
 
   const intervalRef = useRef(null);
   const audioRef = useRef(null);
+  const endsAtRef = useRef(null);
 
-  // Mettre à jour si le plan change
+  // ── Restauration après rafraîchissement ────────────────────────────────
   useEffect(() => {
-    if (!running) {
-      const mins = planMinutes || 25;
-      setTotalSeconds(mins * 60);
-      setRemaining(mins * 60);
-      setCustomInput(String(mins));
+    const saved = loadTimerState();
+    if (saved) {
+      setTotalSeconds(saved.totalSeconds);
+      setRemaining(saved.remaining);
+      setRunning(saved.running);
+      setFinished(!!saved.finished);
+      setCustomInput(String(Math.round(saved.totalSeconds / 60)));
+      setPristine(false);
+      if (saved.running) endsAtRef.current = saved.endsAt;
     }
-  }, [planMinutes, running]);
+    setHydrated(true);
+  }, []);
 
-  const tick = useCallback(() => {
-    setRemaining(r => {
-      if (r <= 1) {
-        setRunning(false);
-        setFinished(true);
-        if (audioRef.current) {
-          audioRef.current.currentTime = 0;
-          audioRef.current.play().catch(() => {});
-        }
-        return 0;
-      }
-      return r - 1;
+  // ── Persistance de l'état ──────────────────────────────────────────────
+  useEffect(() => {
+    if (!hydrated || pristine) return;
+    saveTimerState({
+      totalSeconds,
+      remaining,
+      running,
+      finished,
+      endsAt: running ? endsAtRef.current : null,
     });
+  }, [hydrated, pristine, totalSeconds, remaining, running, finished]);
+
+  // Réaligner sur le plan du jour — uniquement si le minuteur est vierge.
+  useEffect(() => {
+    if (!hydrated || !pristine) return;
+    const mins = planMinutes || 25;
+    setTotalSeconds(mins * 60);
+    setRemaining(mins * 60);
+    setCustomInput(String(mins));
+  }, [planMinutes, hydrated, pristine]);
+
+  // Le restant se déduit de l'horodatage de fin : reste juste même si
+  // l'onglet passe en arrière-plan et que setInterval est bridé.
+  const tick = useCallback(() => {
+    if (endsAtRef.current == null) return;
+    const left = Math.max(0, Math.round((endsAtRef.current - Date.now()) / 1000));
+    setRemaining(left);
+    if (left === 0) {
+      setRunning(false);
+      setFinished(true);
+      endsAtRef.current = null;
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play().catch(() => {});
+      }
+    }
   }, []);
 
   useEffect(() => {
     if (running) {
+      tick();
       intervalRef.current = setInterval(tick, 1000);
     } else {
       clearInterval(intervalRef.current);
@@ -77,12 +114,36 @@ export default function StudyTimer() {
     return () => clearInterval(intervalRef.current);
   }, [running, tick]);
 
-  const handleStart = () => { setFinished(false); setRunning(true); };
-  const handlePause = () => setRunning(false);
+  // Resynchroniser au retour sur l'onglet.
+  useEffect(() => {
+    const onVisible = () => { if (!document.hidden && running) tick(); };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, [running, tick]);
+
+  const handleStart = () => {
+    setFinished(false);
+    setPristine(false);
+    endsAtRef.current = Date.now() + remaining * 1000;
+    setRunning(true);
+  };
+
+  const handlePause = () => {
+    // On fige le restant réel avant d'arrêter — sans écraser la durée totale.
+    if (endsAtRef.current != null) {
+      setRemaining(Math.max(0, Math.round((endsAtRef.current - Date.now()) / 1000)));
+    }
+    endsAtRef.current = null;
+    setRunning(false);
+  };
+
   const handleReset = () => {
     setRunning(false);
     setFinished(false);
+    endsAtRef.current = null;
     setRemaining(totalSeconds);
+    setPristine(true);
+    clearTimerState();
   };
 
   const applyMinutes = (mins) => {
@@ -91,6 +152,8 @@ export default function StudyTimer() {
     setRemaining(secs);
     setRunning(false);
     setFinished(false);
+    setPristine(false);
+    endsAtRef.current = null;
     setCustomInput(String(mins));
   };
 

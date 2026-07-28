@@ -11,6 +11,8 @@ import ReflectionPrompt from "@/components/ReflectionPrompt";
 import LessonChat from "@/components/LessonChat";
 import LessonResources from "@/components/LessonResources";
 import LessonNotes from "@/components/LessonNotes";
+import ModuleSyllabus from "@/components/ModuleSyllabus";
+import LessonCompleteButton from "@/components/LessonCompleteButton";
 
 export default function PmpModulePage() {
   const { moduleId } = useParams();
@@ -50,6 +52,9 @@ export default function PmpModulePage() {
           </span>
         </div>
       </div>
+
+      {/* Syllabus : objectifs, prérequis, lectures, problem set */}
+      <ModuleSyllabus moduleId={mod.id} />
 
       <div className="grid lg:grid-cols-[280px_1fr] gap-8">
         <aside className="space-y-2">
@@ -99,13 +104,11 @@ export default function PmpModulePage() {
               <LessonResources resources={lesson.resources} />
               <LessonNotes lessonId={lesson.id} />
               <div className="mt-8 pt-6 border-t border-ink-700 flex items-center justify-between flex-wrap gap-3">
-                {isDone(lesson.id) ? (
-                  <span className="text-emerald-400 text-sm font-semibold">✅ Leçon complétée (+50 XP)</span>
-                ) : (
-                  <button onClick={() => progress?.completeLesson(lesson.id)} className="btn-primary">
-                    Marquer comme complétée (+50 XP)
-                  </button>
-                )}
+                <LessonCompleteButton
+                  moduleId={mod.id}
+                  lessonId={lesson.id}
+                  isLastLesson={activeLesson + 1 === mod.lessons.length}
+                />
                 {activeLesson + 1 < mod.lessons.length ? (
                   <button onClick={() => setActiveLesson(activeLesson + 1)} className="btn-secondary">
                     Leçon suivante →

@@ -51,3 +51,13 @@ $$ language plpgsql security definer set search_path = public;
 drop trigger if exists trg_on_auth_user_created on auth.users;
 create trigger trg_on_auth_user_created after insert on auth.users
   for each row execute function public.handle_new_user();
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- Migration : notes personnelles par leçon + temps passé par module
+-- À exécuter dans le SQL Editor de Supabase.
+-- ─────────────────────────────────────────────────────────────────────────────
+alter table public.user_progress
+  add column if not exists lesson_notes jsonb not null default '{}'::jsonb;
+
+alter table public.user_progress
+  add column if not exists module_time  jsonb not null default '{}'::jsonb;
