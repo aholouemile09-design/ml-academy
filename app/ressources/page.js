@@ -63,7 +63,7 @@ export default function Ressources() {
               type="checkbox"
               checked={freeOnly}
               onChange={(e) => setFreeOnly(e.target.checked)}
-              className="accent-indigo-500"
+              className="accent-[#D9AE5F]"
             />
             Gratuit uniquement
           </label>

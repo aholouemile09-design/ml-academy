@@ -117,7 +117,7 @@ export default function Parametres() {
         <div className="flex items-center gap-3">
           <input type="checkbox" id="reminder" checked={reminderOptIn}
             onChange={e => setReminderOptIn(e.target.checked)}
-            className="w-4 h-4 accent-indigo-500" />
+            className="w-4 h-4 accent-[#D9AE5F]" />
           <label htmlFor="reminder" className="text-sm text-slate-300">
             Recevoir un email de rappel quotidien (si aucune activité dans la journée)
           </label>

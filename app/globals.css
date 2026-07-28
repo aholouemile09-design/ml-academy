@@ -7,22 +7,38 @@
 /* ─────────────────────────────────────────────────────────────────────────────
    THÈME SOMBRE (défaut)
    ───────────────────────────────────────────────────────────────────────────── */
+/* Courbes d'accélération — partagées par les deux thèmes.
+   --ease-soft : décélération longue, le mouvement « se pose » au lieu de
+   s'arrêter net. C'est ce qui donne la sensation de fluidité.
+   --ease-out  : plus courte, pour les micro-interactions (survols).
+   --ease-spring : léger dépassement, pour les apparitions d'éléments. */
+:root {
+  --ease-soft:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out:    cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 :root,
 html.dark {
   color-scheme: dark;
-  /* Backgrounds */
-  --ink-950: 10 14 26;
-  --ink-900: 15 21 37;
-  --ink-800: 22 30 51;
-  --ink-700: 31 42 71;
-  /* Textes */
+  /* Fonds — vert forêt profond (aucune trace de bleu) */
+  --ink-950: 13 20 16;    /* #0D1410 */
+  --ink-900: 19 28 23;    /* #131C17 */
+  --ink-800: 28 41 33;    /* #1C2921 */
+  --ink-700: 42 61 48;    /* #2A3D30 */
+  /* Accents — or ancien, volontairement désaturé pour ne pas « crier »
+     sur le vert foncé, + vert doux en secondaire */
+  --accent:       217 174 95;   /* #D9AE5F */
+  --accent-light: 233 203 142;  /* #E9CB8E */
+  --accent-2:     95 191 130;   /* #5FBF82 */
+  /* Textes — légèrement réchauffés pour s'accorder aux fonds verts */
   --color-text-primary:   255 255 255;
-  --color-text-secondary: 226 232 240;  /* slate-200 */
-  --color-text-muted:     148 163 184;  /* slate-400 */
-  --color-text-subtle:    100 116 139;  /* slate-500 */
+  --color-text-secondary: 226 232 219;
+  --color-text-muted:     154 173 158;
+  --color-text-subtle:    118 137 123;
   /* Scrollbar */
-  --scrollbar-track: #0f1525;
-  --scrollbar-thumb: #1f2a47;
+  --scrollbar-track: #131c17;
+  --scrollbar-thumb: #2a3d30;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -30,19 +46,24 @@ html.dark {
    ───────────────────────────────────────────────────────────────────────────── */
 html.light {
   color-scheme: light;
-  /* Backgrounds */
-  --ink-950: 248 250 252;  /* slate-50  */
-  --ink-900: 241 245 249;  /* slate-100 */
-  --ink-800: 226 232 240;  /* slate-200 */
-  --ink-700: 203 213 225;  /* slate-300 */
+  /* Fonds — blanc cassé très légèrement verdi */
+  --ink-950: 247 249 245;  /* #F7F9F5 */
+  --ink-900: 241 245 238;  /* #F1F5EE */
+  --ink-800: 228 235 224;  /* #E4EBE0 */
+  --ink-700: 203 216 197;  /* #CBD8C5 */
+  /* Accents — or bien plus foncé qu'en mode sombre : sur fond pâle,
+     l'or clair tomberait à ~2:1 de contraste, donc illisible. */
+  --accent:       138 106 36;   /* #8A6A24 — 4,75:1 sur le fond clair */
+  --accent-light: 122  93  30;  /* #7A5D1E — encore plus foncé pour le texte */
+  --accent-2:      45 122  74;  /* #2D7A4A */
   /* Textes */
-  --color-text-primary:   15 23 42;    /* slate-900 */
-  --color-text-secondary: 30 41 59;    /* slate-800 */
-  --color-text-muted:     71 85 105;   /* slate-600 */
-  --color-text-subtle:    71 85 105;   /* slate-600 — un peu plus foncé pour la lisibilité en clair */
+  --color-text-primary:   20  31  24;
+  --color-text-secondary: 34  48  38;
+  --color-text-muted:     74  92  79;
+  --color-text-subtle:    74  92  79;
   /* Scrollbar */
-  --scrollbar-track: #f1f5f9;
-  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-track: #f1f5ee;
+  --scrollbar-thumb: #cbd8c5;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -58,15 +79,17 @@ body {
 html.light .text-white  { color: rgb(var(--color-text-primary))   !important; }
 html.light .text-slate-100 { color: rgb(var(--color-text-primary)) !important; }
 html.light .text-slate-200 { color: rgb(var(--color-text-secondary)) !important; }
-html.light .text-slate-300 { color: rgb(51 65 85) !important; } /* slate-700 — corrigé (rgb manquant) */
+html.light .text-slate-300 { color: rgb(var(--color-text-secondary)) !important; }
 html.light .text-slate-400 { color: rgb(var(--color-text-muted))   !important; }
 html.light .text-slate-500 { color: rgb(var(--color-text-subtle))  !important; }
 html.light .text-slate-600 { color: rgb(var(--color-text-subtle))  !important; }
 
-/* Boutons blancs — restent blancs même en mode clair */
-html.light .btn-primary .text-white,
-html.light button.bg-accent .text-white,
-html.light .bg-accent { /* le texte sur fond accent reste blanc */ }
+/* Le texte du bouton principal s'inverse selon le thème, parce que l'accent
+   lui-même s'inverse : or CLAIR en thème sombre (→ texte sombre, 9,1:1),
+   bronze FONCÉ en thème clair (→ texte blanc, 5,0:1). Un seul et même
+   choix pour les deux donnerait un bouton illisible dans l'un des cas. */
+html.dark  .btn-primary { color: #0D1410 !important; }
+html.light .btn-primary { color: #FFFFFF !important; }
 
 /* ─────────────────────────────────────────────────────────────────────────────
    COMPOSANTS SÉMANTIQUES
@@ -81,7 +104,8 @@ html.light .card {
 
 .btn-primary {
   @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-light font-semibold transition-colors;
-  color: #ffffff !important;
+  /* La couleur du texte est définie par thème plus haut — voir la note de
+     contraste. Ne pas la fixer ici, sinon les deux règles se contredisent. */
 }
 
 .btn-secondary {
@@ -90,7 +114,7 @@ html.light .card {
 
 html.dark  .btn-secondary { @apply text-slate-200 hover:border-accent; }
 html.light .btn-secondary { color: rgb(var(--color-text-secondary)); }
-html.light .btn-secondary:hover { border-color: #6366f1; }
+html.light .btn-secondary:hover { border-color: rgb(var(--accent)); }
 
 .gradient-text {
   @apply bg-gradient-to-r from-accent-light to-accent-cyan bg-clip-text text-transparent;
@@ -102,23 +126,23 @@ html.light .btn-secondary:hover { border-color: #6366f1; }
    ───────────────────────────────────────────────────────────────────────────── */
 html.light .nav-dropdown {
   background-color: #ffffff !important;
-  border-color: #cbd5e1 !important; /* slate-300 */
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18), 0 2px 8px rgba(15, 23, 42, 0.08) !important;
+  border-color: rgb(var(--ink-700)) !important;
+  box-shadow: 0 12px 32px rgba(20, 31, 24, 0.16), 0 2px 8px rgba(20, 31, 24, 0.07) !important;
 }
 /* Liens du menu : contraste renforcé en mode clair */
 html.light .nav-dropdown a,
 html.light .nav-dropdown button {
-  color: #334155 !important; /* slate-700 */
+  color: rgb(var(--color-text-secondary)) !important;
 }
 html.light .nav-dropdown a:hover,
 html.light .nav-dropdown button:hover {
-  background-color: #f1f5f9 !important; /* slate-100 */
-  color: #0f172a !important;            /* slate-900 */
+  background-color: rgb(var(--ink-900)) !important;
+  color: rgb(var(--color-text-primary)) !important;
 }
 /* L'élément actif garde l'accent */
 html.light .nav-dropdown a.bg-accent\/10 {
-  background-color: rgba(99, 102, 241, 0.12) !important;
-  color: #4338ca !important; /* indigo-700 */
+  background-color: rgb(var(--accent) / 0.14) !important;
+  color: rgb(var(--accent-light)) !important;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -171,17 +195,17 @@ html.light .nav-dropdown a.bg-accent\/10 {
   100% { background-position: 200% 0; }
 }
 @keyframes pulse-ring {
-  0%   { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.45); }
-  70%  { box-shadow: 0 0 0 14px rgba(99, 102, 241, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+  0%   { box-shadow: 0 0 0 0 rgb(var(--accent) / 0.45); }
+  70%  { box-shadow: 0 0 0 14px rgb(var(--accent) / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(var(--accent) / 0); }
 }
 
 /* ── Révélation au scroll (piloté par components/Reveal.js) ───────────────── */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(18px);
+  transition: opacity 0.9s var(--ease-soft),
+              transform 0.9s var(--ease-soft);
   will-change: opacity, transform;
 }
 .reveal.is-visible {
@@ -190,11 +214,11 @@ html.light .nav-dropdown a.bg-accent\/10 {
 }
 
 /* ── Utilitaires d'animation ─────────────────────────────────────────────── */
-.animate-fade-up  { animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-fade-up  { animation: fade-up 0.7s var(--ease-soft) both; }
 .animate-fade-in  { animation: fade-in 0.6s ease both; }
-.animate-scale-in { animation: scale-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
-.animate-float    { animation: float 6s ease-in-out infinite; }
-.animate-aurora   { animation: aurora 18s ease-in-out infinite; }
+.animate-scale-in { animation: scale-in 0.5s var(--ease-soft) both; }
+.animate-float    { animation: float 8s ease-in-out infinite; }
+.animate-aurora   { animation: aurora 26s ease-in-out infinite; }
 .animate-pulse-ring { animation: pulse-ring 2s cubic-bezier(0.66, 0, 0, 1) infinite; }
 
 .delay-75  { animation-delay: 75ms;  }
@@ -206,18 +230,18 @@ html.light .nav-dropdown a.bg-accent\/10 {
 
 /* ── Carte interactive : élévation + halo au survol ───────────────────────── */
 .card {
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+  transition: transform 0.35s var(--ease-soft),
               border-color 0.25s ease,
               box-shadow 0.35s ease,
               background-color 0.25s ease;
 }
 .card-hover:hover {
   transform: translateY(-4px);
-  border-color: rgba(99, 102, 241, 0.5);
+  border-color: rgb(var(--accent) / 0.5);
 }
 html.dark .card-hover:hover {
   box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.7),
-              0 0 0 1px rgba(99, 102, 241, 0.15);
+              0 0 0 1px rgb(var(--accent) / 0.15);
 }
 html.light .card-hover:hover {
   box-shadow: 0 18px 36px -14px rgba(15, 23, 42, 0.22),
@@ -226,14 +250,14 @@ html.light .card-hover:hover {
 
 /* ── Boutons : micro-interaction ──────────────────────────────────────────── */
 .btn-primary, .btn-secondary {
-  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+  transition: transform 0.2s var(--ease-soft),
               background-color 0.2s ease,
               border-color 0.2s ease,
               box-shadow 0.25s ease;
 }
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px -8px rgba(99, 102, 241, 0.6);
+  box-shadow: 0 10px 24px -8px rgb(var(--accent) / 0.6);
 }
 .btn-primary:active, .btn-secondary:active { transform: translateY(0); }
 .btn-secondary:hover { transform: translateY(-2px); }
@@ -259,7 +283,7 @@ html.light .aurora-bg { opacity: 0.32; }
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(120deg, rgba(99,102,241,0.7), rgba(34,211,238,0.5), rgba(99,102,241,0.7));
+  background: linear-gradient(120deg, rgb(var(--accent) / 0.7), rgb(var(--accent-2) / 0.5), rgb(var(--accent) / 0.7));
   background-size: 200% 100%;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
@@ -277,10 +301,10 @@ html.light .aurora-bg { opacity: 0.32; }
   position: absolute;
   left: 0; bottom: -2px;
   width: 100%; height: 1.5px;
-  background: linear-gradient(90deg, #818cf8, #22d3ee);
+  background: linear-gradient(90deg, rgb(var(--accent-light)), rgb(var(--accent-2)));
   transform: scaleX(0);
   transform-origin: right;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.35s var(--ease-soft);
 }
 .link-underline:hover::after {
   transform: scaleX(1);
@@ -302,12 +326,12 @@ html.light .aurora-bg { opacity: 0.32; }
 a.card:hover,
 button.card:hover {
   transform: translateY(-4px);
-  border-color: rgba(99, 102, 241, 0.5);
+  border-color: rgb(var(--accent) / 0.5);
 }
 html.dark a.card:hover,
 html.dark button.card:hover {
   box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.7),
-              0 0 0 1px rgba(99, 102, 241, 0.15);
+              0 0 0 1px rgb(var(--accent) / 0.15);
 }
 html.light a.card:hover,
 html.light button.card:hover {
@@ -328,16 +352,16 @@ html.light button.card:hover {
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(to right, rgba(99, 102, 241, 0.10) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(99, 102, 241, 0.10) 1px, transparent 1px);
+    linear-gradient(to right, rgb(var(--accent) / 0.10) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--accent) / 0.10) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 20%, transparent 75%);
   -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 20%, transparent 75%);
 }
 html.light .grid-backdrop {
   background-image:
-    linear-gradient(to right, rgba(99, 102, 241, 0.16) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(99, 102, 241, 0.16) 1px, transparent 1px);
+    linear-gradient(to right, rgb(var(--accent) / 0.16) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--accent) / 0.16) 1px, transparent 1px);
 }
 
 /* ── Aurora nettement plus présent ────────────────────────────────────────── */
@@ -365,21 +389,21 @@ html.light .glass {
   inset: -30%;
   z-index: -1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.45), transparent 62%);
+  background: radial-gradient(circle, rgb(var(--accent) / 0.45), transparent 62%);
   filter: blur(44px);
   pointer-events: none;
 }
 
 /* ── Bouton principal : dégradé animé + halo ──────────────────────────────── */
 .btn-primary {
-  background: linear-gradient(115deg, #6366f1, #8b5cf6, #22d3ee, #6366f1);
+  background: linear-gradient(115deg, rgb(var(--accent)), rgb(var(--accent-light)), rgb(var(--accent-2)), rgb(var(--accent)));
   background-size: 300% 100%;
   animation: gradient-drift 9s ease infinite;
-  box-shadow: 0 6px 20px -6px rgba(99, 102, 241, 0.55);
+  box-shadow: 0 6px 20px -6px rgb(var(--accent) / 0.55);
   border: none;
 }
 .btn-primary:hover {
-  box-shadow: 0 14px 34px -8px rgba(99, 102, 241, 0.85);
+  box-shadow: 0 14px 34px -8px rgb(var(--accent) / 0.85);
 }
 @keyframes gradient-drift {
   0%, 100% { background-position: 0% 50%; }
@@ -388,7 +412,7 @@ html.light .glass {
 
 /* ── Titre : dégradé animé ────────────────────────────────────────────────── */
 .gradient-text {
-  background: linear-gradient(100deg, #818cf8, #22d3ee, #a78bfa, #818cf8);
+  background: linear-gradient(100deg, rgb(var(--accent-light)), rgb(var(--accent-2)), rgb(var(--accent)), rgb(var(--accent-light)));
   background-size: 300% 100%;
   -webkit-background-clip: text;
           background-clip: text;
@@ -405,7 +429,7 @@ html.light .glass {
 /* ── Séparateur lumineux ──────────────────────────────────────────────────── */
 .divider-glow {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(99,102,241,0.55), transparent);
+  background: linear-gradient(90deg, transparent, rgb(var(--accent) / 0.55), transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {

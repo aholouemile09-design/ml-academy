@@ -83,8 +83,8 @@ const CATEGORIES = [
     id: "projets-avances",
     icon: "🚀",
     title: "Projets ambitieux",
-    color: "border-indigo-500/30 bg-indigo-500/5",
-    titleColor: "text-indigo-400",
+    color: "border-accent/30 bg-accent/5",
+    titleColor: "text-accent-light",
     description: "Projets de niveau senior pour un portfolio qui se démarque — au-delà des tutoriels, des vrais systèmes.",
     status: "coming",
     items: [

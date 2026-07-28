@@ -173,7 +173,7 @@ function PublierContent() {
                     <input type="radio" name="project" value={p.id}
                       checked={projectId === p.id}
                       onChange={() => setProjectId(p.id)}
-                      className="accent-indigo-500" />
+                      className="accent-[#D9AE5F]" />
                     <span className="text-lg">{p.icon}</span>
                     <div className="flex-1 min-w-0">
                       <span className="text-sm text-white font-medium">{p.title}</span>

@@ -47,19 +47,19 @@ export default function Home() {
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div
             className="aurora-bg animate-aurora"
-            style={{ background: "radial-gradient(ellipse 50% 45% at 20% 15%, rgba(99,102,241,0.55), transparent 70%)" }}
+            style={{ background: "radial-gradient(ellipse 50% 45% at 20% 15%, rgb(var(--accent) / 0.42), transparent 70%)" }}
           />
           <div
             className="aurora-bg animate-aurora"
             style={{
-              background: "radial-gradient(ellipse 45% 40% at 80% 70%, rgba(34,211,238,0.38), transparent 70%)",
+              background: "radial-gradient(ellipse 45% 40% at 80% 70%, rgb(var(--accent-2) / 0.36), transparent 70%)",
               animationDelay: "-6s",
             }}
           />
           <div
             className="aurora-bg animate-aurora"
             style={{
-              background: "radial-gradient(ellipse 40% 35% at 60% 20%, rgba(168,85,247,0.32), transparent 70%)",
+              background: "radial-gradient(ellipse 40% 35% at 60% 20%, rgb(var(--accent-light) / 0.22), transparent 70%)",
               animationDelay: "-12s",
             }}
           />
@@ -116,7 +116,7 @@ export default function Home() {
                   priority
                 />
                 {/* Voile léger : assez pour asseoir le badge, sans éteindre la photo */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/10 to-transparent rounded-3xl" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-ink-950/10 to-transparent rounded-3xl" />
                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-transparent to-accent-cyan/15 rounded-3xl" />
                 {/* Badge flottant en verre dépoli */}
                 <div className="absolute bottom-4 left-4 px-4 py-2 rounded-2xl glass animate-float">
@@ -214,7 +214,7 @@ export default function Home() {
                 height={420}
                 className="w-full object-cover rounded-2xl"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent rounded-2xl" />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-ink-950/25 to-transparent rounded-2xl" />
               <div className="absolute bottom-4 left-4 right-4">
                 <p className="text-slate-50 font-bold text-sm">Data Science & ML</p>
                 <p className="text-slate-200/90 text-xs mt-1">De l'analyse de données aux modèles de production</p>
@@ -266,7 +266,7 @@ export default function Home() {
                   height={400}
                   className="w-full object-cover rounded-2xl"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent rounded-2xl" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-ink-950/20 to-transparent rounded-2xl" />
                 <div className="absolute bottom-4 left-4 right-4">
                   <p className="text-slate-50 font-bold text-sm">Web Full Stack</p>
                   <p className="text-slate-200/90 text-xs mt-1">React, Next.js, API, déploiement</p>
@@ -346,7 +346,7 @@ export default function Home() {
             height={400}
             className="w-full object-cover h-64 sm:h-80"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-ink-950 via-ink-950/80 to-transparent" />
           <div className="absolute inset-0 flex items-center px-8 sm:px-12">
             <div className="max-w-lg [text-shadow:0_2px_8px_rgba(0,0,0,0.85)]">
               <p className="text-accent-light text-sm font-semibold mb-2">Votre objectif</p>

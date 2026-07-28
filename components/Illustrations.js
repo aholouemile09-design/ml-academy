@@ -12,16 +12,16 @@ export function NeuralNetworkIllustration({ className = "" }) {
     >
       <defs>
         <radialGradient id="nn-glow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#6366f1" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+          <stop offset="0%" stopColor="#D9AE5F" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="#D9AE5F" stopOpacity="0" />
         </radialGradient>
         <linearGradient id="nn-line1" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#6366f1" stopOpacity="0.6" />
+          <stop offset="0%" stopColor="#D9AE5F" stopOpacity="0.6" />
           <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.6" />
         </linearGradient>
         <linearGradient id="nn-line2" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#6366f1" stopOpacity="0.4" />
+          <stop offset="100%" stopColor="#D9AE5F" stopOpacity="0.4" />
         </linearGradient>
         <filter id="nn-blur">
           <feGaussianBlur stdDeviation="3" result="blur" />
@@ -42,15 +42,15 @@ export function NeuralNetworkIllustration({ className = "" }) {
       {/* ── Layer 1 — Input nodes (x=60) ── */}
       {[70, 130, 190, 250].map((y, i) => (
         <g key={`l1-${i}`}>
-          <circle cx="60" cy={y} r="14" fill="#1e1b4b" stroke="#6366f1" strokeWidth="2" filter="url(#glow-strong)" />
-          <circle cx="60" cy={y} r="7" fill="#6366f1" opacity="0.8" />
+          <circle cx="60" cy={y} r="14" fill="#1C2921" stroke="#D9AE5F" strokeWidth="2" filter="url(#glow-strong)" />
+          <circle cx="60" cy={y} r="7" fill="#D9AE5F" opacity="0.8" />
         </g>
       ))}
 
       {/* ── Layer 2 — Hidden 1 (x=160) ── */}
       {[60, 120, 180, 240, 300].map((y, i) => (
         <g key={`l2-${i}`}>
-          <circle cx="160" cy={y} r="14" fill="#1e1b4b" stroke="#8b5cf6" strokeWidth="2" filter="url(#glow-strong)" />
+          <circle cx="160" cy={y} r="14" fill="#1C2921" stroke="#8b5cf6" strokeWidth="2" filter="url(#glow-strong)" />
           <circle cx="160" cy={y} r="7" fill="#8b5cf6" opacity="0.8" />
         </g>
       ))}
@@ -58,7 +58,7 @@ export function NeuralNetworkIllustration({ className = "" }) {
       {/* ── Layer 3 — Hidden 2 (x=260) ── */}
       {[80, 150, 220, 290].map((y, i) => (
         <g key={`l3-${i}`}>
-          <circle cx="260" cy={y} r="14" fill="#1e1b4b" stroke="#06b6d4" strokeWidth="2" filter="url(#glow-strong)" />
+          <circle cx="260" cy={y} r="14" fill="#1C2921" stroke="#06b6d4" strokeWidth="2" filter="url(#glow-strong)" />
           <circle cx="260" cy={y} r="7" fill="#06b6d4" opacity="0.8" />
         </g>
       ))}
@@ -66,7 +66,7 @@ export function NeuralNetworkIllustration({ className = "" }) {
       {/* ── Layer 4 — Output (x=360) ── */}
       {[120, 200].map((y, i) => (
         <g key={`l4-${i}`}>
-          <circle cx="360" cy={y} r="18" fill="#1e1b4b" stroke="#06b6d4" strokeWidth="2.5" filter="url(#glow-strong)" />
+          <circle cx="360" cy={y} r="18" fill="#1C2921" stroke="#06b6d4" strokeWidth="2.5" filter="url(#glow-strong)" />
           <circle cx="360" cy={y} r="9" fill="#06b6d4" opacity="0.9" />
         </g>
       ))}
@@ -96,10 +96,10 @@ export function NeuralNetworkIllustration({ className = "" }) {
       )}
 
       {/* Floating data label */}
-      <rect x="330" y="50" width="80" height="24" rx="6" fill="#1e1b4b" stroke="#6366f1" strokeWidth="1" opacity="0.8" />
-      <text x="370" y="66" textAnchor="middle" fill="#a5b4fc" fontSize="10" fontFamily="monospace">output: 0.94</text>
+      <rect x="330" y="50" width="80" height="24" rx="6" fill="#1C2921" stroke="#D9AE5F" strokeWidth="1" opacity="0.8" />
+      <text x="370" y="66" textAnchor="middle" fill="#E9CB8E" fontSize="10" fontFamily="monospace">output: 0.94</text>
 
-      <rect x="10" y="155" width="64" height="24" rx="6" fill="#1e1b4b" stroke="#8b5cf6" strokeWidth="1" opacity="0.8" />
+      <rect x="10" y="155" width="64" height="24" rx="6" fill="#1C2921" stroke="#8b5cf6" strokeWidth="1" opacity="0.8" />
       <text x="42" y="171" textAnchor="middle" fill="#c4b5fd" fontSize="10" fontFamily="monospace">x₁...x₄</text>
     </svg>
   );
@@ -136,9 +136,9 @@ export function WebDevIllustration({ className = "" }) {
 
       {/* Code lines in browser */}
       {[
-        { y: 90, w: 180, color: "#6366f1", label: "import React from 'react'" },
+        { y: 90, w: 180, color: "#D9AE5F", label: "import React from 'react'" },
         { y: 110, w: 240, color: "#06b6d4", label: "export default function App() {" },
-        { y: 130, w: 160, color: "#a5b4fc", label: "  return <Dashboard />" },
+        { y: 130, w: 160, color: "#E9CB8E", label: "  return <Dashboard />" },
         { y: 150, w: 80, color: "#06b6d4", label: "}" },
         { y: 180, w: 200, color: "#34d399", label: "✓ Build successful" },
         { y: 200, w: 150, color: "#94a3b8", label: "✓ Deployed to Vercel" },
@@ -149,8 +149,8 @@ export function WebDevIllustration({ className = "" }) {
       ))}
 
       {/* Floating badge */}
-      <rect x="290" y="170" width="80" height="32" rx="8" fill="#1e1b4b" stroke="#6366f1" strokeWidth="1.5" filter="url(#wd-glow)" />
-      <text x="330" y="188" textAnchor="middle" fill="#a5b4fc" fontSize="11" fontFamily="monospace" fontWeight="bold">React ⚛</text>
+      <rect x="290" y="170" width="80" height="32" rx="8" fill="#1C2921" stroke="#D9AE5F" strokeWidth="1.5" filter="url(#wd-glow)" />
+      <text x="330" y="188" textAnchor="middle" fill="#E9CB8E" fontSize="11" fontFamily="monospace" fontWeight="bold">React ⚛</text>
 
       <rect x="55" y="215" width="88" height="28" rx="8" fill="#0c1a2e" stroke="#0891b2" strokeWidth="1.5" filter="url(#wd-glow)" />
       <text x="99" y="233" textAnchor="middle" fill="#67e8f9" fontSize="11" fontFamily="monospace">Next.js 14</text>
@@ -165,11 +165,11 @@ export function TutorAvatar({ className = "" }) {
       <defs>
         <radialGradient id="av-bg" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#4f46e5" />
-          <stop offset="100%" stopColor="#1e1b4b" />
+          <stop offset="100%" stopColor="#1C2921" />
         </radialGradient>
         <linearGradient id="av-screen" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#0ea5e9" />
-          <stop offset="100%" stopColor="#6366f1" />
+          <stop offset="100%" stopColor="#D9AE5F" />
         </linearGradient>
         <filter id="av-glow">
           <feGaussianBlur stdDeviation="2" result="coloredBlur" />
@@ -178,11 +178,11 @@ export function TutorAvatar({ className = "" }) {
       </defs>
 
       {/* Outer ring */}
-      <circle cx="60" cy="60" r="56" fill="#0f0e1a" stroke="#6366f1" strokeWidth="2" />
+      <circle cx="60" cy="60" r="56" fill="#0f0e1a" stroke="#D9AE5F" strokeWidth="2" />
       <circle cx="60" cy="60" r="56" fill="none" stroke="#06b6d4" strokeWidth="1" strokeDasharray="8 4" opacity="0.4" />
 
       {/* Head */}
-      <rect x="28" y="22" width="64" height="64" rx="16" fill="url(#av-bg)" stroke="#6366f1" strokeWidth="2" filter="url(#av-glow)" />
+      <rect x="28" y="22" width="64" height="64" rx="16" fill="url(#av-bg)" stroke="#D9AE5F" strokeWidth="2" filter="url(#av-glow)" />
 
       {/* Screen/visor */}
       <rect x="34" y="32" width="52" height="34" rx="6" fill="#0a0a1a" stroke="#06b6d4" strokeWidth="1.5" />
@@ -197,16 +197,16 @@ export function TutorAvatar({ className = "" }) {
       <rect x="42" y="62" width="36" height="3" rx="2" fill="#06b6d4" opacity="0.8" />
 
       {/* Antenna */}
-      <line x1="60" y1="22" x2="60" y2="10" stroke="#6366f1" strokeWidth="2" />
-      <circle cx="60" cy="8" r="4" fill="#6366f1" filter="url(#av-glow)" />
+      <line x1="60" y1="22" x2="60" y2="10" stroke="#D9AE5F" strokeWidth="2" />
+      <circle cx="60" cy="8" r="4" fill="#D9AE5F" filter="url(#av-glow)" />
 
       {/* Ears / side panels */}
-      <rect x="18" y="42" width="10" height="20" rx="4" fill="#1e1b4b" stroke="#6366f1" strokeWidth="1.5" />
-      <rect x="92" y="42" width="10" height="20" rx="4" fill="#1e1b4b" stroke="#6366f1" strokeWidth="1.5" />
+      <rect x="18" y="42" width="10" height="20" rx="4" fill="#1C2921" stroke="#D9AE5F" strokeWidth="1.5" />
+      <rect x="92" y="42" width="10" height="20" rx="4" fill="#1C2921" stroke="#D9AE5F" strokeWidth="1.5" />
 
       {/* Body stub */}
-      <rect x="40" y="86" width="40" height="18" rx="8" fill="#1e1b4b" stroke="#6366f1" strokeWidth="1.5" />
-      <rect x="52" y="92" width="16" height="6" rx="3" fill="#6366f1" opacity="0.6" />
+      <rect x="40" y="86" width="40" height="18" rx="8" fill="#1C2921" stroke="#D9AE5F" strokeWidth="1.5" />
+      <rect x="52" y="92" width="16" height="6" rx="3" fill="#D9AE5F" opacity="0.6" />
     </svg>
   );
 }
@@ -221,7 +221,7 @@ export function CertificationIllustration({ className = "" }) {
           <stop offset="100%" stopColor="#d97706" />
         </linearGradient>
         <linearGradient id="cert-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#1e1b4b" />
+          <stop offset="0%" stopColor="#1C2921" />
           <stop offset="100%" stopColor="#0f172a" />
         </linearGradient>
         <filter id="cert-glow">
@@ -231,24 +231,24 @@ export function CertificationIllustration({ className = "" }) {
       </defs>
 
       {/* Certificate */}
-      <rect x="60" y="20" width="280" height="200" rx="12" fill="url(#cert-bg)" stroke="#6366f1" strokeWidth="2" />
-      <rect x="68" y="28" width="264" height="184" rx="8" fill="none" stroke="#6366f1" strokeWidth="1" opacity="0.4" strokeDasharray="6 3" />
+      <rect x="60" y="20" width="280" height="200" rx="12" fill="url(#cert-bg)" stroke="#D9AE5F" strokeWidth="2" />
+      <rect x="68" y="28" width="264" height="184" rx="8" fill="none" stroke="#D9AE5F" strokeWidth="1" opacity="0.4" strokeDasharray="6 3" />
 
       {/* Ribbon top */}
-      <rect x="180" y="14" width="40" height="20" rx="4" fill="#6366f1" />
+      <rect x="180" y="14" width="40" height="20" rx="4" fill="#D9AE5F" />
       <rect x="185" y="8" width="30" height="10" rx="3" fill="#4f46e5" />
 
       {/* Star / medal */}
-      <circle cx="200" cy="85" r="32" fill="#1e1b4b" stroke="url(#cert-gold)" strokeWidth="3" filter="url(#cert-glow)" />
+      <circle cx="200" cy="85" r="32" fill="#1C2921" stroke="url(#cert-gold)" strokeWidth="3" filter="url(#cert-glow)" />
       <text x="200" y="93" textAnchor="middle" fontSize="28">🏅</text>
 
       {/* Lines */}
-      <rect x="100" y="130" width="200" height="6" rx="3" fill="#6366f1" opacity="0.6" />
+      <rect x="100" y="130" width="200" height="6" rx="3" fill="#D9AE5F" opacity="0.6" />
       <rect x="120" y="148" width="160" height="4" rx="2" fill="#334155" />
       <rect x="130" y="162" width="140" height="4" rx="2" fill="#334155" />
 
       {/* "CERTIFIÉ" badge */}
-      <rect x="140" y="178" width="120" height="28" rx="6" fill="#6366f1" />
+      <rect x="140" y="178" width="120" height="28" rx="6" fill="#D9AE5F" />
       <text x="200" y="197" textAnchor="middle" fill="white" fontSize="13" fontFamily="Arial" fontWeight="bold">CERTIFIÉ ✓</text>
 
       {/* Floating badges */}
@@ -266,11 +266,11 @@ export function DashboardIllustration({ className = "" }) {
       className={className} aria-hidden="true">
       <defs>
         <linearGradient id="bar-grad" x1="0%" y1="100%" x2="0%" y2="0%">
-          <stop offset="0%" stopColor="#6366f1" />
+          <stop offset="0%" stopColor="#D9AE5F" />
           <stop offset="100%" stopColor="#06b6d4" />
         </linearGradient>
         <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#6366f1" />
+          <stop offset="0%" stopColor="#D9AE5F" />
           <stop offset="100%" stopColor="#06b6d4" />
         </linearGradient>
       </defs>
@@ -280,7 +280,7 @@ export function DashboardIllustration({ className = "" }) {
 
       {/* KPI cards */}
       {[
-        { x: 20, label: "XP", value: "1240", color: "#6366f1" },
+        { x: 20, label: "XP", value: "1240", color: "#D9AE5F" },
         { x: 115, label: "Leçons", value: "18/32", color: "#06b6d4" },
         { x: 210, label: "Modules", value: "5/9", color: "#8b5cf6" },
         { x: 305, label: "Niveau", value: "Avancé", color: "#22c55e" },

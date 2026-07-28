@@ -49,18 +49,18 @@ export async function GET(req) {
         subject: "📚 Ta session du jour t'attend !",
         html: `
           <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px 24px">
-            <h2 style="color:#6366f1;margin:0 0 8px">CodeGraft Academy</h2>
+            <h2 style="color:#D9AE5F;margin:0 0 8px">CodeGraft Academy</h2>
             <p style="color:#1e293b;font-size:16px;margin:0 0 16px">
               Bonjour 👋 Tu n'as pas encore eu d'activité aujourd'hui.
               Quelques minutes suffisent pour maintenir ta progression !
             </p>
             <a href="https://codegraft.oltavia.ca/parcours"
-              style="display:inline-block;background:#6366f1;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600">
+              style="display:inline-block;background:#D9AE5F;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600">
               Reprendre le cours →
             </a>
             <p style="color:#94a3b8;font-size:12px;margin:24px 0 0">
               Tu reçois cet email car tu as activé les rappels dans tes
-              <a href="https://codegraft.oltavia.ca/parametres" style="color:#6366f1">paramètres</a>.
+              <a href="https://codegraft.oltavia.ca/parametres" style="color:#D9AE5F">paramètres</a>.
               Tu peux les désactiver à tout moment.
             </p>
           </div>
