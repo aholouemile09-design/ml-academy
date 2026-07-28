@@ -6,6 +6,7 @@ import { PMP_CURRICULUM, PMP_LEVELS } from "@/lib/pmp";
 import { NeuralNetworkIllustration, WebDevIllustration } from "@/components/Illustrations";
 import ProfileWidget from "@/components/ProfileWidget";
 import Reveal from "@/components/Reveal";
+import AnimatedCounter from "@/components/AnimatedCounter";
 
 const features = [
   { icon: "🗺", title: "Trois parcours complets", desc: "ML/Data Science (9 modules), Web Full Stack (6 modules) et préparation PMP (8 modules). Complémentaires et progressifs." },
@@ -42,34 +43,39 @@ export default function Home() {
     <div>
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden">
-        {/* Fond aurora animé */}
+        {/* Fond aurora animé + grille en perspective */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div
             className="aurora-bg animate-aurora"
-            style={{ background: "radial-gradient(ellipse 50% 45% at 20% 15%, rgba(99,102,241,0.45), transparent 70%)" }}
+            style={{ background: "radial-gradient(ellipse 50% 45% at 20% 15%, rgba(99,102,241,0.55), transparent 70%)" }}
           />
           <div
             className="aurora-bg animate-aurora"
             style={{
-              background: "radial-gradient(ellipse 45% 40% at 80% 70%, rgba(34,211,238,0.28), transparent 70%)",
+              background: "radial-gradient(ellipse 45% 40% at 80% 70%, rgba(34,211,238,0.38), transparent 70%)",
               animationDelay: "-6s",
             }}
           />
           <div
             className="aurora-bg animate-aurora"
             style={{
-              background: "radial-gradient(ellipse 40% 35% at 60% 20%, rgba(168,85,247,0.22), transparent 70%)",
+              background: "radial-gradient(ellipse 40% 35% at 60% 20%, rgba(168,85,247,0.32), transparent 70%)",
               animationDelay: "-12s",
             }}
           />
+          <div className="grid-backdrop" />
         </div>
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Text */}
             <div>
-              <span className="inline-block px-4 py-1.5 rounded-full border border-accent/30 bg-accent/10 text-accent-light text-xs font-semibold mb-6 animate-fade-up">
-                🚀 École ML + Web Dev avec tuteur AI — plan 2026-2031
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-accent-light text-xs font-semibold mb-6 animate-fade-up">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+                </span>
+                École ML + Web Dev avec tuteur AI — plan 2026-2031
               </span>
               <h1 className="text-4xl sm:text-5xl font-extrabold text-white leading-tight animate-fade-up delay-75">
                 Maîtrisez le <span className="gradient-text">Machine Learning</span>{" "}
@@ -87,7 +93,10 @@ export default function Home() {
               <div className="mt-10 grid grid-cols-4 gap-4 text-center animate-fade-up delay-300">
                 {STATS.map(s => (
                   <div key={s.label}>
-                    <div className="text-2xl font-extrabold gradient-text">{s.val}</div>
+                    <AnimatedCounter
+                      value={s.val}
+                      className="block text-3xl font-extrabold gradient-text stat-value"
+                    />
                     <div className="text-xs text-slate-500 mt-1">{s.label}</div>
                   </div>
                 ))}
@@ -95,27 +104,31 @@ export default function Home() {
             </div>
 
             {/* Hero image + illustration */}
-            <div className="hidden lg:block relative animate-scale-in delay-150">
+            <div className="hidden lg:block relative animate-scale-in delay-150 glow">
               {/* Image photo réelle — ML / data science */}
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10">
                 <Image
                   src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=700&q=80"
                   alt="Intelligence artificielle et machine learning"
                   width={600}
                   height={420}
-                  className="w-full object-cover rounded-3xl"
+                  className="w-full object-cover rounded-3xl scale-105"
                   priority
                 />
-                {/* Overlay gradient pour intégrer dans le design (foncé fixe — ne blanchit pas en mode clair) */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-slate-950/70 via-transparent to-accent/10 rounded-3xl" />
-                {/* Badge flottant */}
-                <div className="absolute bottom-4 left-4 px-4 py-2 rounded-2xl bg-ink-900/90 border border-ink-700 backdrop-blur-sm">
+                {/* Voile léger : assez pour asseoir le badge, sans éteindre la photo */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/10 to-transparent rounded-3xl" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-transparent to-accent-cyan/15 rounded-3xl" />
+                {/* Badge flottant en verre dépoli */}
+                <div className="absolute bottom-4 left-4 px-4 py-2 rounded-2xl glass animate-float">
                   <p className="text-xs text-slate-400">Alimenté par</p>
                   <p className="text-sm font-bold gradient-text">Claude Sonnet · Anthropic</p>
                 </div>
               </div>
               {/* Petite illustration SVG en surimpression */}
-              <div className="absolute -bottom-4 -right-4 w-32 h-32 opacity-60 animate-float">
+              <div
+                className="absolute -bottom-4 -right-4 w-32 h-32 opacity-70 animate-float"
+                style={{ animationDelay: "-3s" }}
+              >
                 <NeuralNetworkIllustration className="w-full" />
               </div>
             </div>

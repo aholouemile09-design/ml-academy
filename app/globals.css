@@ -317,3 +317,97 @@ html.light button.card:hover {
 @media (prefers-reduced-motion: reduce) {
   a.card:hover, button.card:hover { transform: none; }
 }
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   EFFETS VISIBLES — grille, halos, verre dépoli, dégradés animés
+   ═════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Grille en perspective sous le hero ───────────────────────────────────── */
+.grid-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(99, 102, 241, 0.10) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.10) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 20%, transparent 75%);
+}
+html.light .grid-backdrop {
+  background-image:
+    linear-gradient(to right, rgba(99, 102, 241, 0.16) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.16) 1px, transparent 1px);
+}
+
+/* ── Aurora nettement plus présent ────────────────────────────────────────── */
+.aurora-bg { opacity: 0.85; filter: blur(70px); }
+html.light .aurora-bg { opacity: 0.45; }
+
+/* ── Verre dépoli ─────────────────────────────────────────────────────────── */
+.glass {
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+}
+html.dark .glass {
+  background: rgba(15, 21, 37, 0.62);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+html.light .glass {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+}
+
+/* ── Halo lumineux derrière un élément ────────────────────────────────────── */
+.glow::after {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.45), transparent 62%);
+  filter: blur(44px);
+  pointer-events: none;
+}
+
+/* ── Bouton principal : dégradé animé + halo ──────────────────────────────── */
+.btn-primary {
+  background: linear-gradient(115deg, #6366f1, #8b5cf6, #22d3ee, #6366f1);
+  background-size: 300% 100%;
+  animation: gradient-drift 9s ease infinite;
+  box-shadow: 0 6px 20px -6px rgba(99, 102, 241, 0.55);
+  border: none;
+}
+.btn-primary:hover {
+  box-shadow: 0 14px 34px -8px rgba(99, 102, 241, 0.85);
+}
+@keyframes gradient-drift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* ── Titre : dégradé animé ────────────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(100deg, #818cf8, #22d3ee, #a78bfa, #818cf8);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-drift 8s ease infinite;
+}
+
+/* ── Chiffres des statistiques ────────────────────────────────────────────── */
+.stat-value {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ── Séparateur lumineux ──────────────────────────────────────────────────── */
+.divider-glow {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(99,102,241,0.55), transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary, .gradient-text { animation: none !important; }
+}
