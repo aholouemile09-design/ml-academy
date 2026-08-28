@@ -9,7 +9,7 @@ import { getSyllabus } from "@/lib/syllabus";
  *
  * Rendu au-dessus des leçons, comme le syllabus d'un cours universitaire.
  */
-export default function ModuleSyllabus({ moduleId, accent = "accent" }) {
+export default function ModuleSyllabus({ moduleId, accent = "accent", showProblemSet = true }) {
   const syllabus = getSyllabus(moduleId);
   const [openPset, setOpenPset] = useState(false);
 
@@ -89,7 +89,7 @@ export default function ModuleSyllabus({ moduleId, accent = "accent" }) {
       )}
 
       {/* ── Problem set noté ───────────────────────────────────────────── */}
-      {problemSet && (
+      {showProblemSet && problemSet && (
         <div className="card overflow-hidden border-emerald-500/25">
           <button
             onClick={() => setOpenPset(!openPset)}

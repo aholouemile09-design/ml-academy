@@ -11,15 +11,19 @@ import ReflectionPrompt from "@/components/ReflectionPrompt";
 import LessonChat from "@/components/LessonChat";
 import LessonResources from "@/components/LessonResources";
 import LessonNotes from "@/components/LessonNotes";
+import LessonExercises from "@/components/LessonExercises";
+import FinalExercise from "@/components/FinalExercise";
 import ModuleSyllabus from "@/components/ModuleSyllabus";
 import LessonCompleteButton from "@/components/LessonCompleteButton";
+import PrincipesBandeau from "@/components/PrincipesBandeau";
 
 export default function ModulePage() {
   const { moduleId } = useParams();
   const mod = getModule(moduleId);
   const progress = useProgress();
   const [activeLesson, setActiveLesson] = useState(0);
-  const [showQuiz, setShowQuiz] = useState(false);
+  // "lesson" → une leçon | "final" → exercice global | "quiz" → QCM
+  const [view, setView] = useState("lesson");
 
   if (!mod) {
     return (
@@ -35,6 +39,11 @@ export default function ModulePage() {
   const lesson = mod.lessons[activeLesson];
   const isDone = (id) => progress?.completedLessons?.includes(id);
   const quiz = progress?.quizScores?.[mod.id];
+
+  const openLesson = (i) => {
+    setActiveLesson(i);
+    setView("lesson");
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
@@ -54,8 +63,18 @@ export default function ModulePage() {
         </div>
       </div>
 
-      {/* Syllabus : objectifs, prérequis, lectures, problem set */}
-      <ModuleSyllabus moduleId={mod.id} />
+      {/* Les principes défilent pendant qu'on travaille : c'est le fait de les
+          recroiser au bon moment qui les ancre, pas de les avoir lus une fois. */}
+      <div className="-mx-4 sm:-mx-6 mb-8">
+        <PrincipesBandeau />
+      </div>
+
+      {/* Syllabus : objectifs, prérequis, lectures.
+          Le problem set n'est masqué ici que si le module a un exercice final :
+          celui-ci le reprend en fin de parcours, là où l'élève peut réellement
+          le faire. Sur les modules pas encore migrés, on le laisse en haut
+          plutôt que de le rendre invisible. */}
+      <ModuleSyllabus moduleId={mod.id} showProblemSet={!mod.finalExercise} />
 
       <div className="grid lg:grid-cols-[280px_1fr] gap-8">
         {/* Sidebar */}
@@ -63,12 +82,9 @@ export default function ModulePage() {
           {mod.lessons.map((l, i) => (
             <button
               key={l.id}
-              onClick={() => {
-                setActiveLesson(i);
-                setShowQuiz(false);
-              }}
+              onClick={() => openLesson(i)}
               className={`w-full text-left px-4 py-3 rounded-xl border text-sm transition-colors ${
-                !showQuiz && i === activeLesson
+                view === "lesson" && i === activeLesson
                   ? "border-accent bg-accent/10 text-white"
                   : "border-ink-700 text-slate-400 hover:border-accent/50"
               }`}
@@ -77,33 +93,55 @@ export default function ModulePage() {
                 <span>{isDone(l.id) ? "✅" : "○"}</span>
                 <span className="flex-1">{l.title}</span>
               </div>
-              <div className="text-xs text-slate-600 mt-0.5 ml-6">{l.duration}</div>
+              <div className="text-xs text-slate-600 mt-0.5 ml-6">
+                {l.duration}
+                {l.exercises?.length > 0 && <> · {l.exercises.length} exos</>}
+              </div>
             </button>
           ))}
+
+          {mod.finalExercise && (
+            <button
+              onClick={() => setView("final")}
+              className={`w-full text-left px-4 py-3 rounded-xl border text-sm font-semibold transition-colors ${
+                view === "final"
+                  ? "border-emerald-500 bg-emerald-500/10 text-white"
+                  : "border-ink-700 text-slate-300 hover:border-emerald-500/50"
+              }`}
+            >
+              🎯 Exercice final
+              <span className="block text-xs text-slate-500 font-normal mt-0.5">
+                Rassemble tout le module
+              </span>
+            </button>
+          )}
+
           <button
-            onClick={() => setShowQuiz(true)}
+            onClick={() => setView("quiz")}
             className={`w-full text-left px-4 py-3 rounded-xl border text-sm font-semibold transition-colors ${
-              showQuiz
+              view === "quiz"
                 ? "border-accent bg-accent/10 text-white"
                 : "border-ink-700 text-slate-300 hover:border-accent/50"
             }`}
           >
             📝 Quiz de validation
-            {quiz && (
-              <span className="block text-xs text-slate-500 font-normal mt-0.5">
-                Meilleur score : {quiz.score}/{quiz.total}
-              </span>
-            )}
+            <span className="block text-xs text-slate-500 font-normal mt-0.5">
+              {quiz
+                ? `Meilleur score : ${quiz.score}/${quiz.total}`
+                : `${mod.quiz.length} questions`}
+            </span>
           </button>
         </aside>
 
         {/* Content */}
         <div>
-          {showQuiz ? (
+          {view === "quiz" ? (
             <>
               <QuizPlayer moduleId={mod.id} questions={mod.quiz} track="ml" />
               <ReflectionPrompt moduleId={mod.id} track="ml" moduleTitle={mod.title} />
             </>
+          ) : view === "final" ? (
+            <FinalExercise moduleId={mod.id} finalExercise={mod.finalExercise} />
           ) : (
             <article className="card p-6 sm:p-8">
               <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
@@ -113,6 +151,7 @@ export default function ModulePage() {
 
               <Markdown text={lesson.content} />
               <LessonResources resources={lesson.resources} />
+              <LessonExercises exercises={lesson.exercises} />
               <LessonNotes lessonId={lesson.id} />
 
               <div className="mt-8 pt-6 border-t border-ink-700 flex items-center justify-between flex-wrap gap-3">
@@ -122,11 +161,15 @@ export default function ModulePage() {
                   isLastLesson={activeLesson + 1 === mod.lessons.length}
                 />
                 {activeLesson + 1 < mod.lessons.length ? (
-                  <button onClick={() => setActiveLesson(activeLesson + 1)} className="btn-secondary">
+                  <button onClick={() => openLesson(activeLesson + 1)} className="btn-secondary">
                     Leçon suivante →
                   </button>
+                ) : mod.finalExercise ? (
+                  <button onClick={() => setView("final")} className="btn-secondary">
+                    Passer à l'exercice final →
+                  </button>
                 ) : (
-                  <button onClick={() => setShowQuiz(true)} className="btn-secondary">
+                  <button onClick={() => setView("quiz")} className="btn-secondary">
                     Passer au quiz →
                   </button>
                 )}
