@@ -16,8 +16,14 @@
     ,{
       "name": "ml-academy",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": ["run", "dev", "--", "-p", "3001"],
       "port": 3001
+    },
+    {
+      "name": "prayela-web",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "cd", "/d", "C:\\Users\\User 1\\Prayela Group\\prayela-web", "&&", "pnpm", "dev", "--port", "3002"],
+      "port": 3002
     }
   ]
 }
