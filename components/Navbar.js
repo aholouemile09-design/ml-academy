@@ -39,6 +39,7 @@ const NAV_GROUPS = [
       { href: "/certificat", label: "🏆 Certificats" },
       { href: "/espace", label: "🏠 Mon Espace" },
       { href: "/reviser", label: "🃏 Réviser" },
+      { href: "/principes", label: "🧭 Les principes" },
       { href: "/plan", label: "📅 Plan d'étude" },
       { href: "/journal", label: "📓 Mon journal" },
       { href: "/calendrier", label: "Plan général" },

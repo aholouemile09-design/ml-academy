@@ -3,6 +3,7 @@ const BASE_URL = "https://codegraft.vercel.app";
 const STATIC_ROUTES = [
   "",
   "/parcours",
+  "/principes",
   "/pmp",
   "/webdev",
   "/aller-plus-loin",

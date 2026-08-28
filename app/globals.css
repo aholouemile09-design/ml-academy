@@ -435,3 +435,40 @@ html.light .glass {
 @media (prefers-reduced-motion: reduce) {
   .btn-primary, .gradient-text { animation: none !important; }
 }
+
+/* ── Bandeau des principes : défilement continu ───────────────────────────── */
+/* Deux copies identiques de la liste défilent de 0 à -50 % : quand la première
+   sort à gauche, la seconde a exactement pris sa place, d'où une boucle sans
+   saut visible. La durée est passée en variable pour l'adapter au nombre de
+   principes affichés. */
+.principes-piste {
+  display: flex;
+  width: max-content;
+  animation: principes-defile var(--duree-defile, 90s) linear infinite;
+}
+
+.principes-fenetre:hover .principes-piste,
+.principes-fenetre:focus-within .principes-piste {
+  animation-play-state: paused;
+}
+
+@keyframes principes-defile {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Dégradés latéraux : les phrases apparaissent et disparaissent en fondu
+   plutôt que d'être coupées net par le bord. */
+.principes-fenetre {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .principes-piste { animation: none; }
+  .principes-fenetre {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+            mask-image: none;
+  }
+}

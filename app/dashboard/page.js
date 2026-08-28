@@ -5,6 +5,7 @@ import { useUserProgress as useProgress, computeStats } from "@/lib/userProgress
 import { LEVELS } from "@/lib/curriculum";
 import { useEffect, useState } from "react";
 import MasteryMap from "@/components/MasteryMap";
+import PrincipeDuJour from "@/components/PrincipeDuJour";
 import { computeMlMastery } from "@/lib/mastery";
 import { computeStreak } from "@/lib/streak";
 
@@ -121,6 +122,10 @@ export default function Dashboard() {
 
       <WeeklyGoalWidget progress={progress} />
       <ReviewWidget />
+
+      <div className="mb-10">
+        <PrincipeDuJour />
+      </div>
 
       {/* Global progress bar */}
       <div className="card p-6 mb-10">
