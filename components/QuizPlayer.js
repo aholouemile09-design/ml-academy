@@ -127,7 +127,9 @@ export default function QuizPlayer({ moduleId, questions, track = "ml" }) {
         />
       </div>
 
-      <h3 className="text-lg font-semibold text-white">{q.q}</h3>
+      {/* whitespace-pre-line : les questions de lecture de code contiennent
+          des retours à la ligne significatifs, à préserver tels quels. */}
+      <h3 className="text-lg font-semibold text-white whitespace-pre-line">{q.q}</h3>
 
       {/* Niveau de confiance */}
       {!validated && (
