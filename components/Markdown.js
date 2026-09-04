@@ -11,7 +11,7 @@ export default function Markdown({ text }) {
         i % 2 === 1 ? (
           <pre
             key={i}
-            className="bg-ink-950 border border-ink-700 rounded-xl p-4 overflow-x-auto text-sm text-accent-cyan"
+            className="bg-ink-800 border border-ink-700 rounded-xl p-4 overflow-x-auto text-sm font-mono text-slate-200"
           >
             <code>{block.replace(/^[a-z]*\n/, "")}</code>
           </pre>
@@ -106,7 +106,7 @@ function renderInline(text) {
     }
     if (part.startsWith("`") && part.endsWith("`")) {
       return (
-        <code key={i} className="bg-ink-800 px-1.5 py-0.5 rounded text-accent-cyan text-sm">
+        <code key={i} className="bg-ink-800 border border-ink-700 px-1.5 py-0.5 rounded-md font-mono text-accent-light text-[0.9em]">
           {part.slice(1, -1)}
         </code>
       );

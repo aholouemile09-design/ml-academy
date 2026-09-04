@@ -280,7 +280,7 @@ export default function StudyTimer() {
             finished
               ? "bg-gradient-to-br from-rose-500 to-orange-500 animate-pulse"
               : running
-              ? "bg-gradient-to-br from-indigo-500 to-violet-500"
+              ? "bg-gradient-to-br from-accent to-violet-500"
               : "bg-ink-800 border border-ink-700"
           }`}
         >

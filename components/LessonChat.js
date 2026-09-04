@@ -75,7 +75,7 @@ export default function LessonChat({ moduleTitle, lessonTitle, track }) {
             {messages.map((m, i) => (
               <div key={i} className={`flex gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 {m.role === "assistant" && (
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-xs shrink-0 mt-0.5">🤖</div>
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-accent to-accent-cyan flex items-center justify-center text-xs shrink-0 mt-0.5">🤖</div>
                 )}
                 <div className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${
                   m.role === "user"
@@ -88,7 +88,7 @@ export default function LessonChat({ moduleTitle, lessonTitle, track }) {
             ))}
             {loading && (
               <div className="flex gap-2 justify-start">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-xs shrink-0">🤖</div>
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-accent to-accent-cyan flex items-center justify-center text-xs shrink-0">🤖</div>
                 <div className="bg-ink-800 rounded-2xl rounded-bl-sm px-3 py-2">
                   <span className="flex gap-1">
                     <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
@@ -128,7 +128,7 @@ export default function LessonChat({ moduleTitle, lessonTitle, track }) {
         className={`fixed bottom-6 right-24 z-50 h-12 px-4 rounded-full shadow-lg flex items-center gap-2 text-sm font-medium transition-all hover:scale-105 ${
           open
             ? "bg-ink-700 border border-ink-600 text-slate-300"
-            : "bg-gradient-to-r from-indigo-500 to-cyan-500 text-white"
+            : "bg-gradient-to-r from-accent to-accent-cyan text-white"
         }`}
       >
         <span>💬</span>

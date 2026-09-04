@@ -56,7 +56,8 @@ export default function LessonExercises({ exercises }) {
         <span className="text-xs text-slate-600">{exercises.length} exercices</span>
       </div>
       <p className="text-xs text-slate-500 mb-4 leading-relaxed">
-        Fais-les dans l'ordre, dans un vrai fichier <code className="text-accent-cyan">.py</code> —
+        Fais-les dans l'ordre, dans un vrai fichier{" "}
+        <code className="bg-ink-800 border border-ink-700 px-1.5 py-0.5 rounded-md font-mono text-accent-light text-[0.9em]">.py</code> —
         pas dans ta tête. Ne déplie la correction qu'après avoir écrit quelque chose, même faux.
       </p>
 

@@ -30,7 +30,7 @@ const CLE_STOCKAGE = "codegraft:examen-blanc:v1";
 
 const DOMAINES = {
   people: { label: "People", couleur: "text-accent-light", anneau: "border-accent/40" },
-  process: { label: "Process", couleur: "text-sky-400", anneau: "border-sky-500/40" },
+  process: { label: "Process", couleur: "text-accent-light", anneau: "border-sky-500/40" },
   business: { label: "Business Environment", couleur: "text-emerald-400", anneau: "border-emerald-500/40" },
 };
 
@@ -354,7 +354,7 @@ export default function ExamenBlanc() {
       {cas && (
         <div className="card p-6 border-sky-500/25">
           <div className="flex items-baseline justify-between gap-3 mb-3 flex-wrap">
-            <p className="text-xs font-bold uppercase tracking-wider text-sky-400">
+            <p className="text-xs font-bold uppercase tracking-wider text-accent-light">
               📋 Étude de cas
             </p>
             <span className="text-xs text-slate-500">

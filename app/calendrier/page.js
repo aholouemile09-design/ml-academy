@@ -51,7 +51,7 @@ export default function CalendrierPage() {
           <div className="px-4 py-2 rounded-xl border border-accent/30 bg-accent/5 text-sm">
             🤖 ML/Data Science — <span className="text-white font-bold">{TOTAL_WEEKS_ML} semaines</span>
           </div>
-          <div className="px-4 py-2 rounded-xl border border-cyan-500/30 bg-cyan-500/5 text-sm text-cyan-400">
+          <div className="px-4 py-2 rounded-xl border border-cyan-500/30 bg-cyan-500/5 text-sm text-accent-light">
             🌐 Web Full Stack — <span className="text-white font-bold">{TOTAL_WEEKS_WEB} semaines</span>
           </div>
           <Link href="/espace" className="px-4 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/5 text-sm text-emerald-400 hover:bg-emerald-500/10 transition-colors">
@@ -172,7 +172,7 @@ export default function CalendrierPage() {
               </div>
             ))}
             <div className="card p-4 border-cyan-500/30 bg-cyan-500/5 text-center">
-              <p className="text-white font-bold">Total parcours Web : <span className="text-cyan-400">{TOTAL_WEEKS_WEB} semaines</span></p>
+              <p className="text-white font-bold">Total parcours Web : <span className="text-accent-light">{TOTAL_WEEKS_WEB} semaines</span></p>
               <p className="text-xs text-slate-500 mt-1">≈ {Math.round(TOTAL_WEEKS_WEB / 4)} mois au rythme recommandé</p>
             </div>
           </div>

@@ -41,7 +41,7 @@ const CATEGORIES = [
     icon: "👥",
     title: "Communautés & réseaux",
     color: "border-cyan-500/30 bg-cyan-500/5",
-    titleColor: "text-cyan-400",
+    titleColor: "text-accent-light",
     description: "Rejoindre les bonnes communautés pour apprendre plus vite, trouver un mentor, ou contribuer.",
     status: "coming",
     items: [
@@ -101,7 +101,7 @@ const CATEGORIES = [
     icon: "🎓",
     title: "Spécialisations — Master",
     color: "border-sky-500/30 bg-sky-500/5",
-    titleColor: "text-sky-400",
+    titleColor: "text-accent-light",
     description: "Cloud, Robotique, Pipelines MLOps — 3 voies de Master après le parcours ML/Web, avec universités, conditions d'admission et bourses.",
     status: "disponible",
     link: "/aller-plus-loin/masters",
@@ -132,7 +132,7 @@ const CATEGORIES = [
 
 const STATUS_BADGE = {
   "coming":       { cls: "border-emerald-500/30 bg-emerald-500/5 text-emerald-400",  label: "✓ Disponible"   },
-  "disponible":   { cls: "border-sky-500/30     bg-sky-500/5     text-sky-400",      label: "✓ Disponible"   },
+  "disponible":   { cls: "border-sky-500/30     bg-sky-500/5     text-accent-light",      label: "✓ Disponible"   },
   "à compléter":  { cls: "border-amber-500/30  bg-amber-500/5  text-amber-400",      label: "🔜 À compléter" },
 };
 
@@ -149,7 +149,9 @@ export default function AllerPlusLoinPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/75 to-transparent" />
         <div className="absolute inset-0 flex flex-col justify-center px-8 [text-shadow:0_2px_8px_rgba(0,0,0,0.85)]">
-          <span className="inline-block px-3 py-1 rounded-full border border-accent/30 bg-accent/10 text-accent-light text-xs font-semibold mb-3 w-fit [text-shadow:none]">
+          {/* Bleu fixe, pas accent-light : ce badge est posé sur un voile
+              sombre, donc le bleu foncé du thème clair y serait illisible. */}
+          <span className="inline-block px-3 py-1 rounded-full border border-[#93C5FD]/30 bg-[#93C5FD]/10 text-[#93C5FD] text-xs font-semibold mb-3 w-fit [text-shadow:none]">
             🚀 Section évolutive — se complète au fil du parcours
           </span>
           <h1 className="text-3xl font-bold text-slate-50 mb-2">Aller plus loin</h1>
@@ -205,7 +207,7 @@ export default function AllerPlusLoinPage() {
                   {cat.link && (
                     <div className="mt-4">
                       <Link href={cat.link}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500/10 border border-sky-500/30 text-sky-400 text-sm font-semibold hover:bg-sky-500/20 transition-colors">
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500/10 border border-sky-500/30 text-accent-light text-sm font-semibold hover:bg-sky-500/20 transition-colors">
                         Voir les 3 parcours Master complets →
                       </Link>
                     </div>

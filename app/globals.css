@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -18,27 +18,35 @@
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* Principe de la palette : les SURFACES sont neutres, l'ACCENT porte seul la
+   couleur. Un fond teinté oblige chaque couleur posée dessus à composer avec
+   sa teinte ; un fond neutre laisse l'accent, les états et les captures
+   d'écran ressortir sans négociation. */
 :root,
 html.dark {
   color-scheme: dark;
-  /* Fonds — vert forêt profond (aucune trace de bleu) */
-  --ink-950: 13 20 16;    /* #0D1410 */
-  --ink-900: 19 28 23;    /* #131C17 */
-  --ink-800: 28 41 33;    /* #1C2921 */
-  --ink-700: 42 61 48;    /* #2A3D30 */
-  /* Accents — or ancien, volontairement désaturé pour ne pas « crier »
-     sur le vert foncé, + vert doux en secondaire */
-  --accent:       217 174 95;   /* #D9AE5F */
-  --accent-light: 233 203 142;  /* #E9CB8E */
-  --accent-2:     95 191 130;   /* #5FBF82 */
-  /* Textes — légèrement réchauffés pour s'accorder aux fonds verts */
-  --color-text-primary:   255 255 255;
-  --color-text-secondary: 226 232 219;
-  --color-text-muted:     154 173 158;
-  --color-text-subtle:    118 137 123;
+  /* Fonds — gris neutres, presque noirs */
+  --ink-950: 10 10 10;    /* #0A0A0A — la page */
+  --ink-900: 23 23 23;    /* #171717 — les cartes */
+  --ink-800: 38 38 38;    /* #262626 — surfaces surélevées, survols */
+  --ink-700: 55 55 55;    /* #373737 — filets et bordures */
+  --ink-600: 82 82 82;    /* #525252 — bordures marquées, pointillés */
+  /* Accents — bleu franc, violet en second pour les dégradés */
+  --accent:       59 130 246;   /* #3B82F6 */
+  --accent-light: 96 165 250;   /* #60A5FA — 7,4:1 sur le fond, lisible en texte */
+  --accent-2:     139 92 246;   /* #8B5CF6 */
+  /* Textes — gris neutres, sans réchauffement */
+  --color-text-primary:   250 250 250;
+  --color-text-secondary: 212 212 212;
+  --color-text-muted:     163 163 163;
+  /* 145 et non 115 : sur un fond presque noir, #737373 ne donne que 3,8:1.
+     La teinte la plus discrète de l'échelle doit rester au-dessus de 4,5:1,
+     sinon « discret » veut dire « illisible ». Échelle obtenue, du texte
+     courant au plus effacé : 19:1 · 12:1 · 7:1 · 4,6:1. */
+  --color-text-subtle:    145 145 145;
   /* Scrollbar */
-  --scrollbar-track: #131c17;
-  --scrollbar-thumb: #2a3d30;
+  --scrollbar-track: #171717;
+  --scrollbar-thumb: #373737;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -46,24 +54,27 @@ html.dark {
    ───────────────────────────────────────────────────────────────────────────── */
 html.light {
   color-scheme: light;
-  /* Fonds — blanc cassé très légèrement verdi */
-  --ink-950: 247 249 245;  /* #F7F9F5 */
-  --ink-900: 241 245 238;  /* #F1F5EE */
-  --ink-800: 228 235 224;  /* #E4EBE0 */
-  --ink-700: 203 216 197;  /* #CBD8C5 */
-  /* Accents — or bien plus foncé qu'en mode sombre : sur fond pâle,
-     l'or clair tomberait à ~2:1 de contraste, donc illisible. */
-  --accent:       138 106 36;   /* #8A6A24 — 4,75:1 sur le fond clair */
-  --accent-light: 122  93  30;  /* #7A5D1E — encore plus foncé pour le texte */
-  --accent-2:      45 122  74;  /* #2D7A4A */
+  /* Fonds — la page est blanche, les cartes à peine détachées */
+  --ink-950: 255 255 255;  /* #FFFFFF */
+  --ink-900: 250 250 250;  /* #FAFAFA */
+  --ink-800: 245 245 245;  /* #F5F5F5 */
+  --ink-700: 229 229 229;  /* #E5E5E5 */
+  --ink-600: 212 212 212;  /* #D4D4D4 */
+  /* Accents — bleu bien plus foncé qu'en mode sombre : sur fond blanc,
+     le bleu clair tomberait à ~3:1 de contraste, insuffisant pour du texte. */
+  --accent:       37  99 235;   /* #2563EB — 5,2:1 avec du texte blanc dessus */
+  --accent-light: 29  78 216;   /* #1D4ED8 — 6,3:1 en texte sur le fond blanc */
+  --accent-2:    109  40 217;   /* #6D28D9 */
   /* Textes */
-  --color-text-primary:   20  31  24;
-  --color-text-secondary: 34  48  38;
-  --color-text-muted:     74  92  79;
-  --color-text-subtle:    74  92  79;
+  --color-text-primary:   10  10  10;
+  --color-text-secondary: 38  38  38;
+  --color-text-muted:     82  82  82;
+  /* 110 et non 115 : #737373 sur blanc mesure 4,35:1, soit juste sous le
+     seuil. Cinq points de gris suffisent à repasser au-dessus de 4,5:1. */
+  --color-text-subtle:   110 110 110;
   /* Scrollbar */
-  --scrollbar-track: #f1f5ee;
-  --scrollbar-thumb: #cbd8c5;
+  --scrollbar-track: #fafafa;
+  --scrollbar-thumb: #e5e5e5;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -75,6 +86,15 @@ body {
   @apply antialiased;
 }
 
+/* Surcharge textes en mode SOMBRE.
+   slate-500 et slate-600 sont des gris calibrés pour un fond bleu-ardoise ;
+   sur un fond neutre presque noir ils tombent à 3,8:1 et 2,4:1 — des libellés
+   qu'on devine plutôt qu'on ne les lit. On les ramène sur le gris « discret »
+   du thème, qui tient 4,6:1 tout en restant nettement en retrait du texte
+   courant à 12:1. La hiérarchie est conservée, la lisibilité récupérée. */
+html.dark .text-slate-500,
+html.dark .text-slate-600 { color: rgb(var(--color-text-subtle)) !important; }
+
 /* Surcharge textes en mode CLAIR */
 html.light .text-white  { color: rgb(var(--color-text-primary))   !important; }
 html.light .text-slate-100 { color: rgb(var(--color-text-primary)) !important; }
@@ -84,11 +104,36 @@ html.light .text-slate-400 { color: rgb(var(--color-text-muted))   !important; }
 html.light .text-slate-500 { color: rgb(var(--color-text-subtle))  !important; }
 html.light .text-slate-600 { color: rgb(var(--color-text-subtle))  !important; }
 
-/* Le texte du bouton principal s'inverse selon le thème, parce que l'accent
-   lui-même s'inverse : or CLAIR en thème sombre (→ texte sombre, 9,1:1),
-   bronze FONCÉ en thème clair (→ texte blanc, 5,0:1). Un seul et même
-   choix pour les deux donnerait un bouton illisible dans l'un des cas. */
-html.dark  .btn-primary { color: #0D1410 !important; }
+/* Couleurs SÉMANTIQUES en mode clair — succès, avertissement, erreur.
+   Les nuances 200-400 sont calibrées pour un fond sombre : sur blanc,
+   emerald-400 tombe à 1,8:1 et amber-400 à 1,6:1, soit un texte que
+   personne ne lit. On les remplace par la nuance 700 correspondante, qui
+   garde exactement la même signification en passant au-dessus de 4,5:1.
+   Le sélecteur reste la classe d'origine : rien à changer dans le balisage. */
+html.light .text-emerald-200,
+html.light .text-emerald-300,
+html.light .text-emerald-400 { color: #047857 !important; } /* 4,8:1 */
+html.light .text-amber-200,
+html.light .text-amber-300,
+html.light .text-amber-400   { color: #B45309 !important; } /* 4,6:1 */
+html.light .text-rose-200,
+html.light .text-rose-300,
+html.light .text-rose-400    { color: #BE123C !important; } /* 6,2:1 */
+html.light .text-orange-300,
+html.light .text-orange-400  { color: #C2410C !important; } /* 5,1:1 */
+html.light .text-blue-400    { color: #1D4ED8 !important; } /* 6,3:1 */
+html.light .text-sky-400     { color: #0369A1 !important; } /* 5,6:1 */
+html.light .text-cyan-400    { color: #0E7490 !important; } /* 4,6:1 */
+html.light .text-teal-400    { color: #0F766E !important; } /* 5,3:1 */
+html.light .text-violet-400  { color: #6D28D9 !important; } /* 7,0:1 */
+html.light .text-purple-400  { color: #7E22CE !important; } /* 6,4:1 */
+
+/* Le bouton principal est NEUTRE, pas coloré : il s'inverse par rapport à la
+   page — pastille blanche sur thème sombre, pastille presque noire sur thème
+   clair. C'est la signature du système repris ici, et accessoirement le seul
+   choix qui tienne le contraste dans les deux thèmes (au-delà de 15:1), là où
+   un aplat bleu portant du texte blanc plafonne à 3,7:1. */
+html.dark  .btn-primary { color: #0A0A0A !important; }
 html.light .btn-primary { color: #FFFFFF !important; }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -98,18 +143,28 @@ html.light .btn-primary { color: #FFFFFF !important; }
   @apply bg-ink-900 border border-ink-700 rounded-2xl;
 }
 
+/* En mode clair, la carte ne se distingue pas par sa couleur — elle est
+   presque blanche sur blanc — mais par un empilement d'ombres très faibles.
+   Six couches dont aucune n'est visible isolément : c'est leur somme qui
+   décolle la carte de la page sans jamais produire de bord dur. */
 html.light .card {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  box-shadow:
+    0px 0px 0px 1px rgb(0 0 0 / 0.06),
+    0px 1px 1px -0.5px rgb(0 0 0 / 0.06),
+    0px 3px 3px -1.5px rgb(0 0 0 / 0.06),
+    0px 6px 6px -3px rgb(0 0 0 / 0.06),
+    0px 12px 12px -6px rgb(0 0 0 / 0.05),
+    0px 24px 24px -12px rgb(0 0 0 / 0.04);
 }
 
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-light font-semibold transition-colors;
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-colors;
   /* La couleur du texte est définie par thème plus haut — voir la note de
      contraste. Ne pas la fixer ici, sinon les deux règles se contredisent. */
 }
 
 .btn-secondary {
-  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-ink-700 font-semibold transition-colors;
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border border-ink-700 text-sm font-medium transition-colors;
 }
 
 html.dark  .btn-secondary { @apply text-slate-200 hover:border-accent; }
@@ -127,7 +182,7 @@ html.light .btn-secondary:hover { border-color: rgb(var(--accent)); }
 html.light .nav-dropdown {
   background-color: #ffffff !important;
   border-color: rgb(var(--ink-700)) !important;
-  box-shadow: 0 12px 32px rgba(20, 31, 24, 0.16), 0 2px 8px rgba(20, 31, 24, 0.07) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(0, 0, 0, 0.05) !important;
 }
 /* Liens du menu : contraste renforcé en mode clair */
 html.light .nav-dropdown a,
@@ -244,8 +299,8 @@ html.dark .card-hover:hover {
               0 0 0 1px rgb(var(--accent) / 0.15);
 }
 html.light .card-hover:hover {
-  box-shadow: 0 18px 36px -14px rgba(15, 23, 42, 0.22),
-              0 2px 8px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 18px 36px -14px rgba(0, 0, 0, 0.12),
+              0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* ── Boutons : micro-interaction ──────────────────────────────────────────── */
@@ -257,7 +312,8 @@ html.light .card-hover:hover {
 }
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px -8px rgb(var(--accent) / 0.6);
+  /* Pas d'ombre ici : les filets internes de la pastille sont définis plus
+     bas, et une box-shadow posée au survol les remplacerait entièrement. */
 }
 .btn-primary:active, .btn-secondary:active { transform: translateY(0); }
 .btn-secondary:hover { transform: translateY(-2px); }
@@ -335,8 +391,8 @@ html.dark button.card:hover {
 }
 html.light a.card:hover,
 html.light button.card:hover {
-  box-shadow: 0 18px 36px -14px rgba(15, 23, 42, 0.22),
-              0 2px 8px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 18px 36px -14px rgba(0, 0, 0, 0.12),
+              0 2px 8px rgba(0, 0, 0, 0.05);
 }
 @media (prefers-reduced-motion: reduce) {
   a.card:hover, button.card:hover { transform: none; }
@@ -351,22 +407,29 @@ html.light button.card:hover {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  /* La grille est GRISE, pas bleue : dans ce système c'est un repère de
+     construction, comme les traits de crayon d'une maquette. Une grille
+     teintée ajouterait une seconde couleur là où il n'en faut qu'une. */
   background-image:
-    linear-gradient(to right, rgb(var(--accent) / 0.10) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(var(--accent) / 0.10) 1px, transparent 1px);
+    linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.045) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 20%, transparent 75%);
   -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 20%, transparent 75%);
 }
 html.light .grid-backdrop {
   background-image:
-    linear-gradient(to right, rgb(var(--accent) / 0.16) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(var(--accent) / 0.16) 1px, transparent 1px);
+    linear-gradient(to right, rgb(0 0 0 / 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(0 0 0 / 0.055) 1px, transparent 1px);
 }
 
-/* ── Aurora nettement plus présent ────────────────────────────────────────── */
-.aurora-bg { opacity: 0.85; filter: blur(70px); }
-html.light .aurora-bg { opacity: 0.45; }
+/* ── Aurora : un halo, pas un lavis ───────────────────────────────────────── */
+/* À 0,85 la nappe colorée recouvrait le fond et le rendait bleu nuit. Or tout
+   le système repose sur un fond NEUTRE : c'est lui qui laisse l'accent
+   ressortir. Ramenée à 0,3 et davantage floutée, l'aurora redevient ce
+   qu'elle doit être — une lueur derrière le contenu. */
+.aurora-bg { opacity: 0.30; filter: blur(90px); }
+html.light .aurora-bg { opacity: 0.18; }
 
 /* ── Verre dépoli ─────────────────────────────────────────────────────────── */
 .glass {
@@ -374,12 +437,12 @@ html.light .aurora-bg { opacity: 0.45; }
   -webkit-backdrop-filter: blur(14px) saturate(150%);
 }
 html.dark .glass {
-  background: rgba(15, 21, 37, 0.62);
-  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(10, 10, 10, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.10);
 }
 html.light .glass {
   background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(148, 163, 184, 0.28);
+  border: 1px solid rgba(0, 0, 0, 0.10);
 }
 
 /* ── Halo lumineux derrière un élément ────────────────────────────────────── */
@@ -394,17 +457,28 @@ html.light .glass {
   pointer-events: none;
 }
 
-/* ── Bouton principal : dégradé animé + halo ──────────────────────────────── */
+/* ── Bouton principal : pastille inversée + filets internes ───────────────── */
+/* Les deux ombres « inset » posent un filet blanc en haut et en bas de la
+   pastille. C'est ce liseré, et non une ombre portée, qui donne au bouton son
+   relief : il imite la tranche éclairée d'une touche physique. */
 .btn-primary {
-  background: linear-gradient(115deg, rgb(var(--accent)), rgb(var(--accent-light)), rgb(var(--accent-2)), rgb(var(--accent)));
-  background-size: 300% 100%;
-  animation: gradient-drift 9s ease infinite;
-  box-shadow: 0 6px 20px -6px rgb(var(--accent) / 0.55);
+  background: #fafafa;
   border: none;
+  box-shadow:
+    0px -1px 0px 0px rgb(0 0 0 / 0.12) inset,
+    0px 1px 0px 0px rgb(255 255 255 / 0.9) inset,
+    0px 1px 2px 0px rgb(0 0 0 / 0.25);
 }
-.btn-primary:hover {
-  box-shadow: 0 14px 34px -8px rgb(var(--accent) / 0.85);
+.btn-primary:hover { background: #ffffff; }
+
+html.light .btn-primary {
+  background: #171717;
+  box-shadow:
+    0px -1px 0px 0px rgb(0 0 0 / 0.4) inset,
+    0px 1px 0px 0px rgb(255 255 255 / 0.25) inset,
+    0px 1px 2px 0px rgb(0 0 0 / 0.18);
 }
+html.light .btn-primary:hover { background: #0a0a0a; }
 @keyframes gradient-drift {
   0%, 100% { background-position: 0% 50%; }
   50%      { background-position: 100% 50%; }

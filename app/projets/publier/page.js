@@ -144,7 +144,7 @@ function PublierContent() {
               <a href="https://github.com/settings/tokens/new?scopes=repo&description=ML+Academy" target="_blank" rel="noopener noreferrer" className="text-accent-light hover:underline">
                 github.com → Settings → Developer settings → Personal access tokens
               </a>
-              . Coche uniquement le scope <code className="bg-ink-800 px-1 rounded text-xs">repo</code>.
+              . Coche uniquement le scope <code className="bg-ink-800 border border-ink-700 px-1.5 py-0.5 rounded-md font-mono text-xs">repo</code>.
               Le token est sauvegardé localement dans ton navigateur.
             </p>
             <input
@@ -185,7 +185,7 @@ function PublierContent() {
             </div>
             {project && (
               <p className="text-xs text-slate-500 mt-3">
-                Nom du repo : <code className="bg-ink-800 px-1.5 py-0.5 rounded text-accent-light">{repoSlug}</code>
+                Nom du repo : <code className="bg-ink-800 border border-ink-700 px-1.5 py-0.5 rounded-md font-mono text-accent-light">{repoSlug}</code>
               </p>
             )}
           </div>

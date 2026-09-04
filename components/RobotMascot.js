@@ -69,7 +69,7 @@ export default function RobotMascot() {
         <button
           onClick={() => setOpen(o => !o)}
           aria-label="Mascotte CodeGraft"
-          className="w-14 h-14 rounded-full bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-2xl shadow-lg hover:scale-110 transition-transform animate-robot-bounce"
+          className="w-14 h-14 rounded-full bg-gradient-to-br from-accent to-accent-cyan flex items-center justify-center text-2xl shadow-lg hover:scale-110 transition-transform animate-robot-bounce"
           style={{ animationDuration: "3s" }}
         >
           🤖
