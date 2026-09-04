@@ -1,11 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export default function ConnexionPage() {
+function FormulaireConnexion() {
   const router = useRouter();
+  const params = useSearchParams();
+  // /auth/callback nous renvoie ici quand un lien reçu par mail n'a pas pu
+  // être validé — sans ce message, l'échec serait muet.
+  const lienInvalide = params.get("erreur") === "lien";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -59,9 +63,16 @@ export default function ConnexionPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto px-4 sm:px-6 py-16">
+    <>
       <h1 className="text-3xl font-bold text-white mb-2">Connexion</h1>
       <p className="text-slate-400 mb-8">Retrouve ta progression depuis n'importe quel appareil.</p>
+
+      {lienInvalide && (
+        <div className="rounded-xl px-4 py-3 border border-amber-500/30 bg-amber-500/10 text-amber-300 text-sm mb-5">
+          🔗 Ce lien n'est plus valide — il a expiré ou a déjà servi. Connecte-toi normalement, ou
+          demande un nouveau lien.
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="card p-6 space-y-4">
         <div>
@@ -93,8 +104,23 @@ export default function ConnexionPage() {
       </form>
 
       <p className="text-sm text-slate-500 mt-5 text-center">
+        <Link href="/mot-de-passe-oublie" className="text-accent-light hover:underline">
+          Mot de passe oublié ?
+        </Link>
+      </p>
+      <p className="text-sm text-slate-500 mt-2 text-center">
         Pas encore de compte ? <Link href="/inscription" className="text-accent-light hover:underline">Créer un compte</Link>
       </p>
+    </>
+  );
+}
+
+export default function ConnexionPage() {
+  return (
+    <div className="max-w-md mx-auto px-4 sm:px-6 py-16">
+      <Suspense fallback={<p className="text-slate-500 text-sm">Chargement…</p>}>
+        <FormulaireConnexion />
+      </Suspense>
     </div>
   );
 }
