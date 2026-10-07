@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   WEEKLY_SCHEDULE,
   ROADMAP_5ANS,
@@ -8,8 +8,13 @@ import {
   TOTAL_WEEKS_ML,
   TOTAL_WEEKS_WEB,
   ANTI_DECOURAGE_RULES,
+  ROADMAP_INGENIERIE,
+  BC_JOB_TARGETS,
+  BC_JOB_WARNING,
 } from "@/lib/calendar";
 import Link from "next/link";
+import { useUserProgress } from "@/lib/userProgress";
+import { moduleCompletion, milestoneStatus, phaseProgress } from "@/lib/roadmapStatus";
 
 const DAY_STYLE = {
   study: { bg: "bg-accent/10 border-accent/40",           icon: "📖", label: "Étude"     },
@@ -17,7 +22,17 @@ const DAY_STYLE = {
   rest:  { bg: "bg-ink-800 border-ink-700",               icon: "😴", label: "Repos"      },
 };
 
-const TABS = ["Programme type", "Modules ML", "Modules Web", "Roadmap 5 ans", "Règles anti-décrochage"];
+const TABS = ["Programme type", "Modules ML", "Modules Web", "Roadmap 5 ans", "Ingénierie & C.-B.", "Règles anti-décrochage"];
+
+const TONE_STYLE = {
+  emerald: "border-emerald-500/30 bg-emerald-500/5 text-emerald-400",
+  amber:   "border-amber-500/30 bg-amber-500/5 text-amber-400",
+  sky:     "border-sky-500/30 bg-sky-500/5 text-sky-400",
+  violet:  "border-violet-500/30 bg-violet-500/5 text-violet-400",
+};
+
+const STATUS_MARK = { done: "✓", current: "▶", todo: "○" };
+const STATUS_COLOR = { done: "text-emerald-400", current: "text-amber-400", todo: "text-slate-600" };
 
 function WeeksBar({ weeks, max }) {
   const pct = Math.round((weeks / max) * 100);
@@ -33,6 +48,14 @@ function WeeksBar({ weeks, max }) {
 
 export default function CalendrierPage() {
   const [tab, setTab] = useState(0);
+  const ctx = useUserProgress();
+
+  // Les jalons se mettent a jour tout seuls : ils lisent les lecons reellement
+  // terminees, donc finir un module fait basculer son jalon sans rien editer.
+  const completion = useMemo(
+    () => moduleCompletion(ctx?.completedLessons || []),
+    [ctx?.completedLessons]
+  );
 
   const mlModules  = MODULE_PLAN.filter(m => m.track === "ml");
   const webModules = MODULE_PLAN.filter(m => m.track === "web");
@@ -190,11 +213,18 @@ export default function CalendrierPage() {
                   <p className="text-xs text-slate-500">{phase.period}</p>
                   <h3 className={`font-bold text-lg ${phase.textColor}`}>{phase.title}</h3>
                 </div>
-                {phase.salaryTarget && (
-                  <span className="ml-auto text-xs px-3 py-1 rounded-full bg-black/20 text-slate-300">
-                    💰 {phase.salaryTarget}
-                  </span>
-                )}
+                <div className="ml-auto flex items-center gap-2">
+                  {phaseProgress(phase, completion) !== null && (
+                    <span className={`text-xs px-3 py-1 rounded-full bg-black/20 font-mono ${phase.textColor}`}>
+                      {phaseProgress(phase, completion)}%
+                    </span>
+                  )}
+                  {phase.salaryTarget && (
+                    <span className="text-xs px-3 py-1 rounded-full bg-black/20 text-slate-300">
+                      💰 {phase.salaryTarget}
+                    </span>
+                  )}
+                </div>
               </div>
               <p className="text-slate-300 text-sm mb-4">{phase.objective}</p>
               <div className="grid sm:grid-cols-2 gap-4">
@@ -213,6 +243,9 @@ export default function CalendrierPage() {
                   <ul className="space-y-1">
                     {phase.milestones.map((ms, i) => (
                       <li key={i} className="text-sm text-slate-300 flex gap-2">
+                        <span className={`shrink-0 ${STATUS_COLOR[milestoneStatus(ms, completion)]}`}>
+                          {STATUS_MARK[milestoneStatus(ms, completion)]}
+                        </span>
                         <span className={`font-mono text-xs ${phase.textColor} shrink-0`}>{ms.month}</span>
                         {ms.label}
                       </li>
@@ -225,8 +258,98 @@ export default function CalendrierPage() {
         </div>
       )}
 
-      {/* Tab 4 — Règles anti-décrochage */}
+      {/* Tab 4 — Axe ingénierie : EGBC + emploi en Colombie-Britannique */}
       {tab === 4 && (
+        <div className="space-y-6">
+          <div className="card p-5 border-sky-500/30 bg-sky-500/5">
+            <h2 className="font-bold text-white mb-2">Pourquoi cet axe existe</h2>
+            <p className="text-sm text-slate-300 leading-relaxed">
+              Le ML reste la priorité. Mais au Canada, la consultation en électricité est une
+              activité réglementée : sans permis, la branche électricité de Xodyia est
+              juridiquement impossible. Le permis n&apos;est donc pas une décoration de CV —
+              c&apos;est la <strong className="text-white">licence commerciale</strong> de la moitié du projet.
+              La Colombie-Britannique est visée parce qu&apos;elle évalue <strong className="text-white">par
+              compétences</strong> (l&apos;expérience à l&apos;étranger compte) et parce que c&apos;est la
+              seule province sans froid extrême.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-bold text-white mb-3">Postes visés en C.-B.</h2>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {BC_JOB_TARGETS.map(group => (
+                <div key={group.id} className={`card p-5 border ${TONE_STYLE[group.tone]}`}>
+                  <h3 className="font-semibold text-white text-sm mb-3">{group.label}</h3>
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {group.titles.map(t => (
+                      <span key={t} className="text-xs px-2 py-1 rounded-lg bg-black/25 text-slate-300">{t}</span>
+                    ))}
+                  </div>
+                  <p className="text-xs text-slate-500 leading-relaxed">{group.note}</p>
+                </div>
+              ))}
+            </div>
+            <div className="card p-4 mt-4 border-rose-500/30 bg-rose-500/5">
+              <p className="text-sm text-slate-300 leading-relaxed">
+                <span className="font-semibold text-rose-400">⚠️ Protection du titre — </span>
+                {BC_JOB_WARNING}
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <h2 className="font-bold text-white mb-3">Calendrier du permis</h2>
+            <div className="space-y-5">
+              {ROADMAP_INGENIERIE.map(phase => (
+                <div key={phase.id} className={`card p-6 border ${phase.bgColor}`}>
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-3xl">{phase.icon}</span>
+                    <div>
+                      <p className="text-xs text-slate-500">{phase.period}</p>
+                      <h3 className={`font-bold text-lg ${phase.textColor}`}>{phase.title}</h3>
+                    </div>
+                    {phase.salaryTarget && (
+                      <span className="ml-auto text-xs px-3 py-1 rounded-full bg-black/20 text-slate-300">
+                        💰 {phase.salaryTarget}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-slate-300 text-sm mb-4">{phase.objective}</p>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-slate-500 uppercase font-semibold mb-2">Livrables</p>
+                      <ul className="space-y-1">
+                        {phase.livrables.map((l, i) => (
+                          <li key={i} className="text-sm text-slate-300 flex gap-2">
+                            <span className="text-emerald-400 shrink-0">✓</span>{l}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 uppercase font-semibold mb-2">Jalons</p>
+                      <ul className="space-y-1">
+                        {phase.milestones.map((ms, i) => (
+                          <li key={i} className="text-sm text-slate-300 flex gap-2">
+                            <span className={`shrink-0 ${STATUS_COLOR[milestoneStatus(ms, completion)]}`}>
+                              {STATUS_MARK[milestoneStatus(ms, completion)]}
+                            </span>
+                            <span className={`font-mono text-xs ${phase.textColor} shrink-0`}>{ms.month}</span>
+                            {ms.label}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 5 — Règles anti-décrochage */}
+      {tab === 5 && (
         <div className="grid sm:grid-cols-2 gap-4">
           {ANTI_DECOURAGE_RULES.map(r => (
             <div key={r.rule} className="card p-5">
