@@ -55,3 +55,8 @@ app/
 components/                  # Navbar, QuizPlayer, Markdown
 lib/                         # Curriculum, projets, progression, tuteur simulé
 ```
+
+## Méthode de travail
+
+- [`METHODE-RESOLUTION-ML.md`](./METHODE-RESOLUTION-ML.md) — la méthode CADRES : le squelette à suivre pour passer d'un problème flou à du code vérifié (cadrer → abstraire → décomposer → réaliser → évaluer → sceller).
+- [`FICHE-PROBLEME-VIERGE.md`](./FICHE-PROBLEME-VIERGE.md) — le gabarit à recopier et remplir au début de chaque problème.
