@@ -6,6 +6,20 @@ import { NextResponse } from "next/server";
 // pause avait fait tomber tout le site, pages publiques comprises.
 const DELAI_SESSION_MS = 3000;
 
+// Le délai doit couper la requête elle-même, pas seulement l'attente.
+//
+// Abandonner la promesse — un Promise.race contre un setTimeout — laissait
+// l'appel continuer après l'envoi de la réponse. Supabase pouvait alors
+// terminer un rafraîchissement : le jeton de rafraîchissement était consommé
+// côté serveur, et les nouveaux cookies posés dans une réponse déjà partie.
+// Le navigateur gardait un jeton devenu invalide et perdait sa session au
+// rafraîchissement suivant — l'utilisateur se retrouvait déconnecté sans
+// raison visible. Avec un signal d'abandon, la requête est coupée pour de
+// bon : rien n'est consommé, la session reste celle que le navigateur a.
+function fetchBorne(url, options) {
+  return fetch(url, { ...options, signal: AbortSignal.timeout(DELAI_SESSION_MS) });
+}
+
 export async function middleware(request) {
   let response = NextResponse.next({ request });
 
@@ -13,6 +27,7 @@ export async function middleware(request) {
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
+      global: { fetch: fetchBorne },
       cookies: {
         getAll() {
           return request.cookies.getAll();
@@ -31,12 +46,7 @@ export async function middleware(request) {
   // passer sans session : la route en aval répondra 401, ce qui vaut mieux
   // qu'une requête bloquée.
   try {
-    await Promise.race([
-      supabase.auth.getUser(),
-      new Promise((_, rejeter) =>
-        setTimeout(() => rejeter(new Error("session: délai dépassé")), DELAI_SESSION_MS)
-      ),
-    ]);
+    await supabase.auth.getUser();
   } catch {
     // session non rafraîchie
   }
