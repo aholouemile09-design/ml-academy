@@ -32,6 +32,30 @@ function getOrigin(req) {
   return `${proto}://${host}`;
 }
 
+/**
+ * Vrai quand l'échec vient de notre côté — service d'authentification
+ * injoignable, mailer en erreur, quota d'envoi atteint — et non de l'adresse
+ * demandée. Une panne ne révèle rien sur l'existence d'un compte : la taire
+ * revient à afficher « lien envoyé » alors que rien n'est parti, ce qui s'est
+ * produit pendant la mise en pause du projet Supabase le 03/11/2026.
+ */
+function estPanneEnvoi(error) {
+  const statut = error?.status ?? 0;
+  return statut === 0 || statut === 429 || statut >= 500;
+}
+
+function reponsePanne(quotaAtteint) {
+  return Response.json(
+    {
+      error: "send_failed",
+      message: quotaAtteint
+        ? "Trop d'envois pour le moment. Réessaie dans une heure."
+        : "L'envoi du lien a échoué de notre côté. Réessaie dans quelques minutes.",
+    },
+    { status: 503 }
+  );
+}
+
 export async function POST(req) {
   // Message unique, renvoyé quoi qu'il arrive.
   const reponseNeutre = Response.json({
@@ -76,9 +100,12 @@ export async function POST(req) {
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
 
-    // Journalisé côté serveur, jamais renvoyé : l'erreur dirait au demandeur
-    // si l'adresse est connue.
-    if (error) console.error("resetPasswordForEmail:", error.message);
+    // Journalisé côté serveur, jamais renvoyé tel quel : l'erreur dirait au
+    // demandeur si l'adresse est connue.
+    if (error) {
+      console.error("resetPasswordForEmail:", error.status, error.message);
+      if (estPanneEnvoi(error)) return reponsePanne(error.status === 429);
+    }
 
     return reponseNeutre;
   } catch (e) {

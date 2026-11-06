@@ -1,16 +1,17 @@
 #!/usr/bin/env node
 /**
- * Vérificateur du middleware de session
+ * Vérificateur du comportement quand Supabase est injoignable
  *
- *   node scripts/verifier-middleware.js
+ *   node scripts/verifier-supabase-injoignable.js
  *
  * Rejoue la panne du 03/11/2026 : le projet Supabase mis en pause avait rendu
  * son domaine introuvable, et comme le middleware interrogeait Supabase sur
  * toutes les routes, chaque page partait en timeout de 25 s.
  *
  * Le script lance `next dev` avec une URL Supabase injoignable, puis vérifie
- * que les pages publiques ne passent plus par le middleware et que les routes
- * serveur dégradent au lieu de bloquer.
+ * que les pages publiques ne passent plus par le middleware, que les routes
+ * serveur dégradent au lieu de bloquer, et que la demande de réinitialisation
+ * de mot de passe avoue la panne au lieu d'annoncer un envoi.
  *
  * Occupe .next : ne pas lancer pendant un build.
  */
@@ -65,6 +66,18 @@ async function mesurer(chemin) {
       if (!ok) echecs++;
       console.log(`${ok ? "OK  " : "ÉCHEC"} ${chemin} — ${code} en ${ms} ms`);
     }
+
+    // L'envoi ne peut pas aboutir : la route doit l'avouer (503) au lieu
+    // d'annoncer « un lien vient d'être envoyé ».
+    const reset = await fetch(BASE + "/api/auth/forgot-password", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ email: `verif-${Date.now()}@example.test` }),
+      signal: AbortSignal.timeout(60000),
+    });
+    const okReset = reset.status === 503;
+    if (!okReset) echecs++;
+    console.log(`${okReset ? "OK  " : "ÉCHEC"} POST /api/auth/forgot-password — ${reset.status} (503 attendu)`);
   } catch (erreur) {
     console.error("ÉCHEC", erreur.message);
     echecs++;
