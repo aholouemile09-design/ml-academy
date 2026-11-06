@@ -34,7 +34,6 @@ export default function HeroPreview() {
         <div className="p-5 space-y-3">
           {/* En-tête du module */}
           <div className="flex items-center gap-2.5">
-            <span className="text-xl">🤖</span>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-white leading-tight">ML classique</p>
             </div>
@@ -46,7 +45,7 @@ export default function HeroPreview() {
           {/* Objectifs d'apprentissage */}
           <div className="rounded-xl border border-accent/25 bg-accent/5 p-3">
             <p className="text-[9px] font-bold text-white uppercase tracking-wider mb-2">
-              🎯 Objectifs d'apprentissage
+              Objectifs d'apprentissage
             </p>
             <div className="space-y-1.5">
               {[
@@ -69,7 +68,7 @@ export default function HeroPreview() {
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <p className="text-[9px] font-bold text-white uppercase tracking-wider">
-                  🧪 Évaluation pratique
+                  Évaluation pratique
                 </p>
                 <p className="text-[11px] font-semibold text-emerald-400 mt-0.5 leading-tight">
                   Problem Set 6 — Scoring crédit auditable
@@ -88,8 +87,8 @@ export default function HeroPreview() {
 
           {/* Pied : complétion + temps */}
           <div className="flex items-center justify-between pt-2.5 border-t border-ink-700">
-            <span className="text-[10px] text-emerald-400 font-semibold">✅ Leçon complétée</span>
-            <span className="text-[10px] text-slate-500">⏱ 1 h 12 min</span>
+            <span className="text-[10px] text-emerald-400 font-semibold">Leçon complétée</span>
+            <span className="text-[10px] text-slate-500">1 h 12 min</span>
           </div>
         </div>
       </div>
@@ -105,7 +104,7 @@ export default function HeroPreview() {
         className="absolute -top-3 -right-3 px-3 py-1.5 rounded-xl glass animate-float"
         style={{ animationDelay: "-4s" }}
       >
-        <p className="text-xs font-bold text-accent-light">🔥 12 jours</p>
+        <p className="text-xs font-bold text-accent-light">12 jours de suite</p>
       </div>
     </div>
   );

@@ -4,27 +4,22 @@ import { useEffect, useRef, useState } from "react";
 
 const STEPS = [
   {
-    icon: "👤",
     title: "Crée ton compte",
     desc: "Ta progression, tes notes et ton temps d'étude te suivent sur tous tes appareils.",
   },
   {
-    icon: "🎯",
     title: "Ouvre un module",
     desc: "Chaque module commence par ses objectifs d'apprentissage, ses prérequis et ses lectures de référence.",
   },
   {
-    icon: "📝",
     title: "Valide par le quiz",
     desc: "Un quiz corrigé par module. On n'avance que sur des bases solides — comme en cours magistral.",
   },
   {
-    icon: "🧪",
     title: "Rends le problem set",
     desc: "Une évaluation pratique notée sur 100, ancrée dans un cas réel : scoring crédit, détection de fraude, prévision retail.",
   },
   {
-    icon: "🎓",
     title: "Obtiens ton certificat",
     desc: "Vérifiable, partageable sur LinkedIn, adossé à des projets publics sur ton GitHub.",
   },
@@ -78,25 +73,24 @@ export default function HowItWorks() {
             return (
               <li key={s.title} className="text-center lg:text-left">
                 <div
-                  className={`w-13 h-13 mx-auto lg:mx-0 rounded-2xl flex items-center justify-center text-2xl mb-4 border transition-all duration-700 ${
+                  className={`w-13 h-13 mx-auto lg:mx-0 rounded-2xl flex items-center justify-center mb-4 border transition-all duration-700 ${
                     on
                       ? "border-accent/50 bg-accent/10 scale-100 opacity-100"
                       : "border-ink-700 bg-ink-900 scale-95 opacity-40"
                   }`}
                   style={{ width: 52, height: 52, transitionTimingFunction: "var(--ease-soft)" }}
                 >
-                  <span aria-hidden="true">{s.icon}</span>
+                  {/* Le numéro était déjà imprimé à côté du titre, en double de
+                      l'emoji. Il remonte ici, l'emoji disparaît. */}
+                  <span className="font-mono text-sm text-accent-light">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
                 </div>
                 <div
                   className={`transition-all duration-700 ${on ? "opacity-100 translate-y-0" : "opacity-40 translate-y-1"}`}
                   style={{ transitionTimingFunction: "var(--ease-soft)" }}
                 >
-                  <div className="flex items-center gap-2 justify-center lg:justify-start mb-1.5">
-                    <span className="text-xs font-mono text-accent-light">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <h3 className="font-semibold text-white text-sm">{s.title}</h3>
-                  </div>
+                  <h3 className="font-semibold text-white text-sm mb-1.5">{s.title}</h3>
                   <p className="text-xs text-slate-400 leading-relaxed">{s.desc}</p>
                 </div>
               </li>

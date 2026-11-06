@@ -13,31 +13,31 @@ import FAQ from "@/components/FAQ";
 // Grille bento : les tailles encodent l'importance. `span` = classes de grille.
 const features = [
   {
-    icon: "🤖", title: "Tuteur AI personnel", span: "lg:col-span-2 lg:row-span-2", featured: true,
+    title: "Tuteur AI personnel", span: "lg:col-span-2 lg:row-span-2", featured: true,
     desc: "Un expert disponible 24/7 qui connaît la leçon que tu consultes. Il explique, décortique tes erreurs, propose des pistes — mais ne fera jamais tes projets à ta place.",
   },
   {
-    icon: "🧪", title: "Problem sets notés", span: "lg:col-span-2",
+    title: "Problem sets notés", span: "lg:col-span-2",
     desc: "Une évaluation pratique sur 100 par module, avec sa grille de notation, ancrée dans un cas réel — scoring crédit, détection de fraude, imagerie médicale.",
   },
   {
-    icon: "🗺", title: "Trois parcours", span: "",
+    title: "Trois parcours", span: "",
     desc: "ML & Data Science, Web Full Stack et préparation PMP 2026.",
   },
   {
-    icon: "🛠", title: "27 projets portfolio", span: "",
+    title: "27 projets portfolio", span: "",
     desc: "Guidés, de débutant à expert, pour un GitHub crédible.",
   },
   {
-    icon: "📖", title: "Lectures de référence", span: "lg:col-span-2",
+    title: "Lectures de référence", span: "lg:col-span-2",
     desc: "Une sélection par module, gratuites signalées comme telles — MIT, Stanford, Hugging Face — avec la raison précise de chaque recommandation.",
   },
   {
-    icon: "🔥", title: "Streak & régularité", span: "",
+    title: "Streak & régularité", span: "",
     desc: "Ta constance mesurée jour après jour.",
   },
   {
-    icon: "🎓", title: "Certificats vérifiables", span: "",
+    title: "Certificats vérifiables", span: "",
     desc: "Partageables sur LinkedIn, adossés à tes projets.",
   },
 ];
@@ -61,7 +61,8 @@ const QUOTES = [
 const TRACKS = [
   {
     id: "ml",
-    icon: "🤖",
+    image: "photo-1551288049-bebda4e38f71",
+    imageAlt: "Courbes de performance d'un modèle sur l'écran d'un ordinateur portable",
     label: "ML & Data",
     title: "Machine Learning & Data Science",
     basePath: "/parcours",
@@ -78,7 +79,8 @@ const TRACKS = [
   },
   {
     id: "web",
-    icon: "🌐",
+    image: "photo-1674483699209-25fb6d962119",
+    imageAlt: "Développeur devant deux écrans, en train d'écrire du code",
     label: "Web Full Stack",
     title: "Développement Web Full Stack",
     basePath: "/webdev",
@@ -95,7 +97,8 @@ const TRACKS = [
   },
   {
     id: "pmp",
-    icon: "📋",
+    image: "photo-1557804506-669a67965ba0",
+    imageAlt: "Équipe projet réunie autour d'un tableau blanc, ordinateurs ouverts",
     label: "PMP 2026",
     title: "Certification PMP — examen 2026",
     basePath: "/pmp",
@@ -206,7 +209,10 @@ export default function Home() {
                 f.featured ? "justify-center" : ""
               }`}
             >
-              <div className={f.featured ? "text-5xl mb-4" : "text-3xl mb-3"}>{f.icon}</div>
+              {/* Index en mono plutôt qu'un emoji par carte : sept pictogrammes
+                  décoratifs ne hiérarchisent rien et donnent à la grille son
+                  air de gabarit générique. Le numéro, lui, ordonne. */}
+              <div className="eyebrow mb-4">{String(i + 1).padStart(2, "0")}</div>
               <h3 className={`font-bold text-white mb-2 ${f.featured ? "text-xl" : "text-sm"}`}>
                 {f.title}
               </h3>
@@ -270,7 +276,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-r from-neutral-950 via-neutral-950/80 to-transparent" />
           <div className="absolute inset-0 flex items-center px-8 sm:px-12">
             <div className="max-w-lg [text-shadow:0_2px_8px_rgba(0,0,0,0.85)]">
-              <p className="text-[#E8845C] text-sm font-semibold mb-2">Ton objectif</p>
+              <p className="eyebrow mb-2 !text-[#E8845C]">Ton objectif</p>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-[#FAFAFA] leading-tight mb-4">
                 De zéro à ML Engineer en 5 ans
               </h2>

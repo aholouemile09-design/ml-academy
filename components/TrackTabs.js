@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 /**
  * Les trois parcours en onglets plutôt qu'en sections empilées :
@@ -33,7 +34,6 @@ export default function TrackTabs({ tracks }) {
             }`}
             style={{ transitionTimingFunction: "var(--ease-soft)" }}
           >
-            <span aria-hidden="true">{t.icon}</span>
             <span>{t.label}</span>
             <span
               className={`text-xs px-1.5 py-0.5 rounded-md ${
@@ -61,9 +61,8 @@ export default function TrackTabs({ tracks }) {
                 href={`${track.basePath}/${m.id}`}
                 className="card p-4 flex items-center gap-4 group"
               >
-                <div className="w-10 h-10 rounded-xl bg-ink-800 flex items-center justify-center text-xl shrink-0">
-                  {m.icon}
-                </div>
+                {/* La pastille d'emoji du module a disparu : le numéro qui la
+                    suivait disait déjà le rang, en double. */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-slate-500 text-xs font-mono">
@@ -89,8 +88,19 @@ export default function TrackTabs({ tracks }) {
           </div>
 
           {/* Fiche récapitulative */}
-          <div className="card p-6 gradient-border">
-            <div className="text-3xl mb-3">{track.icon}</div>
+          {/* Carte récapitulative : photo en haut, texte dessous. La hauteur
+              de l'image est fixe pour qu'elle ne pousse pas le texte en
+              arrivant — c'est la cause la plus banale de saut de mise en page. */}
+          <div className="card overflow-hidden">
+            <Image
+              src={`https://images.unsplash.com/${track.image}?w=800&q=80`}
+              alt={track.imageAlt}
+              width={800}
+              height={520}
+              sizes="(min-width: 1024px) 320px, 100vw"
+              className="w-full h-40 object-cover"
+            />
+            <div className="p-6">
             <h3 className="font-bold text-white mb-2">{track.title}</h3>
             <p className="text-sm text-slate-400 mb-5 leading-relaxed">{track.pitch}</p>
             <div className="space-y-2.5 mb-6">
@@ -104,6 +114,7 @@ export default function TrackTabs({ tracks }) {
             <Link href={track.basePath} className="btn-primary w-full justify-center text-sm">
               Commencer ce parcours
             </Link>
+            </div>
           </div>
         </div>
       </div>

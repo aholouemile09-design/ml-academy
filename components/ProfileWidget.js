@@ -13,7 +13,7 @@ export default function ProfileWidget() {
     return (
       <div className="card p-5 border-accent/20 bg-accent/5 flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <p className="text-white font-semibold text-sm">👋 Bienvenue sur CodeGraft Academy !</p>
+          <p className="text-white font-semibold text-sm">Bienvenue sur CodeGraft Academy !</p>
           <p className="text-slate-400 text-xs mt-0.5">Crée un compte pour sauvegarder ta progression sur tous tes appareils.</p>
         </div>
         <Link href="/inscription" className="btn-primary text-sm shrink-0">Créer mon compte →</Link>
@@ -45,8 +45,8 @@ export default function ProfileWidget() {
             </span>
           </div>
           <div className="flex gap-3 mt-1 text-xs text-slate-400">
-            <span>⚡ {xp} XP</span>
-            <span>📚 {lessons} leçons</span>
+            <span>{xp} XP</span>
+            <span>{lessons} leçons</span>
           </div>
           <div className="mt-2 h-1.5 bg-ink-800 rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r from-accent to-accent-cyan rounded-full transition-all" style={{ width: `${pct}%` }} />
@@ -58,13 +58,13 @@ export default function ProfileWidget() {
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex gap-2 flex-wrap">
           <Link href="/dashboard" className="text-xs px-3 py-1.5 rounded-lg bg-ink-800 text-slate-300 hover:text-white hover:bg-ink-700 transition-colors">
-            📊 Dashboard
+            Dashboard
           </Link>
           <Link href="/parcours" className="text-xs px-3 py-1.5 rounded-lg bg-ink-800 text-slate-300 hover:text-white hover:bg-ink-700 transition-colors">
-            📚 Cours
+            Cours
           </Link>
           <Link href="/projets" className="text-xs px-3 py-1.5 rounded-lg bg-ink-800 text-slate-300 hover:text-white hover:bg-ink-700 transition-colors">
-            🛠 Projets
+            Projets
           </Link>
         </div>
         <Link href="/profils" className="text-xs text-accent-light hover:text-accent-cyan">

@@ -14,9 +14,9 @@ const NAV_GROUPS = [
     links: [
       { href: "/parcours", label: "Parcours ML" },
       { href: "/projets", label: "Projets" },
-      { href: "/projets/publier", label: "🐙 Publier sur GitHub" },
+      { href: "/projets/publier", label: "Publier sur GitHub" },
       { href: "/certifications", label: "Certifications" },
-      { href: "/certifications/prep/c6", label: "🎯 Prép AWS CLF" },
+      { href: "/certifications/prep/c6", label: "Prép AWS CLF" },
     ],
   },
   {
@@ -28,24 +28,24 @@ const NAV_GROUPS = [
   {
     label: "PMP",
     links: [
-      { href: "/pmp", label: "📋 Parcours PMP" },
-      { href: "/pmp/examen-blanc", label: "🎯 Examen blanc" },
+      { href: "/pmp", label: "Parcours PMP" },
+      { href: "/pmp/examen-blanc", label: "Examen blanc" },
     ],
   },
   {
     label: "Outils",
     links: [
-      { href: "/recherche", label: "🔍 Recherche" },
-      { href: "/certificat", label: "🏆 Certificats" },
-      { href: "/espace", label: "🏠 Mon Espace" },
-      { href: "/reviser", label: "🃏 Réviser" },
-      { href: "/principes", label: "🧭 Les principes" },
-      { href: "/plan", label: "📅 Plan d'étude" },
-      { href: "/journal", label: "📓 Mon journal" },
+      { href: "/recherche", label: "Recherche" },
+      { href: "/certificat", label: "Certificats" },
+      { href: "/espace", label: "Mon Espace" },
+      { href: "/reviser", label: "Réviser" },
+      { href: "/principes", label: "Les principes" },
+      { href: "/plan", label: "Plan d'étude" },
+      { href: "/journal", label: "Mon journal" },
       { href: "/calendrier", label: "Plan général" },
       { href: "/ressources", label: "Ressources" },
-      { href: "/aller-plus-loin", label: "🚀 Aller plus loin" },
-      { href: "/aller-plus-loin/masters", label: "🎓 Masters spécialisés" },
+      { href: "/aller-plus-loin", label: "Aller plus loin" },
+      { href: "/aller-plus-loin/masters", label: "Masters spécialisés" },
       { href: "/tuteur", label: "Tuteur AI" },
       { href: "/dashboard", label: "Dashboard" },
       { href: "/parametres", label: "Paramètres" },
@@ -155,12 +155,17 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           {user && (
             <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/30 text-accent-light text-xs font-bold">
-              ⚡ {progress.xp} XP
+              {progress.xp} XP
             </span>
           )}
+          {/* Sans la flamme, « 12 » seul ne veut plus rien dire : le « j »
+              donne l'unité, l'aria-label donne la phrase complète. */}
           {user && computeStreak(progress.activityDates || []).current > 0 && (
-            <span className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400 text-xs font-bold" title="Série de jours consécutifs">
-              🔥 {computeStreak(progress.activityDates || []).current}
+            <span
+              className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400 text-xs font-bold"
+              aria-label={`Série de ${computeStreak(progress.activityDates || []).current} jours consécutifs`}
+            >
+              {computeStreak(progress.activityDates || []).current}&nbsp;j
             </span>
           )}
 
@@ -211,7 +216,22 @@ export default function Navbar() {
             title={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
             aria-label="Changer le thème"
           >
-            {theme === "dark" ? "☀️" : "🌙"}
+            {/* Deux traits plutôt que deux emoji : l'emoji soleil s'affiche en
+                jaune vif quel que soit le thème et ne suit pas la couleur du
+                bouton au survol. Un SVG en currentColor, si. */}
+            <svg
+              width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              strokeWidth="2" strokeLinecap="round" aria-hidden="true"
+            >
+              {theme === "dark" ? (
+                <>
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" />
+                </>
+              ) : (
+                <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+              )}
+            </svg>
           </button>
 
           <button
@@ -248,7 +268,7 @@ export default function Navbar() {
           ))}
           {progress && (
             <div className="pt-3 border-t border-ink-700 text-xs text-accent-light font-bold">
-              ⚡ {progress.xp} XP
+              {progress.xp} XP
             </div>
           )}
         </div>
