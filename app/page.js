@@ -116,72 +116,56 @@ export default function Home() {
   return (
     <div>
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
-        {/* Fond aurora animé + grille en perspective */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div
-            className="aurora-bg"
-            style={{ background: "radial-gradient(ellipse 50% 45% at 20% 15%, rgb(var(--accent) / 0.42), transparent 70%)" }}
-          />
-          <div
-            className="aurora-bg"
-            style={{
-              background: "radial-gradient(ellipse 45% 40% at 80% 70%, rgb(var(--accent-2) / 0.36), transparent 70%)",
-            }}
-          />
-          <div
-            className="aurora-bg"
-            style={{
-              background: "radial-gradient(ellipse 40% 35% at 60% 20%, rgb(var(--accent-light) / 0.22), transparent 70%)",
-            }}
-          />
-          <div className="grid-backdrop" />
-        </div>
-
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Text */}
-            <div>
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-accent-light text-xs font-semibold mb-6 animate-fade-up">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
-                </span>
-                École ML + Web Dev avec tuteur AI — plan 2026-2031
-              </span>
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-white leading-tight animate-fade-up delay-75">
-                Maîtrisez le <span className="gradient-text">Machine Learning</span>{" "}
-                et le <span className="gradient-text">Web Full Stack</span>
-              </h1>
-              <p className="mt-6 text-lg text-slate-400 leading-relaxed animate-fade-up delay-150">
-                Un curriculum complet, un tuteur AI expert, un plan de discipline sur 5 ans et une progression visible sur votre GitHub.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-4 animate-fade-up delay-225">
-                <Link href="/parcours" className="btn-primary text-base px-7 py-3">Parcours ML →</Link>
-                <Link href="/webdev" className="btn-secondary text-base px-7 py-3">Parcours Web</Link>
-                <Link href="/calendrier" className="btn-secondary text-base px-7 py-3">📅 Mon plan</Link>
-              </div>
-              {/* Stats */}
-              <div className="mt-10 grid grid-cols-4 gap-4 text-center animate-fade-up delay-300">
-                {STATS.map(s => (
-                  <div key={s.label}>
-                    {/* Chiffres rendus directement : le comptage animé affichait
-                        « 1 module ML, 0 modules Web » pendant 1,4 s à chaque
-                        visite — une information fausse, pour décorer. */}
-                    <span className="block text-3xl font-extrabold gradient-text stat-value">
-                      {s.val}
-                    </span>
-                    <div className="text-xs text-slate-500 mt-1">{s.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Aperçu produit : l'interface réelle, pas une photo d'illustration */}
-            <div className="hidden lg:block animate-scale-in delay-150">
-              <HeroPreview />
+      {/* Pas de fond décoratif : les trois halos « aurora » et la grille en
+          perspective coloraient la page sans rien dire. Ce qui tient le haut
+          de page, c'est la grille de 12 colonnes et le blanc, pas un effet. */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-16">
+        <div className="grid lg:grid-cols-12 gap-x-8 gap-y-12 items-end">
+          {/* Le texte occupe 7 colonnes sur 12, l'aperçu les 5 suivantes :
+              le déséquilibre est ce qui donne sa tension à la composition. */}
+          <div className="lg:col-span-7">
+            <p className="eyebrow animate-fade-up">École ML &amp; Web · plan 2026–2031</p>
+            {/* text-wrap:balance — sans lui, « Apprendre le machine learning »
+                se coupait en laissant « learning » seul sur sa ligne. */}
+            <h1 className="mt-4 text-[2.75rem] sm:text-6xl font-extrabold text-white tracking-tight leading-[1.05] [text-wrap:balance] animate-fade-up delay-75">
+              Apprendre le machine learning
+              <br />
+              <span className="text-slate-500">comme un métier, pas comme un cours.</span>
+            </h1>
+            <p className="mt-6 max-w-xl text-lg text-slate-400 leading-relaxed animate-fade-up delay-150">
+              Un curriculum complet, un tuteur AI qui connaît la leçon que tu lis,
+              et une progression visible sur ton GitHub.
+            </p>
+            {/* Deux actions, pas trois : un troisième bouton de même poids
+                transforme un choix en hésitation. */}
+            <div className="mt-9 flex flex-wrap gap-3 animate-fade-up delay-225">
+              <Link href="/parcours" className="btn-primary text-base px-7 py-3">Commencer le parcours ML →</Link>
+              <Link href="/webdev" className="btn-secondary text-base px-7 py-3">Voir le parcours Web</Link>
             </div>
           </div>
+
+          {/* Aperçu produit : l'interface réelle, pas une photo d'illustration */}
+          <div className="hidden lg:block lg:col-span-5 animate-fade-up delay-150">
+            <HeroPreview />
+          </div>
+        </div>
+
+        {/* Les chiffres posés sur un filet, en bas de page : des nombres nus et
+            leur légende, sans carte ni icône autour. */}
+        <div className="mt-16 border-t border-ink-700 grid grid-cols-2 sm:grid-cols-4 animate-fade-up delay-300">
+          {STATS.map(s => (
+            <div key={s.label} className="py-6 sm:border-r border-ink-700 last:border-r-0 pr-6">
+              {/* Chiffres rendus directement : le comptage animé affichait
+                  « 1 module ML, 0 modules Web » pendant 1,4 s à chaque
+                  visite — une information fausse, pour décorer. */}
+              <span className="block text-4xl font-extrabold text-white stat-value">
+                {s.val}
+              </span>
+              {/* `!` : .eyebrow est déclarée après les utilitaires Tailwind et
+                  gagnerait sinon sur la couleur. La légende reste grise. */}
+              <div className="eyebrow mt-2 !text-slate-500">{s.label}</div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -191,20 +175,27 @@ export default function Home() {
       </section>
 
       {/* ── CITATION ─────────────────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-        <div className="rounded-2xl border border-accent/20 bg-accent/5 px-8 py-6 flex gap-6 items-start">
-          <span className="text-4xl shrink-0">💡</span>
-          <div>
-            <p className="text-lg font-medium text-white italic">"{QUOTES[0].text}"</p>
-            <p className="text-sm text-slate-500 mt-2">— {QUOTES[0].author}</p>
+      {/* Bandeau pleine largeur, d'un cran plus clair que la page. Sur un fond
+          déjà presque noir, c'est l'inverse du bandeau vert foncé de la
+          maquette qui produit la même respiration : une bande qui tranche. */}
+      <section className="bg-ink-900 border-y border-ink-700 my-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
+          <div className="max-w-3xl">
+            <p className="text-2xl sm:text-3xl font-medium text-white leading-snug tracking-tight">
+              « {QUOTES[0].text} »
+            </p>
+            <p className="eyebrow mt-5 !text-slate-500">{QUOTES[0].author}</p>
           </div>
         </div>
       </section>
 
       {/* ── FEATURES ─────────────────────────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-        <Reveal as="h2" className="text-3xl font-bold text-white text-center mb-12">
-          Tout ce qu'il faut pour <span className="gradient-text">progresser comme à l'école</span>
+        <Reveal className="mb-12">
+          <p className="eyebrow">Ce que contient la plateforme</p>
+          <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-white tracking-tight">
+            Tout ce qu'il faut pour progresser comme à l'école
+          </h2>
         </Reveal>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[minmax(150px,auto)]">
           {features.map((f, i) => (
@@ -212,7 +203,7 @@ export default function Home() {
               key={f.title}
               delay={i * 70}
               className={`card card-hover p-6 flex flex-col ${f.span} ${
-                f.featured ? "gradient-border justify-center" : ""
+                f.featured ? "justify-center" : ""
               }`}
             >
               <div className={f.featured ? "text-5xl mb-4" : "text-3xl mb-3"}>{f.icon}</div>
@@ -237,11 +228,10 @@ export default function Home() {
 
       {/* ── COMMENT ÇA MARCHE ────────────────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-        <Reveal className="text-center mb-14">
-          <h2 className="text-3xl font-bold text-white mb-3">
-            Comment <span className="gradient-text">ça marche</span>
-          </h2>
-          <p className="text-slate-400 max-w-xl mx-auto">
+        <Reveal className="mb-14">
+          <p className="eyebrow">Le déroulé</p>
+          <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-white tracking-tight">Comment ça marche</h2>
+          <p className="mt-4 text-slate-400 max-w-xl">
             Le même déroulé que dans une université : objectifs, cours, évaluation, certification.
           </p>
         </Reveal>
@@ -252,11 +242,10 @@ export default function Home() {
 
       {/* ── LES TROIS PARCOURS (onglets) ─────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-        <Reveal className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-white mb-3">
-            Trois <span className="gradient-text">parcours complets</span>
-          </h2>
-          <p className="text-slate-400 max-w-xl mx-auto">
+        <Reveal className="mb-10">
+          <p className="eyebrow">Pour qui</p>
+          <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-white tracking-tight">Trois parcours complets</h2>
+          <p className="mt-4 text-slate-400 max-w-xl">
             Complémentaires et progressifs. Choisis ton point d'entrée.
           </p>
         </Reveal>
@@ -281,9 +270,9 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-r from-neutral-950 via-neutral-950/80 to-transparent" />
           <div className="absolute inset-0 flex items-center px-8 sm:px-12">
             <div className="max-w-lg [text-shadow:0_2px_8px_rgba(0,0,0,0.85)]">
-              <p className="text-[#93C5FD] text-sm font-semibold mb-2">Votre objectif</p>
+              <p className="text-[#E8845C] text-sm font-semibold mb-2">Ton objectif</p>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-[#FAFAFA] leading-tight mb-4">
-                De zéro à <span className="gradient-text">ML Engineer</span> en 5 ans
+                De zéro à ML Engineer en 5 ans
               </h2>
               <p className="text-[#E5E5E5] text-sm mb-5">
                 Pas de raccourcis. Un plan solide, des projets réels sur GitHub, et un tuteur AI disponible à toute heure.
@@ -296,10 +285,9 @@ export default function Home() {
 
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-        <Reveal className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-white mb-3">
-            Questions <span className="gradient-text">fréquentes</span>
-          </h2>
+        <Reveal className="mb-12">
+          <p className="eyebrow">Avant de commencer</p>
+          <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-white tracking-tight">Questions fréquentes</h2>
         </Reveal>
         <Reveal delay={100}>
           <FAQ />
@@ -307,16 +295,20 @@ export default function Home() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-24">
-        <Reveal className="card gradient-border p-10 text-center bg-gradient-to-b from-accent/5 to-transparent border-accent/20">
-          <h2 className="text-2xl font-bold text-white mb-3">Prêt à commencer ?</h2>
-          <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-            Consulte ton calendrier de discipline, choisis ton premier module et commence à construire des preuves sur GitHub.
+      <section className="bg-ink-900 border-t border-ink-700">
+        <Reveal className="max-w-6xl mx-auto px-4 sm:px-6 py-20 text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight [text-wrap:balance]">
+            Prêt à commencer ?
+          </h2>
+          <p className="mt-4 text-slate-400 max-w-lg mx-auto">
+            Choisis ton premier module et commence à construire des preuves sur GitHub.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/calendrier" className="btn-primary">Voir mon plan 2026-2031</Link>
-            <Link href="/tuteur" className="btn-secondary">Parler au tuteur AI</Link>
-            <Link href="/ressources" className="btn-secondary">Bibliothèque de ressources</Link>
+          {/* Deux actions : « Bibliothèque de ressources » n'est pas une fin de
+              page, c'est une page du menu. La proposer ici diluait la seule
+              chose qu'on demande vraiment. */}
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link href="/calendrier" className="btn-primary text-base px-7 py-3">Voir mon plan 2026-2031</Link>
+            <Link href="/tuteur" className="btn-secondary text-base px-7 py-3">Parler au tuteur AI</Link>
           </div>
         </Reveal>
       </section>
