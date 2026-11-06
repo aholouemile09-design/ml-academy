@@ -5,7 +5,6 @@ import { WEB_CURRICULUM } from "@/lib/webdev";
 import { PMP_CURRICULUM } from "@/lib/pmp";
 import ProfileWidget from "@/components/ProfileWidget";
 import Reveal from "@/components/Reveal";
-import AnimatedCounter from "@/components/AnimatedCounter";
 import HeroPreview from "@/components/HeroPreview";
 import TrackTabs from "@/components/TrackTabs";
 import HowItWorks from "@/components/HowItWorks";
@@ -121,21 +120,19 @@ export default function Home() {
         {/* Fond aurora animé + grille en perspective */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div
-            className="aurora-bg animate-aurora"
+            className="aurora-bg"
             style={{ background: "radial-gradient(ellipse 50% 45% at 20% 15%, rgb(var(--accent) / 0.42), transparent 70%)" }}
           />
           <div
-            className="aurora-bg animate-aurora"
+            className="aurora-bg"
             style={{
               background: "radial-gradient(ellipse 45% 40% at 80% 70%, rgb(var(--accent-2) / 0.36), transparent 70%)",
-              animationDelay: "-6s",
             }}
           />
           <div
-            className="aurora-bg animate-aurora"
+            className="aurora-bg"
             style={{
               background: "radial-gradient(ellipse 40% 35% at 60% 20%, rgb(var(--accent-light) / 0.22), transparent 70%)",
-              animationDelay: "-12s",
             }}
           />
           <div className="grid-backdrop" />
@@ -168,10 +165,12 @@ export default function Home() {
               <div className="mt-10 grid grid-cols-4 gap-4 text-center animate-fade-up delay-300">
                 {STATS.map(s => (
                   <div key={s.label}>
-                    <AnimatedCounter
-                      value={s.val}
-                      className="block text-3xl font-extrabold gradient-text stat-value"
-                    />
+                    {/* Chiffres rendus directement : le comptage animé affichait
+                        « 1 module ML, 0 modules Web » pendant 1,4 s à chaque
+                        visite — une information fausse, pour décorer. */}
+                    <span className="block text-3xl font-extrabold gradient-text stat-value">
+                      {s.val}
+                    </span>
                     <div className="text-xs text-slate-500 mt-1">{s.label}</div>
                   </div>
                 ))}

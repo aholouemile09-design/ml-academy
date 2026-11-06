@@ -158,13 +158,13 @@ html.light .card {
 }
 
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-colors;
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium;
   /* La couleur du texte est définie par thème plus haut — voir la note de
      contraste. Ne pas la fixer ici, sinon les deux règles se contredisent. */
 }
 
 .btn-secondary {
-  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border border-ink-700 text-sm font-medium transition-colors;
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border border-ink-700 text-sm font-medium;
 }
 
 html.dark  .btn-secondary { @apply text-slate-200 hover:border-accent; }
@@ -259,8 +259,8 @@ html.light .nav-dropdown a.bg-accent\/10 {
 .reveal {
   opacity: 0;
   transform: translateY(18px);
-  transition: opacity 0.9s var(--ease-soft),
-              transform 0.9s var(--ease-soft);
+  transition: opacity 0.35s var(--ease-soft),
+              transform 0.35s var(--ease-soft);
   will-change: opacity, transform;
 }
 .reveal.is-visible {
@@ -285,9 +285,9 @@ html.light .nav-dropdown a.bg-accent\/10 {
 
 /* ── Carte interactive : élévation + halo au survol ───────────────────────── */
 .card {
-  transition: transform 0.35s var(--ease-soft),
-              border-color 0.25s ease,
-              box-shadow 0.35s ease,
+  transition: transform 0.2s var(--ease-soft),
+              border-color 0.2s ease,
+              box-shadow 0.2s ease,
               background-color 0.25s ease;
 }
 .card-hover:hover {
@@ -315,7 +315,7 @@ html.light .card-hover:hover {
   /* Pas d'ombre ici : les filets internes de la pastille sont définis plus
      bas, et une box-shadow posée au survol les remplacerait entièrement. */
 }
-.btn-primary:active, .btn-secondary:active { transform: translateY(0); }
+.btn-primary:active, .btn-secondary:active { transform: scale(0.97); }
 .btn-secondary:hover { transform: translateY(-2px); }
 
 /* ── Fond « aurora » pour les héros ───────────────────────────────────────── */
@@ -367,11 +367,17 @@ html.light .aurora-bg { opacity: 0.32; }
   transform-origin: left;
 }
 
+/* ── Tactile : pas d'état de survol collé après un tap ────────────────────── */
+@media (hover: none) {
+  .card-hover:hover, a.card:hover, button.card:hover,
+  .btn-primary:hover, .btn-secondary:hover { transform: none; }
+}
+
 /* ── Accessibilité : respecter prefers-reduced-motion ─────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
   .animate-fade-up, .animate-fade-in, .animate-scale-in,
-  .animate-float, .animate-aurora, .animate-pulse-ring,
+  .animate-float, .animate-aurora, .animate-pulse-ring, .animate-ping,
   .gradient-border::before {
     animation: none !important;
   }
