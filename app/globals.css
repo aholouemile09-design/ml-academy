@@ -31,10 +31,14 @@ html.dark {
   --ink-800: 38 38 38;    /* #262626 — surfaces surélevées, survols */
   --ink-700: 55 55 55;    /* #373737 — filets et bordures */
   --ink-600: 82 82 82;    /* #525252 — bordures marquées, pointillés */
-  /* Accents — bleu franc, violet en second pour les dégradés */
-  --accent:       59 130 246;   /* #3B82F6 */
-  --accent-light: 96 165 250;   /* #60A5FA — 7,4:1 sur le fond, lisible en texte */
-  --accent-2:     139 92 246;   /* #8B5CF6 */
+  /* Accent unique — terre cuite. Un seul ton porte la couleur ; il n'y a plus
+     de second accent pour fabriquer un dégradé. Le bleu-violet précédent est
+     la signature visuelle par défaut de la quasi-totalité des produits
+     générés : s'en séparer est le geste le moins cher pour ne plus y
+     ressembler. */
+  --accent:       217 102  61;  /* #D9663D */
+  --accent-light: 232 132  92;  /* #E8845C — 7,4:1 sur le fond, lisible en texte */
+  --accent-2:     217 102  61;  /* identique à --accent : plus aucun dégradé à deux tons */
   /* Textes — gris neutres, sans réchauffement */
   --color-text-primary:   250 250 250;
   --color-text-secondary: 212 212 212;
@@ -54,23 +58,30 @@ html.dark {
    ───────────────────────────────────────────────────────────────────────────── */
 html.light {
   color-scheme: light;
-  /* Fonds — la page est blanche, les cartes à peine détachées */
-  --ink-950: 255 255 255;  /* #FFFFFF */
-  --ink-900: 250 250 250;  /* #FAFAFA */
-  --ink-800: 245 245 245;  /* #F5F5F5 */
+  /* Fonds — la page n'est pas blanche, les cartes le sont.
+     Du blanc pur en pleine page renvoie toute la luminosité de l'écran dans
+     l'œil ; la page descend donc d'un cran et ce sont les cartes qui portent
+     le blanc, ce qui les détache en plus. Gris strictement neutres : un
+     blanc cassé chaud donnerait le fond crème qu'on ne veut pas. */
+  --ink-950: 245 245 245;  /* #F5F5F5 — la page */
+  --ink-900: 255 255 255;  /* #FFFFFF — les cartes, plus claires que la page */
+  --ink-800: 250 250 250;  /* #FAFAFA */
   --ink-700: 229 229 229;  /* #E5E5E5 */
   --ink-600: 212 212 212;  /* #D4D4D4 */
-  /* Accents — bleu bien plus foncé qu'en mode sombre : sur fond blanc,
-     le bleu clair tomberait à ~3:1 de contraste, insuffisant pour du texte. */
-  --accent:       37  99 235;   /* #2563EB — 5,2:1 avec du texte blanc dessus */
-  --accent-light: 29  78 216;   /* #1D4ED8 — 6,3:1 en texte sur le fond blanc */
-  --accent-2:    109  40 217;   /* #6D28D9 */
-  /* Textes */
-  --color-text-primary:   10  10  10;
-  --color-text-secondary: 38  38  38;
+  /* Terre cuite bien plus foncée qu'en mode sombre : sur fond blanc, le ton
+     clair ne mesure que 3,6:1, insuffisant pour du texte. */
+  --accent:       168  67  32;  /* #A84320 — 6,0:1 avec du texte blanc dessus */
+  --accent-light: 168  67  32;  /* #A84320 — 6,0:1 en texte sur le fond blanc */
+  --accent-2:     168  67  32;  /* identique à --accent : plus aucun dégradé à deux tons */
+  /* Textes — noir adouci. Du #0A0A0A sur fond clair donne un contraste de
+     19:1 : au-delà de ~16:1 le gain de lisibilité est nul et la fatigue
+     visuelle, elle, continue d'augmenter. #171717 mesure 16,9:1. */
+  --color-text-primary:   23  23  23;
+  --color-text-secondary: 51  51  51;
   --color-text-muted:     82  82  82;
-  /* 110 et non 115 : #737373 sur blanc mesure 4,35:1, soit juste sous le
-     seuil. Cinq points de gris suffisent à repasser au-dessus de 4,5:1. */
+  /* 110 et non 115 : #737373 mesure 4,2:1 sur la page claire, soit sous le
+     seuil. Cinq points de gris suffisent à repasser au-dessus — #6E6E6E
+     donne 4,68:1 sur #F5F5F5. */
   --color-text-subtle:   110 110 110;
   /* Scrollbar */
   --scrollbar-track: #fafafa;
@@ -143,10 +154,10 @@ html.light .btn-primary { color: #FFFFFF !important; }
   @apply bg-ink-900 border border-ink-700 rounded-2xl;
 }
 
-/* En mode clair, la carte ne se distingue pas par sa couleur — elle est
-   presque blanche sur blanc — mais par un empilement d'ombres très faibles.
-   Six couches dont aucune n'est visible isolément : c'est leur somme qui
-   décolle la carte de la page sans jamais produire de bord dur. */
+/* En mode clair, la carte est blanche sur une page gris très clair : l'écart
+   de un cran la pose déjà. L'empilement de six ombres très faibles, dont
+   aucune n'est visible isolément, fait le reste — c'est leur somme qui
+   décolle la carte sans jamais produire de bord dur. */
 html.light .card {
   box-shadow:
     0px 0px 0px 1px rgb(0 0 0 / 0.06),
@@ -171,8 +182,13 @@ html.dark  .btn-secondary { @apply text-slate-200 hover:border-accent; }
 html.light .btn-secondary { color: rgb(var(--color-text-secondary)); }
 html.light .btn-secondary:hover { border-color: rgb(var(--accent)); }
 
+/* Anciennement un dégradé bleu → violet animé en boucle, posé sur le titre de
+   la page d'accueil et sur chaque chiffre. Une animation sans fin sur le texte
+   le plus important de la page coûte de l'attention à chaque visite et ne dit
+   rien. Le nom de la classe est conservé : sept fichiers l'emploient, et le
+   mot « gradient » y désigne désormais la mise en valeur, pas le dégradé. */
 .gradient-text {
-  @apply bg-gradient-to-r from-accent-light to-accent-cyan bg-clip-text text-transparent;
+  color: rgb(var(--accent-light));
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -488,16 +504,6 @@ html.light .btn-primary:hover { background: #0a0a0a; }
 @keyframes gradient-drift {
   0%, 100% { background-position: 0% 50%; }
   50%      { background-position: 100% 50%; }
-}
-
-/* ── Titre : dégradé animé ────────────────────────────────────────────────── */
-.gradient-text {
-  background: linear-gradient(100deg, rgb(var(--accent-light)), rgb(var(--accent-2)), rgb(var(--accent)), rgb(var(--accent-light)));
-  background-size: 300% 100%;
-  -webkit-background-clip: text;
-          background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradient-drift 8s ease infinite;
 }
 
 /* ── Chiffres des statistiques ────────────────────────────────────────────── */
