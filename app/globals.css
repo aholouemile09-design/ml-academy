@@ -91,16 +91,26 @@ html.light {
 /* ─────────────────────────────────────────────────────────────────────────────
    BASE
    ───────────────────────────────────────────────────────────────────────────── */
+/* Le halo de .glow déborde de 30 % de son conteneur, par construction : c'est
+   ce qui lui donne sa douceur. Entre 1024 px — où l'aperçu du héros apparaît —
+   et ~1150 px, il dépassait la fenêtre et donnait à la page une barre de
+   défilement horizontale.
+   Les deux sélecteurs sont nécessaires, et aucun ne suffit seul : le
+   navigateur remonte la règle du premier des deux qui la porte jusqu'au
+   viewport, et cet élément-là repasse en « visible ». Posée sur body seul,
+   elle remonte et body ne coupe plus rien ; posée sur html seul, pareil. Avec
+   les deux, html alimente le viewport et body coupe pour de bon.
+   « clip » et non « hidden » : hidden ferait un conteneur de défilement et
+   décrocherait la barre de navigation collante. */
+html,
+body {
+  overflow-x: clip;
+}
+
 body {
   background-color: rgb(var(--ink-950));
   color: rgb(var(--color-text-secondary));
   @apply antialiased;
-  /* Le halo de .glow déborde de 30 % de son conteneur, par construction : c'est
-     ce qui lui donne sa douceur. Sous 1100 px il dépassait la fenêtre et créait
-     une barre de défilement horizontale. « clip » et non « hidden » : hidden
-     ferait du body un conteneur de défilement et décrocherait la barre de
-     navigation collante. */
-  overflow-x: clip;
 }
 
 /* Surcharge textes en mode SOMBRE.
