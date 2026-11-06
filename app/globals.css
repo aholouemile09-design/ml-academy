@@ -95,6 +95,12 @@ body {
   background-color: rgb(var(--ink-950));
   color: rgb(var(--color-text-secondary));
   @apply antialiased;
+  /* Le halo de .glow déborde de 30 % de son conteneur, par construction : c'est
+     ce qui lui donne sa douceur. Sous 1100 px il dépassait la fenêtre et créait
+     une barre de défilement horizontale. « clip » et non « hidden » : hidden
+     ferait du body un conteneur de défilement et décrocherait la barre de
+     navigation collante. */
+  overflow-x: clip;
 }
 
 /* Surcharge textes en mode SOMBRE.
