@@ -4,26 +4,89 @@
     {
       "name": "portfolio-static",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8124", "--directory", "C:/Users/User 1/Portfolio-v1"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8124",
+        "--directory",
+        "C:/Users/User 1/Portfolio-v1"
+      ],
       "port": 8124
     },
     {
       "name": "tcf-tef-canada",
       "runtimeExecutable": "cmd",
-      "runtimeArgs": ["/c", "cd", "/d", "C:\\Users\\User 1\\tcf-tef-canada", "&&", "npm", "run", "dev"],
+      "runtimeArgs": [
+        "/c",
+        "cd",
+        "/d",
+        "C:\\Users\\User 1\\tcf-tef-canada",
+        "&&",
+        "npm",
+        "run",
+        "dev"
+      ],
       "port": 3000
-    }
-    ,{
+    },
+    {
       "name": "ml-academy",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "-p", "3001"],
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--",
+        "-p",
+        "3001"
+      ],
       "port": 3001
     },
     {
       "name": "prayela-web",
       "runtimeExecutable": "cmd",
-      "runtimeArgs": ["/c", "cd", "/d", "C:\\Users\\User 1\\Prayela Group\\prayela-web", "&&", "pnpm", "dev", "--port", "3002"],
+      "runtimeArgs": [
+        "/c",
+        "cd",
+        "/d",
+        "C:\\Users\\User 1\\Prayela Group\\prayela-web",
+        "&&",
+        "pnpm",
+        "dev",
+        "--port",
+        "3002"
+      ],
       "port": 3002
+    },
+    {
+      "name": "xodyia-demos",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8899",
+        "--directory",
+        "C:/Users/User 1/Ecosysteme Xodyia/Xodyia Demos/Demos en ligne"
+      ],
+      "port": 8899
+    },
+    {
+      "name": "xodyia-crm",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "C:/Users/User 1/Ecosysteme Xodyia/Xodyia CRM/serveur.js"
+      ],
+      "port": 4000
+    },
+    {
+      "name": "portfolio-v2",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "cd", "/d", "C:\\Users\\User 1\\Portfolio-v2", "&&", "pnpm", "dev", "--port", "3003"],
+      "port": 3003
+    },
+    {
+      "name": "crm-financier-apercu",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "set", "CRM_DB=C:\\Users\\User 1\\Projets\\crm-financier\\data\\apercu-test.db", "&&", "set", "PORT=4398", "&&", "node", "C:\\Users\\User 1\\Projets\\crm-financier\\server\\index.mjs"],
+      "port": 4398
     }
   ]
 }
