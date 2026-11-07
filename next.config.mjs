@@ -12,6 +12,17 @@ const isDev = process.env.NODE_ENV !== "production";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {
+    // Le texte des leçons est lu sur le disque au moment de la requête. Next
+    // trace les fichiers à embarquer en suivant les `import` ; un chemin
+    // construit à l'exécution lui échappe, et le dossier resterait sur la
+    // machine de build. Les deux routes qui le lisent l'emportent donc
+    // explicitement — sans ça, tout marche en local et renvoie 404 en ligne.
+    outputFileTracingIncludes: {
+      "/api/lecon/[piste]/[lecon]": ["./contenu/**/*.md"],
+      "/api/recherche": ["./contenu/**/*.md"],
+    },
+  },
   images: {
     remotePatterns: [
       {

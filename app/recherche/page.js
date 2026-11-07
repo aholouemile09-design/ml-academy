@@ -1,175 +1,179 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { CURRICULUM } from "@/lib/curriculum";
-import { WEB_CURRICULUM } from "@/lib/webdev";
-import { PMP_CURRICULUM } from "@/lib/pmp";
+import { FORMATIONS } from "@/lib/formations";
 
-// Flatten all lessons from all tracks into searchable items
-function buildIndex() {
-  const items = [];
+/**
+ * Recherche plein texte dans les leçons.
+ *
+ * L'index était construit dans le navigateur à partir des trois curriculums,
+ * ce qui obligeait à livrer tout le texte du site à qui ouvrait cette page.
+ * Il vit maintenant sur le serveur, derrière /api/recherche.
+ */
 
-  const addTrack = (curriculum, track, trackLabel, baseHref) => {
-    for (const mod of curriculum) {
-      for (const lesson of mod.lessons || []) {
-        items.push({
-          track,
-          trackLabel,
-          trackIcon: track === "ml" ? "🤖" : track === "web" ? "🌐" : "📋",
-          moduleId: mod.id,
-          moduleTitle: mod.title,
-          lessonId: lesson.id,
-          lessonTitle: lesson.title,
-          duration: lesson.duration,
-          href: `${baseHref}/${mod.id}`,
-          // Searchable text (title + content excerpt, lowercased)
-          searchable: `${lesson.title} ${lesson.content || ""}`.toLowerCase(),
-        });
-      }
-    }
-  };
+const PISTES = [
+  { id: "all", label: "Toutes" },
+  { id: "ml", label: FORMATIONS.ml.domaine },
+  { id: "web", label: FORMATIONS.web.domaine },
+  { id: "pmp", label: FORMATIONS.pmp.domaine },
+];
 
-  addTrack(CURRICULUM,     "ml",  "ML & Data Science", "/parcours");
-  addTrack(WEB_CURRICULUM, "web", "Web Full Stack",     "/webdev");
-  addTrack(PMP_CURRICULUM, "pmp", "PMP 2026",           "/pmp");
+const HREF = { ml: FORMATIONS.ml.href, web: FORMATIONS.web.href, pmp: FORMATIONS.pmp.href };
+const LIBELLE = {
+  ml: FORMATIONS.ml.domaine,
+  web: FORMATIONS.web.domaine,
+  pmp: FORMATIONS.pmp.domaine,
+};
 
-  return items;
-}
-
-const INDEX = buildIndex();
-
-function highlight(text, query) {
-  if (!query) return text;
-  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
-  const parts = text.split(regex);
-  return parts.map((p, i) =>
-    regex.test(p) ? <mark key={i} className="bg-accent/30 text-white rounded px-0.5">{p}</mark> : p
+function surligner(texte, requete) {
+  if (!requete) return texte;
+  const motif = new RegExp(`(${requete.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+  return texte.split(motif).map((part, i) =>
+    part.toLowerCase() === requete.toLowerCase() ? (
+      <mark key={i} className="bg-accent/20 text-accent-light rounded px-0.5">{part}</mark>
+    ) : (
+      part
+    )
   );
 }
 
-function getExcerpt(content = "", query = "", maxLen = 120) {
-  const lower = content.toLowerCase();
-  const idx = query ? lower.indexOf(query.toLowerCase()) : -1;
-  if (idx === -1 || !query) return content.slice(0, maxLen);
-  const start = Math.max(0, idx - 40);
-  const end = Math.min(content.length, start + maxLen);
-  const excerpt = (start > 0 ? "…" : "") + content.slice(start, end) + (end < content.length ? "…" : "");
-  return excerpt;
-}
-
-const TRACK_FILTERS = [
-  { id: "all", label: "Tous", icon: "🎓" },
-  { id: "ml",  label: "ML & Data", icon: "🤖" },
-  { id: "web", label: "Web Full Stack", icon: "🌐" },
-  { id: "pmp", label: "PMP 2026", icon: "📋" },
-];
-
 export default function RecherchePage() {
-  const [query, setQuery] = useState("");
-  const [trackFilter, setTrackFilter] = useState("all");
+  const [requete, setRequete] = useState("");
+  const [piste, setPiste] = useState("all");
+  const [etat, setEtat] = useState("repos");
+  const [resultats, setResultats] = useState([]);
 
-  const results = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q || q.length < 2) return [];
-    return INDEX
-      .filter(item => (trackFilter === "all" || item.track === trackFilter) && item.searchable.includes(q))
-      .slice(0, 40);
-  }, [query, trackFilter]);
+  useEffect(() => {
+    const q = requete.trim();
+    if (q.length < 2) {
+      setEtat("repos");
+      setResultats([]);
+      return;
+    }
+
+    // On attend que la frappe se calme : sans ça, « transformer » part en
+    // onze requêtes dont dix sont périmées avant d'arriver.
+    const controleur = new AbortController();
+    const minuteur = setTimeout(() => {
+      setEtat("chargement");
+      fetch(`/api/recherche?q=${encodeURIComponent(q)}`, { signal: controleur.signal })
+        .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+        .then((d) => {
+          setResultats(d.resultats);
+          setEtat(d.resultats.length ? "pret" : "vide");
+        })
+        .catch((e) => {
+          if (e?.name !== "AbortError") setEtat("erreur");
+        });
+    }, 250);
+
+    return () => {
+      clearTimeout(minuteur);
+      controleur.abort();
+    };
+  }, [requete]);
+
+  const visibles = resultats.filter((r) => piste === "all" || r.piste === piste);
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-      <h1 className="text-2xl font-bold text-white mb-2">🔍 Recherche globale</h1>
-      <p className="text-slate-400 text-sm mb-6">
-        Cherche dans toutes les leçons ML, Web Full Stack et PMP.
+      <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">Recherche</h1>
+      <p className="text-slate-400 mb-7">
+        Cherchez dans les leçons des trois formations.
       </p>
 
-      {/* Barre de recherche */}
       <div className="relative mb-4">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">🔍</span>
         <input
-          type="text"
-          value={query}
-          onChange={e => setQuery(e.target.value)}
+          type="search"
+          value={requete}
+          onChange={(e) => setRequete(e.target.value)}
           autoFocus
-          placeholder="Ex: gradient descent, hooks React, WBS, ARIMA…"
-          className="w-full pl-11 pr-4 py-3 rounded-xl border border-ink-700 bg-ink-900 text-white text-sm placeholder-slate-600 focus:outline-none focus:border-accent/60"
+          placeholder="descente de gradient, hooks React, WBS, ARIMA…"
+          className="w-full px-4 py-3 rounded-lg border border-ink-700 bg-ink-900 text-white placeholder-slate-500 focus:outline-none focus:border-accent"
         />
-        {query && (
-          <button onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white">✕</button>
-        )}
       </div>
 
-      {/* Filtres par track */}
-      <div className="flex gap-2 mb-6 flex-wrap">
-        {TRACK_FILTERS.map(t => (
+      <div className="flex gap-2 mb-7 flex-wrap">
+        {PISTES.map((p) => (
           <button
-            key={t.id}
-            onClick={() => setTrackFilter(t.id)}
-            className={`px-3 py-1.5 rounded-xl border text-xs font-medium transition-colors flex items-center gap-1 ${
-              trackFilter === t.id
-                ? "border-accent bg-accent/10 text-white"
-                : "border-ink-700 text-slate-400 hover:border-accent/40"
+            key={p.id}
+            onClick={() => setPiste(p.id)}
+            className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors ${
+              piste === p.id
+                ? "border-accent bg-accent/10 text-accent-light"
+                : "border-ink-700 text-slate-500 hover:border-accent/40"
             }`}
           >
-            {t.icon} {t.label}
+            {p.label}
           </button>
         ))}
       </div>
 
-      {/* Résultats */}
-      {query.length >= 2 && results.length === 0 && (
-        <div className="text-center py-12 text-slate-500">
-          <p className="text-2xl mb-2">😕</p>
-          <p>Aucun résultat pour "<span className="text-white">{query}</span>"</p>
-          <p className="text-xs mt-2">Essaie d'autres mots-clés ou un autre track.</p>
+      {etat === "repos" && (
+        <p className="text-center py-14 text-sm text-slate-500">
+          Tapez au moins deux lettres pour lancer la recherche.
+        </p>
+      )}
+
+      {etat === "chargement" && (
+        <div className="space-y-3 animate-pulse" aria-busy="true">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="h-24 rounded-xl bg-ink-900 border border-ink-700" />
+          ))}
         </div>
       )}
 
-      {results.length > 0 && (
-        <div>
-          <p className="text-xs text-slate-500 mb-3">{results.length} résultat{results.length > 1 ? "s" : ""}</p>
+      {etat === "erreur" && (
+        <div className="border border-ink-700 rounded-xl p-5 text-center">
+          <p className="text-sm text-slate-400">La recherche n'a pas abouti.</p>
+          <button onClick={() => setRequete((q) => q + " ")} className="btn-secondary mt-3">
+            Réessayer
+          </button>
+        </div>
+      )}
+
+      {etat === "vide" && (
+        <div className="text-center py-14">
+          <p className="text-slate-400">
+            Aucun résultat pour « <span className="text-white">{requete.trim()}</span> ».
+          </p>
+          <p className="text-sm text-slate-500 mt-2">
+            Essayez un terme plus court, ou le mot tel qu'il apparaît dans le cours.
+          </p>
+        </div>
+      )}
+
+      {etat === "pret" && (
+        <>
+          <p className="text-xs text-slate-500 mb-3">
+            {visibles.length} résultat{visibles.length > 1 ? "s" : ""}
+            {piste !== "all" && ` sur ${resultats.length}`}
+          </p>
           <div className="space-y-3">
-            {results.map(item => {
-              const excerpt = getExcerpt(item.searchable, query.trim().toLowerCase());
-              return (
-                <Link
-                  key={`${item.moduleId}-${item.lessonId}`}
-                  href={item.href}
-                  className="block card p-4 hover:border-accent/50 transition-colors group"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-ink-800 border border-ink-700 text-slate-400">
-                          {item.trackIcon} {item.trackLabel}
-                        </span>
-                        <span className="text-xs text-slate-500">{item.moduleTitle}</span>
-                      </div>
-                      <p className="font-semibold text-white group-hover:text-accent-light transition-colors">
-                        {highlight(item.lessonTitle, query.trim())}
-                      </p>
-                      <p className="text-xs text-slate-500 mt-1 leading-relaxed line-clamp-2">
-                        {highlight(excerpt, query.trim())}
-                      </p>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <span className="text-xs text-slate-500">{item.duration}</span>
-                      <p className="text-accent-light text-xs mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Ouvrir →</p>
-                    </div>
+            {visibles.map((r) => (
+              <Link
+                key={`${r.piste}-${r.lecon}`}
+                href={`${HREF[r.piste]}/${r.module}`}
+                className="block card p-4 hover:border-accent transition-colors group"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.09em] text-accent-light mb-1">
+                      {LIBELLE[r.piste]}
+                    </p>
+                    <p className="font-bold text-white">{surligner(r.titreLecon, requete.trim())}</p>
+                    <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                      {surligner(r.extrait, requete.trim())}
+                    </p>
+                    <p className="text-xs text-slate-600 mt-2">{r.titreModule}</p>
                   </div>
-                </Link>
-              );
-            })}
+                  <span className="text-xs text-slate-500 shrink-0">{r.duree}</span>
+                </div>
+              </Link>
+            ))}
           </div>
-        </div>
-      )}
-
-      {query.length === 0 && (
-        <div className="text-center py-12 text-slate-600">
-          <p className="text-4xl mb-3">🔍</p>
-          <p className="text-sm">{INDEX.length} leçons indexées — commence à taper pour chercher</p>
-        </div>
+        </>
       )}
     </div>
   );

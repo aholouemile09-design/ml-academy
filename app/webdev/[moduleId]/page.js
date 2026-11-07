@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { getWebModule, WEB_LEVELS } from "@/lib/webdev";
 import { useUserProgress as useProgress } from "@/lib/userProgress";
-import Markdown from "@/components/Markdown";
+import ContenuLecon from "@/components/ContenuLecon";
 import QuizPlayer from "@/components/QuizPlayer";
 import ReflectionPrompt from "@/components/ReflectionPrompt";
 import LessonChat from "@/components/LessonChat";
@@ -140,7 +140,7 @@ export default function WebModulePage() {
                 <h2 className="text-xl font-bold text-white">{lesson.title}</h2>
                 <span className="text-xs text-slate-500">⏱ {lesson.duration}</span>
               </div>
-              <Markdown text={lesson.content} />
+              <ContenuLecon piste="web" lecon={lesson.id} />
               <LessonResources resources={lesson.resources} />
               <LessonExercises exercises={lesson.exercises} />
               <LessonNotes lessonId={lesson.id} />
