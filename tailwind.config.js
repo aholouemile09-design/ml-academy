@@ -32,7 +32,11 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ["Geist", "Inter", "system-ui", "sans-serif"],
+        // Guillemets obligatoires : Tailwind recopie le nom tel quel, et un
+        // nom de police non quoté ne peut pas contenir un mot commençant par
+        // un chiffre. Sans eux, « Source Sans 3 » invalide toute la
+        // déclaration font-family et la page repasse en Times New Roman.
+        sans: ['"Source Sans 3"', '"Source Sans Pro"', "system-ui", "sans-serif"],
         mono: ["Geist Mono", "ui-monospace", "SFMono-Regular", "monospace"],
       },
       boxShadow: {

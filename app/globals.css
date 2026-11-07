@@ -1,4 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap");
+/* Source Sans 3 — la police de Coursera. Dessinée pour l'écran, très lisible
+   en petits corps, et sans le caractère « produit tech » d'une grotesque
+   géométrique : c'est ce qui fait qu'un catalogue de formations se lit comme
+   un catalogue de formations. Geist Mono reste pour les numéros de module. */
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -31,14 +35,15 @@ html.dark {
   --ink-800: 38 38 38;    /* #262626 — surfaces surélevées, survols */
   --ink-700: 55 55 55;    /* #373737 — filets et bordures */
   --ink-600: 82 82 82;    /* #525252 — bordures marquées, pointillés */
-  /* Accent unique — terre cuite. Un seul ton porte la couleur ; il n'y a plus
-     de second accent pour fabriquer un dégradé. Le bleu-violet précédent est
-     la signature visuelle par défaut de la quasi-totalité des produits
-     générés : s'en séparer est le geste le moins cher pour ne plus y
-     ressembler. */
-  --accent:       217 102  61;  /* #D9663D */
-  --accent-light: 232 132  92;  /* #E8845C — 7,4:1 sur le fond, lisible en texte */
-  --accent-2:     217 102  61;  /* identique à --accent : plus aucun dégradé à deux tons */
+  /* Accent unique — bleu franc. C'est la couleur du secteur : Coursera,
+     OpenClassrooms et LinkedIn Learning la portent toutes. Un aplat, jamais
+     un dégradé — le bleu-violet dégradé reste la signature des produits
+     générés, et c'est elle qu'on évite, pas le bleu.
+     Deux tons parce qu'un bleu lisible en texte sur un fond presque noir est
+     trop clair pour porter du texte blanc en bouton, et inversement. */
+  --accent:       37  99 235;  /* #2563EB — 5,2:1 avec du texte blanc dessus */
+  --accent-light: 96 165 250;  /* #60A5FA — 7,8:1 sur le fond, lisible en texte */
+  --accent-2:     37  99 235;  /* identique à --accent : plus aucun dégradé à deux tons */
   /* Textes — gris neutres, sans réchauffement */
   --color-text-primary:   250 250 250;
   --color-text-secondary: 212 212 212;
@@ -68,11 +73,12 @@ html.light {
   --ink-800: 250 250 250;  /* #FAFAFA */
   --ink-700: 229 229 229;  /* #E5E5E5 */
   --ink-600: 212 212 212;  /* #D4D4D4 */
-  /* Terre cuite bien plus foncée qu'en mode sombre : sur fond blanc, le ton
-     clair ne mesure que 3,6:1, insuffisant pour du texte. */
-  --accent:       168  67  32;  /* #A84320 — 6,0:1 avec du texte blanc dessus */
-  --accent-light: 168  67  32;  /* #A84320 — 6,0:1 en texte sur le fond blanc */
-  --accent-2:     168  67  32;  /* identique à --accent : plus aucun dégradé à deux tons */
+  /* Bleu bien plus foncé qu'en mode sombre : sur fond clair, le #2563EB ne
+     mesure que 4,7:1 et le ton clair 2,3:1. Un seul ton suffit ici, il tient
+     les deux emplois. */
+  --accent:       29  78 216;  /* #1D4ED8 — 6,7:1 avec du texte blanc dessus */
+  --accent-light: 29  78 216;  /* #1D4ED8 — 6,2:1 en texte sur la page claire */
+  --accent-2:     29  78 216;  /* identique à --accent : plus aucun dégradé à deux tons */
   /* Textes — noir adouci. Du #0A0A0A sur fond clair donne un contraste de
      19:1 : au-delà de ~16:1 le gain de lisibilité est nul et la fatigue
      visuelle, elle, continue d'augmenter. #171717 mesure 16,9:1. */
@@ -155,13 +161,12 @@ html.light .text-teal-400    { color: #0F766E !important; } /* 5,3:1 */
 html.light .text-violet-400  { color: #6D28D9 !important; } /* 7,0:1 */
 html.light .text-purple-400  { color: #7E22CE !important; } /* 6,4:1 */
 
-/* Le bouton principal est NEUTRE, pas coloré : il s'inverse par rapport à la
-   page — pastille blanche sur thème sombre, pastille presque noire sur thème
-   clair. C'est la signature du système repris ici, et accessoirement le seul
-   choix qui tienne le contraste dans les deux thèmes (au-delà de 15:1), là où
-   un aplat bleu portant du texte blanc plafonne à 3,7:1. */
-html.dark  .btn-primary { color: #0A0A0A !important; }
-html.light .btn-primary { color: #FFFFFF !important; }
+/* Le bouton principal porte l'accent. Un bouton neutre convenait à un site
+   éditorial ; sur un catalogue de formations, l'action principale doit se
+   voir de loin, et c'est le bleu qui la signale. L'objection de contraste qui
+   justifiait le bouton neutre visait l'ancien bleu : #1D4ED8 tient 6,7:1 avec
+   du texte blanc en thème clair, #2563EB 5,2:1 en thème sombre. */
+.btn-primary { color: #FFFFFF !important; }
 
 /* ─────────────────────────────────────────────────────────────────────────────
    COMPOSANTS SÉMANTIQUES
@@ -184,14 +189,14 @@ html.light .card {
     0px 24px 24px -12px rgb(0 0 0 / 0.04);
 }
 
+/* Coin arrondi court et non pastille : la pastille est une forme d'application
+   mobile, le rectangle adouci est celle des plateformes de cours. */
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium;
-  /* La couleur du texte est définie par thème plus haut — voir la note de
-     contraste. Ne pas la fixer ici, sinon les deux règles se contredisent. */
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold;
 }
 
 .btn-secondary {
-  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border border-ink-700 text-sm font-medium;
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-ink-700 text-sm font-semibold;
 }
 
 html.dark  .btn-secondary { @apply text-slate-200 hover:border-accent; }
@@ -495,28 +500,16 @@ html.light .glass {
   pointer-events: none;
 }
 
-/* ── Bouton principal : pastille inversée + filets internes ───────────────── */
-/* Les deux ombres « inset » posent un filet blanc en haut et en bas de la
-   pastille. C'est ce liseré, et non une ombre portée, qui donne au bouton son
-   relief : il imite la tranche éclairée d'une touche physique. */
+/* ── Bouton principal : aplat d'accent ───────────────────────────────────── */
+/* Plus de filets internes imitant une touche physique : un aplat franc, comme
+   chez Coursera et OpenClassrooms. Le survol fonce le bleu au lieu de
+   l'éclaircir — c'est le sens qu'on attend d'un bouton pressé. */
 .btn-primary {
-  background: #fafafa;
+  background: rgb(var(--accent));
   border: none;
-  box-shadow:
-    0px -1px 0px 0px rgb(0 0 0 / 0.12) inset,
-    0px 1px 0px 0px rgb(255 255 255 / 0.9) inset,
-    0px 1px 2px 0px rgb(0 0 0 / 0.25);
 }
-.btn-primary:hover { background: #ffffff; }
-
-html.light .btn-primary {
-  background: #171717;
-  box-shadow:
-    0px -1px 0px 0px rgb(0 0 0 / 0.4) inset,
-    0px 1px 0px 0px rgb(255 255 255 / 0.25) inset,
-    0px 1px 2px 0px rgb(0 0 0 / 0.18);
-}
-html.light .btn-primary:hover { background: #0a0a0a; }
+.btn-primary:hover { background: #1D4ED8; }
+html.light .btn-primary:hover { background: #1E3A8A; }
 @keyframes gradient-drift {
   0%, 100% { background-position: 0% 50%; }
   50%      { background-position: 100% 50%; }

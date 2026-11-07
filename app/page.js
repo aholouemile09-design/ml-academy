@@ -4,319 +4,239 @@ import { CURRICULUM } from "@/lib/curriculum";
 import { WEB_CURRICULUM } from "@/lib/webdev";
 import { PMP_CURRICULUM } from "@/lib/pmp";
 import ProfileWidget from "@/components/ProfileWidget";
-import Reveal from "@/components/Reveal";
-import HeroPreview from "@/components/HeroPreview";
-import TrackTabs from "@/components/TrackTabs";
 import HowItWorks from "@/components/HowItWorks";
 import FAQ from "@/components/FAQ";
 
-// Grille bento : les tailles encodent l'importance. `span` = classes de grille.
-const features = [
-  {
-    title: "Tuteur AI personnel", span: "lg:col-span-2 lg:row-span-2", featured: true,
-    desc: "Un expert disponible 24/7 qui connaît la leçon que tu consultes. Il explique, décortique tes erreurs, propose des pistes — mais ne fera jamais tes projets à ta place.",
-  },
-  {
-    title: "Problem sets notés", span: "lg:col-span-2",
-    desc: "Une évaluation pratique sur 100 par module, avec sa grille de notation, ancrée dans un cas réel — scoring crédit, détection de fraude, imagerie médicale.",
-  },
-  {
-    title: "Trois parcours", span: "",
-    desc: "ML & Data Science, Web Full Stack et préparation PMP 2026.",
-  },
-  {
-    title: "27 projets portfolio", span: "",
-    desc: "Guidés, de débutant à expert, pour un GitHub crédible.",
-  },
-  {
-    title: "Lectures de référence", span: "lg:col-span-2",
-    desc: "Une sélection par module, gratuites signalées comme telles — MIT, Stanford, Hugging Face — avec la raison précise de chaque recommandation.",
-  },
-  {
-    title: "Streak & régularité", span: "",
-    desc: "Ta constance mesurée jour après jour.",
-  },
-  {
-    title: "Certificats vérifiables", span: "",
-    desc: "Partageables sur LinkedIn, adossés à tes projets.",
-  },
-];
+const compter = (curriculum) => ({
+  modules: curriculum.length,
+  lecons: curriculum.reduce((total, m) => total + m.lessons.length, 0),
+});
 
-// Stats bar
-const STATS = [
-  { val: "9", label: "modules ML" },
-  { val: "6", label: "modules Web" },
-  { val: "15", label: "projets portfolio" },
-  { val: "5 ans", label: "plan structuré" },
-];
-
-// Témoignages / citations motivantes
-const QUOTES = [
-  { text: "L'intelligence artificielle est la nouvelle électricité.", author: "Andrew Ng, co-fondateur de Coursera" },
-  { text: "Les données sont le pétrole du 21e siècle, et l'analytics en est le moteur à combustion.", author: "Peter Sondergaard, Gartner" },
-  { text: "Le machine learning, c'est l'avenir. Celui qui ne l'apprend pas aujourd'hui sera dépassé demain.", author: "CodeGraft Academy" },
-];
-
-// Données des onglets de parcours.
-const TRACKS = [
+/* Les trois formations. Les chiffres sont comptés sur le curriculum réel : une
+   durée en heures serait inventée, et c'est précisément le genre de promesse
+   qu'on ne peut pas tenir. */
+const FORMATIONS = [
   {
-    id: "ml",
-    image: "photo-1551288049-bebda4e38f71",
-    imageAlt: "Courbes de performance d'un modèle sur l'écran d'un ordinateur portable",
-    label: "ML & Data",
-    title: "Machine Learning & Data Science",
-    basePath: "/parcours",
-    pitch:
+    href: "/parcours",
+    domaine: "Machine learning & data",
+    titre: "Machine learning et data science",
+    resume:
       "De Python aux modèles en production : statistiques, ML classique, deep learning, NLP et MLOps.",
-    highlights: [
-      "Problem sets ancrés dans des cas réels",
-      "XGBoost, PyTorch, transformers, MLflow",
-      "Éthique et équité algorithmique incluses",
-      "Livres MIT et Stanford, gratuits",
-    ],
-    total: CURRICULUM.length,
-    modules: CURRICULUM.slice(0, 5),
+    niveau: "Débutant à avancé",
+    image: "photo-1551288049-bebda4e38f71",
+    alt: "Courbes de performance d'un modèle sur l'écran d'un ordinateur portable",
+    ...compter(CURRICULUM),
   },
   {
-    id: "web",
-    image: "photo-1674483699209-25fb6d962119",
-    imageAlt: "Développeur devant deux écrans, en train d'écrire du code",
-    label: "Web Full Stack",
-    title: "Développement Web Full Stack",
-    basePath: "/webdev",
-    pitch:
+    href: "/webdev",
+    domaine: "Développement web",
+    titre: "Développeur web full-stack",
+    resume:
       "Du HTML sémantique au déploiement supervisé, en passant par React, les bases de données et la sécurité.",
-    highlights: [
-      "Bases de données avant le backend",
-      "TypeScript strict et validation Zod",
-      "Revue OWASP Top 10 obligatoire",
-      "CI/CD, supervision et post-mortem",
-    ],
-    total: WEB_CURRICULUM.length,
-    modules: WEB_CURRICULUM.slice(0, 5),
+    niveau: "Débutant accepté",
+    image: "photo-1674483699209-25fb6d962119",
+    alt: "Développeur devant deux écrans, en train d'écrire du code",
+    ...compter(WEB_CURRICULUM),
   },
   {
-    id: "pmp",
+    href: "/pmp",
+    domaine: "Gestion de projet",
+    titre: "Certification PMP — examen 2026",
+    resume:
+      "People, Process et Business Environment, prédictif et agile, avec un examen blanc de 180 questions.",
+    niveau: "Niveau intermédiaire",
     image: "photo-1557804506-669a67965ba0",
-    imageAlt: "Équipe projet réunie autour d'un tableau blanc, ordinateurs ouverts",
-    label: "PMP 2026",
-    title: "Certification PMP — examen 2026",
-    basePath: "/pmp",
-    pitch:
-      "Préparation complète au Project Management Professional du PMI : People, Process et Business Environment.",
-    highlights: [
-      "Aligné sur l'ECO 2026 officiel",
-      "Prédictif, agile et hybride",
-      "Calculs EVM et analyse de risques",
-      "Examen blanc chronométré de 180 questions",
-    ],
-    total: PMP_CURRICULUM.length,
-    modules: PMP_CURRICULUM.slice(0, 5),
+    alt: "Équipe projet réunie autour d'un tableau blanc, ordinateurs ouverts",
+    ...compter(PMP_CURRICULUM),
+  },
+];
+
+/* Icônes au trait, déclarées une fois et appelées par les cartes. Trois
+   pictogrammes de 16 px : les redéclarer dans chaque carte ferait trois fois
+   le même SVG dans le balisage. */
+const Trait = (props) => (
+  <svg
+    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+    {...props}
+  />
+);
+const IconeModules = () => (
+  <Trait><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 10h18" /></Trait>
+);
+const IconeLecons = () => (
+  <Trait><path d="M4 5a2 2 0 0 1 2-2h8l6 6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" /><path d="M14 3v6h6" /></Trait>
+);
+const IconeNiveau = () => (
+  <Trait><path d="M4 20V11M10 20V4M16 20v-6M22 20H2" /></Trait>
+);
+
+const VALEURS = [
+  {
+    titre: "Des formations entières",
+    texte:
+      "Pas une collection de tutoriels : un chemin du premier module à l'évaluation finale.",
+    icone: <path d="M12 3 2 8l10 5 10-5-10-5Z M2 14l10 5 10-5" />,
+  },
+  {
+    titre: "On vérifie que vous avez compris",
+    texte:
+      "Deux exercices par leçon, un quiz par module, et des cartes de révision qui reviennent au bon moment.",
+    icone: <path d="m9 11 3 3L22 4 M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />,
+  },
+  {
+    titre: "À votre rythme",
+    texte:
+      "Votre progression est enregistrée. Vous reprenez exactement là où vous vous êtes arrêté.",
+    icone: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
   },
 ];
 
 export default function Home() {
   return (
     <div>
-      {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      {/* Pas de fond décoratif : les trois halos « aurora » et la grille en
-          perspective coloraient la page sans rien dire. Ce qui tient le haut
-          de page, c'est la grille de 12 colonnes et le blanc, pas un effet. */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-16">
-        <div className="grid lg:grid-cols-12 gap-x-8 gap-y-12 items-end">
-          {/* Le texte occupe 7 colonnes sur 12, l'aperçu les 5 suivantes :
-              le déséquilibre est ce qui donne sa tension à la composition. */}
-          <div className="lg:col-span-7">
-            <p className="eyebrow animate-fade-up">École ML &amp; Web · plan 2026–2031</p>
-            {/* text-wrap:balance — sans lui, « Apprendre le machine learning »
-                se coupait en laissant « learning » seul sur sa ligne. */}
-            <h1 className="mt-4 text-[2.75rem] sm:text-6xl font-extrabold text-white tracking-tight leading-[1.05] [text-wrap:balance] animate-fade-up delay-75">
-              Apprendre le machine learning
-              <br />
-              <span className="text-slate-500">comme un métier, pas comme un cours.</span>
+      {/* ── HÉROS ────────────────────────────────────────────────────────── */}
+      <section className="bg-ink-900 border-b border-ink-700">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+          <div>
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.1] [text-wrap:balance]">
+              Devenez opérationnel en machine learning, en développement web ou
+              en gestion de projet.
             </h1>
-            <p className="mt-6 max-w-xl text-lg text-slate-400 leading-relaxed animate-fade-up delay-150">
-              Un curriculum complet, un tuteur AI qui connaît la leçon que tu lis,
-              et une progression visible sur ton GitHub.
+            <p className="mt-5 text-lg text-slate-400 leading-relaxed max-w-xl">
+              Trois formations complètes, structurées en modules, avec exercices
+              corrigés, quiz et révisions espacées. À votre rythme, du premier
+              cours à l'évaluation finale.
             </p>
-            {/* Deux actions, pas trois : un troisième bouton de même poids
-                transforme un choix en hésitation. */}
-            <div className="mt-9 flex flex-wrap gap-3 animate-fade-up delay-225">
-              <Link href="/parcours" className="btn-primary text-base px-7 py-3">Commencer le parcours ML →</Link>
-              <Link href="/webdev" className="btn-secondary text-base px-7 py-3">Voir le parcours Web</Link>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="#formations" className="btn-primary text-base px-7 py-3">
+                Découvrir les formations
+              </Link>
+              <Link href="/tuteur" className="btn-secondary text-base px-7 py-3">
+                Parler au tuteur AI
+              </Link>
             </div>
           </div>
-
-          {/* Aperçu produit : l'interface réelle, pas une photo d'illustration */}
-          <div className="hidden lg:block lg:col-span-5 animate-fade-up delay-150">
-            <HeroPreview />
-          </div>
+          <Image
+            src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1000&q=75"
+            alt="Poste de travail avec un ordinateur portable et des notes"
+            width={1000}
+            height={750}
+            className="hidden lg:block w-full rounded-2xl object-cover aspect-[4/3]"
+            priority
+          />
         </div>
+      </section>
 
-        {/* Les chiffres posés sur un filet, en bas de page : des nombres nus et
-            leur légende, sans carte ni icône autour. */}
-        <div className="mt-16 border-t border-ink-700 grid grid-cols-2 sm:grid-cols-4 animate-fade-up delay-300">
-          {STATS.map(s => (
-            <div key={s.label} className="py-6 sm:border-r border-ink-700 last:border-r-0 pr-6">
-              {/* Chiffres rendus directement : le comptage animé affichait
-                  « 1 module ML, 0 modules Web » pendant 1,4 s à chaque
-                  visite — une information fausse, pour décorer. */}
-              <span className="block text-4xl font-extrabold text-white stat-value">
-                {s.val}
-              </span>
-              {/* `!` : .eyebrow est déclarée après les utilitaires Tailwind et
-                  gagnerait sinon sur la couleur. La légende reste grise. */}
-              <div className="eyebrow mt-2 !text-slate-500">{s.label}</div>
+      {/* ── CE QUE VOUS Y TROUVEZ ────────────────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
+        <div className="grid sm:grid-cols-3 gap-8">
+          {VALEURS.map((v) => (
+            <div key={v.titre} className="flex gap-3.5">
+              <svg
+                width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+                className="shrink-0 text-accent-light mt-0.5" aria-hidden="true"
+              >
+                {v.icone}
+              </svg>
+              <div>
+                <h3 className="font-bold text-white mb-1">{v.titre}</h3>
+                <p className="text-sm text-slate-400 leading-relaxed">{v.texte}</p>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── PROFIL WIDGET ────────────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-4">
+      {/* ── LES FORMATIONS ───────────────────────────────────────────────── */}
+      <section id="formations" className="max-w-6xl mx-auto px-4 sm:px-6 py-8 pb-16">
+        <div className="mb-8">
+          <h2 className="text-3xl font-extrabold text-white tracking-tight">Nos formations</h2>
+          <p className="mt-2 text-slate-400">
+            Trois parcours complets, chacun mené jusqu'à son évaluation.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {FORMATIONS.map((f) => (
+            <Link
+              key={f.href}
+              href={f.href}
+              className="card overflow-hidden flex flex-col hover:border-accent transition-colors"
+            >
+              <Image
+                src={`https://images.unsplash.com/${f.image}?w=600&q=70`}
+                alt={f.alt}
+                width={600}
+                height={338}
+                className="w-full aspect-video object-cover"
+              />
+              <div className="p-5 flex flex-col flex-1">
+                <p className="text-[11px] font-bold uppercase tracking-[0.09em] text-accent-light mb-2">
+                  {f.domaine}
+                </p>
+                <h3 className="text-lg font-bold text-white leading-snug">{f.titre}</h3>
+                <p className="mt-2 text-sm text-slate-400 leading-relaxed">{f.resume}</p>
+
+                <div className="mt-4 pt-4 border-t border-ink-700 flex flex-col gap-2 text-sm text-slate-500">
+                  <span className="flex items-center gap-2.5"><IconeModules /> {f.modules} modules</span>
+                  <span className="flex items-center gap-2.5"><IconeLecons /> {f.lecons} leçons</span>
+                  <span className="flex items-center gap-2.5"><IconeNiveau /> {f.niveau}</span>
+                </div>
+
+                <span className="mt-4 text-sm font-semibold text-accent-light">
+                  Voir la formation →
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ── PROGRESSION DE L'UTILISATEUR ─────────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
         <ProfileWidget />
       </section>
 
-      {/* ── CITATION ─────────────────────────────────────────────────────── */}
-      {/* Bandeau pleine largeur, d'un cran plus clair que la page. Sur un fond
-          déjà presque noir, c'est l'inverse du bandeau vert foncé de la
-          maquette qui produit la même respiration : une bande qui tranche. */}
-      <section className="bg-ink-900 border-y border-ink-700 my-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
-          <div className="max-w-3xl">
-            <p className="text-2xl sm:text-3xl font-medium text-white leading-snug tracking-tight">
-              « {QUOTES[0].text} »
-            </p>
-            <p className="eyebrow mt-5 !text-slate-500">{QUOTES[0].author}</p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FEATURES ─────────────────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-        <Reveal className="mb-12">
-          <p className="eyebrow">Ce que contient la plateforme</p>
-          <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-white tracking-tight">
-            Tout ce qu'il faut pour progresser comme à l'école
-          </h2>
-        </Reveal>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[minmax(150px,auto)]">
-          {features.map((f, i) => (
-            <Reveal
-              key={f.title}
-              delay={i * 70}
-              className={`card card-hover p-6 flex flex-col ${f.span} ${
-                f.featured ? "justify-center" : ""
-              }`}
-            >
-              {/* Index en mono plutôt qu'un emoji par carte : sept pictogrammes
-                  décoratifs ne hiérarchisent rien et donnent à la grille son
-                  air de gabarit générique. Le numéro, lui, ordonne. */}
-              <div className="eyebrow mb-4">{String(i + 1).padStart(2, "0")}</div>
-              <h3 className={`font-bold text-white mb-2 ${f.featured ? "text-xl" : "text-sm"}`}>
-                {f.title}
-              </h3>
-              <p className={`text-slate-400 leading-relaxed ${f.featured ? "text-sm" : "text-xs"}`}>
-                {f.desc}
-              </p>
-              {f.featured && (
-                <Link
-                  href="/tuteur"
-                  className="mt-5 text-sm text-accent-light font-semibold link-underline w-fit"
-                >
-                  Parler au tuteur →
-                </Link>
-              )}
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
       {/* ── COMMENT ÇA MARCHE ────────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-        <Reveal className="mb-14">
-          <p className="eyebrow">Le déroulé</p>
-          <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-white tracking-tight">Comment ça marche</h2>
-          <p className="mt-4 text-slate-400 max-w-xl">
-            Le même déroulé que dans une université : objectifs, cours, évaluation, certification.
-          </p>
-        </Reveal>
-        <Reveal delay={100}>
+      <section className="bg-ink-900 border-y border-ink-700">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+          <h2 className="text-3xl font-extrabold text-white tracking-tight mb-10">
+            Comment ça marche
+          </h2>
           <HowItWorks />
-        </Reveal>
-      </section>
-
-      {/* ── LES TROIS PARCOURS (onglets) ─────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-        <Reveal className="mb-10">
-          <p className="eyebrow">Pour qui</p>
-          <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-white tracking-tight">Trois parcours complets</h2>
-          <p className="mt-4 text-slate-400 max-w-xl">
-            Complémentaires et progressifs. Choisis ton point d'entrée.
-          </p>
-        </Reveal>
-        <Reveal delay={100}>
-          <TrackTabs tracks={TRACKS} />
-        </Reveal>
-      </section>
-      {/* ── SECTION IMAGE LARGE — ENVIRONNEMENT ──────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
-        <div className="relative rounded-3xl overflow-hidden">
-          <Image
-            src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&q=80"
-            alt="Espace de travail d'un développeur — objectif ML Engineer"
-            width={1200}
-            height={400}
-            className="w-full object-cover h-64 sm:h-80"
-          />
-          {/* Le voile est noir en dur, jamais ink-950 : ce jeton devient BLANC
-              en thème clair, et le voile effaçait alors le texte au lieu de le
-              détacher de la photo. Les couleurs de ce bloc sont fixes pour la
-              même raison — elles se lisent sur une photo, pas sur la page. */}
-          <div className="absolute inset-0 bg-gradient-to-r from-neutral-950 via-neutral-950/80 to-transparent" />
-          <div className="absolute inset-0 flex items-center px-8 sm:px-12">
-            <div className="max-w-lg [text-shadow:0_2px_8px_rgba(0,0,0,0.85)]">
-              <p className="eyebrow mb-2 !text-[#E8845C]">Ton objectif</p>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#FAFAFA] leading-tight mb-4">
-                De zéro à ML Engineer en 5 ans
-              </h2>
-              <p className="text-[#E5E5E5] text-sm mb-5">
-                Pas de raccourcis. Un plan solide, des projets réels sur GitHub, et un tuteur AI disponible à toute heure.
-              </p>
-              <Link href="/calendrier" className="btn-primary">Voir le plan complet →</Link>
-            </div>
-          </div>
         </div>
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-        <Reveal className="mb-12">
-          <p className="eyebrow">Avant de commencer</p>
-          <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-white tracking-tight">Questions fréquentes</h2>
-        </Reveal>
-        <Reveal delay={100}>
-          <FAQ />
-        </Reveal>
+        <h2 className="text-3xl font-extrabold text-white tracking-tight mb-8">
+          Questions fréquentes
+        </h2>
+        <FAQ />
       </section>
 
-      {/* ── CTA ──────────────────────────────────────────────────────────── */}
-      <section className="bg-ink-900 border-t border-ink-700">
-        <Reveal className="max-w-6xl mx-auto px-4 sm:px-6 py-20 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight [text-wrap:balance]">
-            Prêt à commencer ?
+      {/* ── APPEL À L'ACTION ─────────────────────────────────────────────── */}
+      <section className="bg-accent">
+        {/* Couleurs en dur et non `text-white` : ce jeton est réécrit en
+            presque noir par le thème clair, ce qui effacerait le texte sur
+            l'aplat bleu. Ici le fond ne change pas avec le thème, le texte
+            non plus. */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 text-center">
+          <h2 className="text-3xl font-extrabold text-[#FFFFFF] tracking-tight">
+            Commencez aujourd'hui
           </h2>
-          <p className="mt-4 text-slate-400 max-w-lg mx-auto">
-            Choisis ton premier module et commence à construire des preuves sur GitHub.
+          <p className="mt-3 text-[#DBE6FD] max-w-lg mx-auto">
+            Choisissez votre formation et ouvrez la première leçon dans la minute.
           </p>
-          {/* Deux actions : « Bibliothèque de ressources » n'est pas une fin de
-              page, c'est une page du menu. La proposer ici diluait la seule
-              chose qu'on demande vraiment. */}
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link href="/calendrier" className="btn-primary text-base px-7 py-3">Voir mon plan 2026-2031</Link>
-            <Link href="/tuteur" className="btn-secondary text-base px-7 py-3">Parler au tuteur AI</Link>
-          </div>
-        </Reveal>
+          <Link
+            href="/parcours"
+            className="mt-7 inline-flex items-center justify-center rounded-lg bg-white px-7 py-3 text-base font-semibold text-accent hover:bg-slate-100 transition-colors"
+          >
+            Commencer le parcours ML
+          </Link>
+        </div>
       </section>
     </div>
   );

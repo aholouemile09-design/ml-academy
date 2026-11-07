@@ -6,7 +6,7 @@ import LegacyImportPrompt from "@/components/LegacyImportPrompt";
 import RobotMascot from "@/components/RobotMascot";
 import StudyTimer from "@/components/StudyTimer";
 
-const SITE_URL = "https://codegraft.vercel.app";
+const SITE_URL = "https://codegraft.oltavia.ca";
 const TITLE = "CodeGraft Academy — Machine Learning & Web Full Stack";
 const DESCRIPTION =
   "École en ligne de machine learning, data science et développement web full stack, avec tuteur AI personnel : parcours structuré, quiz, projets et suivi de progression.";
@@ -39,10 +39,10 @@ export const metadata = {
 const themeScript = `
 (function() {
   try {
-    var t = localStorage.getItem('ml-academy-theme') || 'dark';
+    var t = localStorage.getItem('ml-academy-theme') || 'light';
     document.documentElement.classList.add(t);
   } catch(e) {
-    document.documentElement.classList.add('dark');
+    document.documentElement.classList.add('light');
   }
 })();
 `;
