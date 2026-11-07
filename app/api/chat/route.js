@@ -86,7 +86,7 @@ async function lireProgression(supabase, user, piste, lecon) {
 async function assemblerPrompt(supabase, user, piste, lecon) {
   const couches = [SYSTEM_PROMPT];
 
-  const profil = lireProfil();
+  const profil = lireProfil(user);
   if (profil) {
     couches.push(
       `PROFIL DE L'APPRENANT — ces consignes viennent de lui et priment sur les tiennes :\n\n${profil}`

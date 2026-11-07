@@ -11,6 +11,11 @@
   table `user_progress` et se synchronise tout seul. Un avancement écrit à la
   main serait faux la semaine suivante.
 
+  Il n'est injecté que pour le compte désigné par PROFIL_APPRENANT_EMAIL. Le
+  site a plusieurs comptes, et ce fichier nomme une machine, un utilisateur
+  Linux et une base : il n'a rien à dire à un autre apprenant. Variable vide,
+  profil injecté pour personne.
+
   Source : Machine Learning/REPRISE-SESSION.md et resume-global.md du classeur
   ml-academy, synthétisés le 2026-11-07.
 -->
