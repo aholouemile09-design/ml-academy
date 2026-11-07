@@ -280,16 +280,20 @@ export default function StudyTimer() {
             finished
               ? "bg-gradient-to-br from-rose-500 to-orange-500 animate-pulse"
               : running
-              ? "bg-gradient-to-br from-accent to-violet-500"
+              ? "bg-accent"
               : "bg-ink-800 border border-ink-700"
           }`}
         >
           {running ? (
             <svg className="absolute inset-0 -rotate-90 w-14 h-14" viewBox="0 0 56 56">
-              <circle cx="28" cy="28" r="24" fill="none" stroke="#312e81" strokeWidth="3" />
+              {/* Blanc translucide pour la piste, blanc plein pour la part
+                  écoulée : l'anneau est posé sur le bouton, qui porte l'accent.
+                  Il suit donc la couleur du bouton sans la nommer, dans les
+                  deux thèmes. */}
+              <circle cx="28" cy="28" r="24" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="3" />
               <circle
                 cx="28" cy="28" r="24" fill="none"
-                stroke="#a5b4fc" strokeWidth="3" strokeLinecap="round"
+                stroke="#ffffff" strokeWidth="3" strokeLinecap="round"
                 strokeDasharray={2 * Math.PI * 24}
                 strokeDashoffset={2 * Math.PI * 24 * (1 - progress)}
                 style={{ transition: "stroke-dashoffset 1s linear" }}

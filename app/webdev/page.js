@@ -72,7 +72,7 @@ export default function WebDev() {
                   <p className="text-sm text-slate-400 mt-1">{m.description}</p>
                   <div className="mt-4 flex items-center gap-4">
                     <div className="flex-1 h-2 bg-ink-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-500" style={{ width: `${pct}%` }} />
+                      <div className="h-full bg-gradient-to-r from-accent to-accent-cyan" style={{ width: `${pct}%` }} />
                     </div>
                     <span className="text-xs text-slate-500 whitespace-nowrap">
                       {done}/{m.lessons.length} leçons
