@@ -42,7 +42,6 @@ export default function PrincipeDuJour({ compact = false }) {
     <div className="card p-6">
       <div className="flex items-start justify-between gap-4 mb-3 flex-wrap">
         <div className="flex items-center gap-2">
-          <span className="text-lg">{cat.icon}</span>
           <span className={`text-xs font-bold uppercase tracking-wider ${cat.couleur}`}>
             Principe du jour · {cat.label}
           </span>
@@ -52,7 +51,7 @@ export default function PrincipeDuJour({ compact = false }) {
           className="text-xs text-slate-500 hover:text-accent-light transition-colors"
           title="Afficher un autre principe"
         >
-          🎲 un autre
+          un autre
         </button>
       </div>
 

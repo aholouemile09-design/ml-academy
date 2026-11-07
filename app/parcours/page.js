@@ -23,7 +23,7 @@ export default function Parcours() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/75 to-transparent" />
         <div className="absolute inset-0 flex flex-col justify-center px-6 [text-shadow:0_2px_8px_rgba(0,0,0,0.85)]">
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-50 mb-1">🤖 Parcours ML & Data Science</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-50 mb-1">Parcours ML &amp; Data Science</h1>
           <p className="text-slate-200/90 text-sm">
             Suivez les modules dans l'ordre — chaque module se valide par un quiz.
           </p>
@@ -48,8 +48,16 @@ export default function Parcours() {
                 href={`/parcours/${m.id}`}
                 className="card p-6 flex gap-5 hover:border-accent/50 transition-colors relative sm:ml-14 group block"
               >
-                <div className="absolute -left-14 top-6 w-12 h-12 rounded-full bg-ink-900 border border-ink-700 hidden sm:flex items-center justify-center text-xl">
-                  {pct === 100 ? "✅" : m.icon}
+                {/* Le rang plutôt qu'une pastille d'emoji. Le médaillon doit
+                    porter quelque chose, puisqu'il marque la position sur le
+                    filet ; un module terminé se lit à l'accent, et surtout au
+                    « 12/12 leçons » imprimé juste en dessous. */}
+                <div
+                  className={`absolute -left-14 top-6 w-12 h-12 rounded-full bg-ink-900 border hidden sm:flex items-center justify-center font-mono text-sm ${
+                    pct === 100 ? "border-accent/60 text-accent-light" : "border-ink-700 text-slate-500"
+                  }`}
+                >
+                  {String(i + 1).padStart(2, "0")}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 flex-wrap mb-1">
@@ -61,7 +69,6 @@ export default function Parcours() {
                     </span>
                   </div>
                   <h2 className="text-lg font-bold text-white group-hover:text-accent-light transition-colors">
-                    <span className="sm:hidden mr-2">{m.icon}</span>
                     {m.title}
                   </h2>
                   <p className="text-sm text-slate-400 mt-1">{m.description}</p>

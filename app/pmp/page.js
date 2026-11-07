@@ -15,7 +15,7 @@ export default function Pmp() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
       <div className="mb-10">
         <span className="inline-block px-3 py-1 rounded-full border border-accent/30 bg-accent/10 text-accent-light text-xs font-semibold mb-4">
-          📋 Nouveau parcours — examen PMP 2026
+          Nouveau parcours — examen PMP 2026
         </span>
         <h1 className="text-3xl font-bold text-white mb-2">Préparation à la certification PMP</h1>
         <p className="text-slate-400 max-w-2xl">
@@ -64,8 +64,14 @@ export default function Pmp() {
                 href={`/pmp/${m.id}`}
                 className="card p-6 flex gap-5 hover:border-accent/50 transition-colors relative sm:ml-14 group block"
               >
-                <div className="absolute -left-14 top-6 w-12 h-12 rounded-full bg-ink-900 border border-ink-700 hidden sm:flex items-center justify-center text-xl">
-                  {pct === 100 ? "✅" : m.icon}
+                {/* Même médaillon que sur /parcours : le rang, et l'accent
+                    quand le module est terminé. */}
+                <div
+                  className={`absolute -left-14 top-6 w-12 h-12 rounded-full bg-ink-900 border hidden sm:flex items-center justify-center font-mono text-sm ${
+                    pct === 100 ? "border-accent/60 text-accent-light" : "border-ink-700 text-slate-500"
+                  }`}
+                >
+                  {String(i + 1).padStart(2, "0")}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 flex-wrap mb-1">
@@ -75,7 +81,6 @@ export default function Pmp() {
                     </span>
                   </div>
                   <h2 className="text-lg font-bold text-white group-hover:text-accent-light transition-colors">
-                    <span className="sm:hidden mr-2">{m.icon}</span>
                     {m.title}
                   </h2>
                   <p className="text-sm text-slate-400 mt-1">{m.description}</p>
@@ -95,7 +100,7 @@ export default function Pmp() {
       </div>
 
       <div className="mt-10 card p-6 bg-accent/5 border-accent/20">
-        <h3 className="font-bold text-white mb-2">🎓 Ce parcours te prépare à</h3>
+        <h3 className="font-bold text-white mb-2">Ce parcours te prépare à</h3>
         <div className="grid sm:grid-cols-2 gap-3 text-sm text-slate-400">
           <div>→ Réussir l'examen PMP 2026 (PMBOK 8)</div>
           <div>→ Maîtriser le mindset et l'éthique PMI</div>
@@ -105,7 +110,7 @@ export default function Pmp() {
           <div>→ T'auto-évaluer avec un examen blanc</div>
         </div>
         <p className="text-xs text-slate-500 mt-4">
-          ⚠️ Le PMP exige aussi de l'expérience en gestion de projet et 35 heures de formation pour candidater — voir le module « Fondamentaux ».
+          À noter — le PMP exige aussi de l'expérience en gestion de projet et 35 heures de formation pour candidater, voir le module « Fondamentaux ».
         </p>
       </div>
     </div>

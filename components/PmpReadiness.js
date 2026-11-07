@@ -3,10 +3,10 @@
 import Link from "next/link";
 
 const DOMAIN_LABELS = {
-  people: { label: "People (33%)", icon: "👥" },
-  process: { label: "Process (41%)", icon: "⚙️" },
-  business: { label: "Business Env. (26%)", icon: "🏢" },
-  agile: { label: "Agile / Hybride", icon: "🔄" },
+  people: { label: "People (33%)" },
+  process: { label: "Process (41%)" },
+  business: { label: "Business Env. (26%)" },
+  agile: { label: "Agile / Hybride" },
 };
 
 const DOMAIN_MODULE_LINKS = {
@@ -66,11 +66,10 @@ export default function PmpReadiness({ readiness }) {
 
       {/* Scores par domaine */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-        {Object.entries(DOMAIN_LABELS).map(([key, { label, icon }]) => {
+        {Object.entries(DOMAIN_LABELS).map(([key, { label }]) => {
           const s = domainScores[key];
           return (
             <div key={key} className="bg-ink-800 rounded-xl p-3 text-center">
-              <div className="text-xl mb-1">{icon}</div>
               <div className="text-xs text-slate-500 mb-1">{label}</div>
               <div className={`text-lg font-bold ${s === null ? "text-slate-600" : s >= 70 ? "text-emerald-400" : s >= 50 ? "text-amber-400" : "text-rose-400"}`}>
                 {s !== null ? `${s}%` : "—"}
@@ -95,12 +94,12 @@ export default function PmpReadiness({ readiness }) {
             {weakDomains.map(([key]) => (
               <Link key={key} href={DOMAIN_MODULE_LINKS[key]}
                 className="text-xs px-3 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500/20 transition-colors">
-                {DOMAIN_LABELS[key].icon} {DOMAIN_LABELS[key].label} →
+                {DOMAIN_LABELS[key].label} →
               </Link>
             ))}
             <Link href="/reviser"
               className="text-xs px-3 py-1.5 rounded-lg bg-accent/10 border border-accent/30 text-accent-light hover:bg-accent/20 transition-colors">
-              🃏 Réviser →
+              Réviser →
             </Link>
           </div>
         </div>

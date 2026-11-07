@@ -22,13 +22,12 @@ function ReviewWidget() {
 
   return (
     <Link href="/reviser" className="card p-5 flex items-center gap-4 hover:border-accent/50 transition-colors mb-10">
-      <div className="text-3xl">🃏</div>
       <div className="flex-1">
         <div className="font-semibold text-white">
           {count === 0 ? "Aucune révision aujourd'hui" : `${count} carte${count > 1 ? "s" : ""} à réviser`}
         </div>
         <div className="text-xs text-slate-400 mt-0.5">
-          {count === 0 ? "Tout est à jour ✅" : "Clique pour réviser maintenant →"}
+          {count === 0 ? "Tout est à jour" : "Clique pour réviser maintenant →"}
         </div>
       </div>
       {count > 0 && (
@@ -64,7 +63,7 @@ function WeeklyGoalWidget({ progress }) {
     <div className="card p-5 mb-6">
       <div className="flex items-center justify-between mb-3">
         <div>
-          <p className="text-sm font-semibold text-white">🎯 Objectif de la semaine</p>
+          <p className="text-sm font-semibold text-white">Objectif de la semaine</p>
           <p className="text-xs text-slate-500 mt-0.5">{done} / {goalTarget} jours actifs</p>
         </div>
         <Link href="/parametres" className="text-xs text-slate-500 hover:text-accent-light transition-colors">
@@ -78,7 +77,7 @@ function WeeklyGoalWidget({ progress }) {
         />
       </div>
       {pct >= 100 && (
-        <p className="text-xs text-emerald-400 mt-2">✅ Objectif atteint cette semaine !</p>
+        <p className="text-xs text-emerald-400 mt-2">Objectif atteint cette semaine</p>
       )}
     </div>
   );
@@ -105,7 +104,7 @@ export default function Dashboard() {
         </div>
         <div className="card p-5">
           <div className="text-xs text-slate-500 mb-1">Expérience</div>
-          <div className="text-2xl font-extrabold text-white">⚡ {progress.xp} XP</div>
+          <div className="text-2xl font-extrabold text-white">{progress.xp} XP</div>
         </div>
         <div className="card p-5">
           <div className="text-xs text-slate-500 mb-1">Leçons complétées</div>
@@ -114,7 +113,7 @@ export default function Dashboard() {
         <div className="card p-5">
           <div className="text-xs text-slate-500 mb-1">Série actuelle</div>
           <div className="text-2xl font-extrabold text-white">
-            🔥 {computeStreak(progress.activityDates || []).current} j.
+            {computeStreak(progress.activityDates || []).current} j.
           </div>
           <div className="text-xs text-slate-600 mt-0.5">Record : {progress.streakRecord || 0} j.</div>
         </div>
@@ -152,13 +151,11 @@ export default function Dashboard() {
             href={`/parcours/${m.id}`}
             className="card p-5 hover:border-accent/50 transition-colors"
           >
-            <div className="flex items-center gap-3 mb-3">
-              <span className="text-2xl">{m.icon}</span>
-              <div className="flex-1 min-w-0">
-                <div className="font-semibold text-white truncate">{m.title}</div>
-                <div className={`text-xs ${LEVELS[m.level].color}`}>{LEVELS[m.level].label}</div>
-              </div>
-              {m.completed && <span className="text-xl">🏆</span>}
+            {/* Ni pastille d'emoji ni coupe : « 12/12 leçons » et la barre
+                pleine, deux lignes plus bas, disent déjà que c'est terminé. */}
+            <div className="mb-3">
+              <div className="font-semibold text-white truncate">{m.title}</div>
+              <div className={`text-xs ${LEVELS[m.level].color}`}>{LEVELS[m.level].label}</div>
             </div>
             <div className="w-full h-2 bg-ink-800 rounded-full overflow-hidden mb-2">
               <div
@@ -191,7 +188,7 @@ export default function Dashboard() {
               key={b.label}
               className="px-4 py-2 rounded-xl bg-ink-900 border border-ink-700 text-sm font-medium"
             >
-              {b.icon} {b.label}
+              {b.label}
             </span>
           ))}
         </div>

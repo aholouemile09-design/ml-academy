@@ -13,7 +13,7 @@ export default function WebDev() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
       <div className="mb-10">
         <span className="inline-block px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-xs font-semibold mb-4">
-          🌐 Nouveau parcours
+          Nouveau parcours
         </span>
         <h1 className="text-3xl font-bold text-white mb-2">Développement Web Full Stack</h1>
         <p className="text-slate-400 max-w-2xl">
@@ -55,8 +55,14 @@ export default function WebDev() {
                 href={`/webdev/${m.id}`}
                 className="card p-6 flex gap-5 hover:border-accent/50 transition-colors relative sm:ml-14 group block"
               >
-                <div className="absolute -left-14 top-6 w-12 h-12 rounded-full bg-ink-900 border border-ink-700 hidden sm:flex items-center justify-center text-xl">
-                  {pct === 100 ? "✅" : m.icon}
+                {/* Même médaillon que sur /parcours : le rang, et l'accent
+                    quand le module est terminé. */}
+                <div
+                  className={`absolute -left-14 top-6 w-12 h-12 rounded-full bg-ink-900 border hidden sm:flex items-center justify-center font-mono text-sm ${
+                    pct === 100 ? "border-accent/60 text-accent-light" : "border-ink-700 text-slate-500"
+                  }`}
+                >
+                  {String(i + 1).padStart(2, "0")}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 flex-wrap mb-1">
@@ -66,7 +72,6 @@ export default function WebDev() {
                     </span>
                   </div>
                   <h2 className="text-lg font-bold text-white group-hover:text-accent-light transition-colors">
-                    <span className="sm:hidden mr-2">{m.icon}</span>
                     {m.title}
                   </h2>
                   <p className="text-sm text-slate-400 mt-1">{m.description}</p>
@@ -86,7 +91,7 @@ export default function WebDev() {
       </div>
 
       <div className="mt-10 card p-6 bg-blue-500/5 border-blue-500/20">
-        <h3 className="font-bold text-white mb-2">🛠 Ce que tu pourras construire</h3>
+        <h3 className="font-bold text-white mb-2">Ce que tu pourras construire</h3>
         <div className="grid sm:grid-cols-2 gap-3 text-sm text-slate-400">
           <div>→ Portfolio personnel professionnel</div>
           <div>→ Dashboard de visualisation ML</div>
