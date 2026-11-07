@@ -1,6 +1,7 @@
 // Mini-rendu markdown sans dépendance externe :
-// gras, code inline, blocs de code, listes à puces, listes numérotées,
-// citations (>) et retours à la ligne simples à l'intérieur d'un paragraphe.
+// titres (## et ###), gras, code inline, blocs de code, listes à puces,
+// listes numérotées, citations (>) et retours à la ligne simples à
+// l'intérieur d'un paragraphe.
 
 export default function Markdown({ text }) {
   const blocks = text.split(/```/);
@@ -29,6 +30,7 @@ export default function Markdown({ text }) {
 const BULLET = /^[-*]\s+/;
 const NUMBERED = /^(\d+)[.)]\s+/;
 const QUOTE = /^>\s?/;
+const TITRE = /^(#{2,3})\s+(.+)$/;
 
 /**
  * Un paragraphe peut en réalité être une liste, une citation ou du texte
@@ -37,6 +39,23 @@ const QUOTE = /^>\s?/;
 function renderBlock(para, key) {
   const lines = para.split("\n").filter((l) => l.trim());
   if (lines.length === 0) return null;
+
+  // ── Titre de section ───────────────────────────────────────────────────
+  // L'espacement passe par le padding : le conteneur gère déjà les marges
+  // verticales (space-y-4) et deux utilitaires de marge se disputeraient.
+  const titre = lines.length === 1 && lines[0].match(TITRE);
+  if (titre) {
+    const [, diese, texte] = titre;
+    return diese === "##" ? (
+      <h2 key={key} className="text-lg font-bold text-white pt-5">
+        {renderInline(texte)}
+      </h2>
+    ) : (
+      <h3 key={key} className="text-base font-semibold text-white pt-3">
+        {renderInline(texte)}
+      </h3>
+    );
+  }
 
   // ── Liste à puces ──────────────────────────────────────────────────────
   if (lines.every((l) => BULLET.test(l))) {
