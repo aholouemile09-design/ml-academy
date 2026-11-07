@@ -2,45 +2,19 @@
 
 import Link from "next/link";
 import { PMP_CURRICULUM, PMP_LEVELS } from "@/lib/pmp";
+import { FORMATIONS } from "@/lib/formations";
 import { useUserProgress as useProgress } from "@/lib/userProgress";
+import EnteteParcours from "@/components/EnteteParcours";
 import MasteryMap from "@/components/MasteryMap";
 import PmpReadiness from "@/components/PmpReadiness";
 import { computePmpMastery, computePmpReadiness } from "@/lib/mastery";
 
 export default function Pmp() {
   const progress = useProgress();
-  const totalLessons = PMP_CURRICULUM.reduce((a, m) => a + m.lessons.length, 0);
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-      <div className="mb-10">
-        <span className="inline-block px-3 py-1 rounded-full border border-accent/30 bg-accent/10 text-accent-light text-xs font-semibold mb-4">
-          Nouveau parcours — examen PMP 2026
-        </span>
-        <h1 className="text-3xl font-bold text-white mb-2">Préparation à la certification PMP</h1>
-        <p className="text-slate-400 max-w-2xl">
-          Tout ce qu'il faut pour réussir le <strong className="text-white font-semibold">Project Management Professional</strong> du PMI — version 2026 (PMBOK 8, 180 questions, 240 min). Cours structuré par domaine, mindset PMI, quiz et examen blanc chronométré.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
-        <div className="card p-4 text-center">
-          <div className="text-2xl font-extrabold gradient-text">{PMP_CURRICULUM.length}</div>
-          <div className="text-xs text-slate-500 mt-1">modules</div>
-        </div>
-        <div className="card p-4 text-center">
-          <div className="text-2xl font-extrabold gradient-text">{totalLessons}</div>
-          <div className="text-xs text-slate-500 mt-1">leçons</div>
-        </div>
-        <div className="card p-4 text-center">
-          <div className="text-2xl font-extrabold gradient-text">8-12</div>
-          <div className="text-xs text-slate-500 mt-1">semaines de prépa</div>
-        </div>
-        <div className="card p-4 text-center">
-          <div className="text-2xl font-extrabold gradient-text">2026</div>
-          <div className="text-xs text-slate-500 mt-1">examen à jour</div>
-        </div>
-      </div>
+      <EnteteParcours {...FORMATIONS.pmp} />
 
       {progress && (
         <>

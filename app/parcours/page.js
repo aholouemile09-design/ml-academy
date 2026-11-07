@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { CURRICULUM, LEVELS } from "@/lib/curriculum";
+import { FORMATIONS } from "@/lib/formations";
 import { useUserProgress as useProgress } from "@/lib/userProgress";
+import EnteteParcours from "@/components/EnteteParcours";
 import MasteryMap from "@/components/MasteryMap";
 import { computeMlMastery } from "@/lib/mastery";
 
@@ -12,23 +13,7 @@ export default function Parcours() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-      {/* Banner */}
-      <div className="relative rounded-2xl overflow-hidden mb-8 h-40 sm:h-52">
-        <Image
-          src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=900&q=75"
-          alt="Parcours Machine Learning"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/75 to-transparent" />
-        <div className="absolute inset-0 flex flex-col justify-center px-6 [text-shadow:0_2px_8px_rgba(0,0,0,0.85)]">
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-50 mb-1">Parcours ML &amp; Data Science</h1>
-          <p className="text-slate-200/90 text-sm">
-            Suivez les modules dans l'ordre — chaque module se valide par un quiz.
-          </p>
-        </div>
-      </div>
+      <EnteteParcours {...FORMATIONS.ml} />
 
       {progress && <MasteryMap modules={computeMlMastery(progress.quizScores || {})} title="Ta maîtrise par module" />}
 

@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { WEB_CURRICULUM, WEB_LEVELS } from "@/lib/webdev";
+import { FORMATIONS } from "@/lib/formations";
 import { useUserProgress as useProgress } from "@/lib/userProgress";
+import EnteteParcours from "@/components/EnteteParcours";
 import MasteryMap from "@/components/MasteryMap";
 import { computeWebMastery } from "@/lib/mastery";
 
@@ -11,32 +13,7 @@ export default function WebDev() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-      <div className="mb-10">
-        <span className="inline-block px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-xs font-semibold mb-4">
-          Nouveau parcours
-        </span>
-        <h1 className="text-3xl font-bold text-white mb-2">Développement Web Full Stack</h1>
-        <p className="text-slate-400 max-w-2xl">
-          Crée tes propres applications web : portfolios, dashboards ML, SaaS. Ce parcours est complémentaire au track ML — ensemble, ils te rendent autonome de bout en bout.
-        </p>
-      </div>
-
-      <div className="grid sm:grid-cols-3 gap-4 mb-10">
-        <div className="card p-4 text-center">
-          <div className="text-2xl font-extrabold gradient-text">{WEB_CURRICULUM.length}</div>
-          <div className="text-xs text-slate-500 mt-1">modules</div>
-        </div>
-        <div className="card p-4 text-center">
-          <div className="text-2xl font-extrabold gradient-text">
-            {WEB_CURRICULUM.reduce((a, m) => a + m.lessons.length, 0)}
-          </div>
-          <div className="text-xs text-slate-500 mt-1">leçons</div>
-        </div>
-        <div className="card p-4 text-center">
-          <div className="text-2xl font-extrabold gradient-text">100%</div>
-          <div className="text-xs text-slate-500 mt-1">gratuit & open source</div>
-        </div>
-      </div>
+      <EnteteParcours {...FORMATIONS.web} />
 
       {progress && <MasteryMap modules={computeWebMastery(progress.quizScores || {})} title="Ta maîtrise par module" />}
 

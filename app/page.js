@@ -1,75 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { CURRICULUM } from "@/lib/curriculum";
-import { WEB_CURRICULUM } from "@/lib/webdev";
-import { PMP_CURRICULUM } from "@/lib/pmp";
+import { LISTE_FORMATIONS } from "@/lib/formations";
+import MetaFormation from "@/components/MetaFormation";
 import ProfileWidget from "@/components/ProfileWidget";
 import HowItWorks from "@/components/HowItWorks";
 import FAQ from "@/components/FAQ";
-
-const compter = (curriculum) => ({
-  modules: curriculum.length,
-  lecons: curriculum.reduce((total, m) => total + m.lessons.length, 0),
-});
-
-/* Les trois formations. Les chiffres sont comptés sur le curriculum réel : une
-   durée en heures serait inventée, et c'est précisément le genre de promesse
-   qu'on ne peut pas tenir. */
-const FORMATIONS = [
-  {
-    href: "/parcours",
-    domaine: "Machine learning & data",
-    titre: "Machine learning et data science",
-    resume:
-      "De Python aux modèles en production : statistiques, ML classique, deep learning, NLP et MLOps.",
-    niveau: "Débutant à avancé",
-    image: "photo-1551288049-bebda4e38f71",
-    alt: "Courbes de performance d'un modèle sur l'écran d'un ordinateur portable",
-    ...compter(CURRICULUM),
-  },
-  {
-    href: "/webdev",
-    domaine: "Développement web",
-    titre: "Développeur web full-stack",
-    resume:
-      "Du HTML sémantique au déploiement supervisé, en passant par React, les bases de données et la sécurité.",
-    niveau: "Débutant accepté",
-    image: "photo-1674483699209-25fb6d962119",
-    alt: "Développeur devant deux écrans, en train d'écrire du code",
-    ...compter(WEB_CURRICULUM),
-  },
-  {
-    href: "/pmp",
-    domaine: "Gestion de projet",
-    titre: "Certification PMP — examen 2026",
-    resume:
-      "People, Process et Business Environment, prédictif et agile, avec un examen blanc de 180 questions.",
-    niveau: "Niveau intermédiaire",
-    image: "photo-1557804506-669a67965ba0",
-    alt: "Équipe projet réunie autour d'un tableau blanc, ordinateurs ouverts",
-    ...compter(PMP_CURRICULUM),
-  },
-];
-
-/* Icônes au trait, déclarées une fois et appelées par les cartes. Trois
-   pictogrammes de 16 px : les redéclarer dans chaque carte ferait trois fois
-   le même SVG dans le balisage. */
-const Trait = (props) => (
-  <svg
-    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
-    {...props}
-  />
-);
-const IconeModules = () => (
-  <Trait><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 10h18" /></Trait>
-);
-const IconeLecons = () => (
-  <Trait><path d="M4 5a2 2 0 0 1 2-2h8l6 6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" /><path d="M14 3v6h6" /></Trait>
-);
-const IconeNiveau = () => (
-  <Trait><path d="M4 20V11M10 20V4M16 20v-6M22 20H2" /></Trait>
-);
 
 const VALEURS = [
   {
@@ -159,7 +94,7 @@ export default function Home() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {FORMATIONS.map((f) => (
+          {LISTE_FORMATIONS.map((f) => (
             <Link
               key={f.href}
               href={f.href}
@@ -179,10 +114,8 @@ export default function Home() {
                 <h3 className="text-lg font-bold text-white leading-snug">{f.titre}</h3>
                 <p className="mt-2 text-sm text-slate-400 leading-relaxed">{f.resume}</p>
 
-                <div className="mt-4 pt-4 border-t border-ink-700 flex flex-col gap-2 text-sm text-slate-500">
-                  <span className="flex items-center gap-2.5"><IconeModules /> {f.modules} modules</span>
-                  <span className="flex items-center gap-2.5"><IconeLecons /> {f.lecons} leçons</span>
-                  <span className="flex items-center gap-2.5"><IconeNiveau /> {f.niveau}</span>
+                <div className="mt-4 pt-4 border-t border-ink-700">
+                  <MetaFormation modules={f.modules} lecons={f.lecons} niveau={f.niveau} />
                 </div>
 
                 <span className="mt-4 text-sm font-semibold text-accent-light">
