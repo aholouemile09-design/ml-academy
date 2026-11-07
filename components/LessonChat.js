@@ -3,15 +3,13 @@
 import { useState, useRef, useEffect } from "react";
 import Markdown from "@/components/Markdown";
 
-export default function LessonChat({ moduleTitle, lessonTitle, track }) {
+export default function LessonChat({ moduleTitle, lessonTitle, piste, lecon }) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
-
-  const lessonContext = `Parcours : ${track}\nModule : ${moduleTitle}\nLeçon en cours : ${lessonTitle}`;
 
   const greeting = `Bonjour ! 👋 Tu étudies **${lessonTitle}** dans le module *${moduleTitle}*.\nPose-moi n'importe quelle question sur cette leçon, je suis là pour t'aider !`;
 
@@ -42,7 +40,9 @@ export default function LessonChat({ moduleTitle, lessonTitle, track }) {
           "content-type": "application/json",
           ...(apiKey ? { "x-user-api-key": apiKey } : {}),
         },
-        body: JSON.stringify({ messages: next, lessonContext }),
+        // Deux identifiants suffisent : le serveur retrouve le titre, le texte
+        // de la leçon et l'avancement de l'apprenant tout seul.
+        body: JSON.stringify({ messages: next, piste, lecon }),
       });
       const data = await res.json();
       setMessages(m => [...m, {

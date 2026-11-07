@@ -175,7 +175,7 @@ export default function WebModulePage() {
           </div>
         </div>
       </div>
-      <LessonChat moduleTitle={mod.title} lessonTitle={lesson.title} track="Web Full Stack" />
+      <LessonChat moduleTitle={mod.title} lessonTitle={lesson.title} piste="web" lecon={lesson.id} />
     </div>
   );
 }

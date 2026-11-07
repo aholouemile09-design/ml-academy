@@ -3,6 +3,9 @@
 // soit de la variable d'environnement ANTHROPIC_API_KEY.
 
 import { rateLimit, getClientKey } from "../../../lib/rateLimit";
+import { createClient } from "@/lib/supabase/server";
+import { ficheLecon, lireLecon } from "@/lib/contenuLecons";
+import { lireProfil, resumerProgression } from "@/lib/memoireTuteur";
 
 const MAX_MESSAGES = 50;
 const MAX_MESSAGE_LENGTH = 8000;
@@ -35,6 +38,74 @@ En revanche, tu PEUX et DOIS :
 
 Réponds en français, de façon structurée mais concise. Utilise des blocs de code markdown quand tu montres du code.`;
 
+/**
+ * La progression de l'apprenant connecté, résumée, ou "" si on ne sait pas qui
+ * il est — un visiteur non connecté est un cas normal, pas une erreur.
+ */
+async function lireProgression(piste, lecon) {
+  try {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return "";
+
+    // Le `eq("user_id", ...)` double la politique RLS : la ressource est
+    // autorisée explicitement, pas seulement l'appelant authentifié.
+    const { data } = await supabase
+      .from("user_progress")
+      .select("completed_lessons, quiz_scores, lesson_notes, track_preference")
+      .eq("user_id", user.id)
+      .single();
+
+    return resumerProgression(data, piste ?? data?.track_preference ?? "ml", lecon);
+  } catch {
+    // Supabase indisponible : le tuteur répond sans mémoire plutôt que pas du
+    // tout. C'est une dégradation, pas une panne à montrer à l'apprenant.
+    return "";
+  }
+}
+
+/**
+ * Le prompt système, assemblé à chaque question.
+ *
+ * Quatre couches, de la plus stable à la plus volatile : le rôle du tuteur, le
+ * profil de l'apprenant, la leçon qu'il a sous les yeux, puis son avancement.
+ * Tout est lu sur le serveur ; le navigateur n'envoie que des identifiants.
+ */
+async function assemblerPrompt(piste, lecon) {
+  const couches = [SYSTEM_PROMPT];
+
+  const profil = lireProfil();
+  if (profil) {
+    couches.push(
+      `PROFIL DE L'APPRENANT — ces consignes viennent de lui et priment sur les tiennes :\n\n${profil}`
+    );
+  }
+
+  const fiche = piste && lecon ? ficheLecon(piste, lecon) : null;
+  if (fiche) {
+    couches.push(
+      `LEÇON OUVERTE : « ${fiche.titreLecon} », module « ${fiche.titreModule} » (${fiche.duree}).`
+    );
+    // Le tuteur devinait le contenu de la leçon à partir de son titre. Depuis
+    // que le texte vit sur le serveur, il peut le lui donner.
+    const texte = lireLecon(piste, lecon);
+    if (texte) {
+      couches.push(
+        `LE TEXTE DE CETTE LEÇON, tel qu'il l'a sous les yeux. Appuie-toi dessus et ne le contredis pas ; s'il est trop court pour sa question, complète-le sans le lui faire remarquer.\n\n${texte}`
+      );
+    }
+  }
+
+  const progression = await lireProgression(piste, lecon);
+  if (progression) {
+    couches.push(`SON AVANCEMENT RÉEL, lu dans son compte à l'instant :\n\n${progression}`);
+  }
+
+  return couches.join("\n\n---\n\n");
+}
+
 export async function POST(req) {
   try {
     const userKey = req.headers.get("x-user-api-key");
@@ -50,7 +121,11 @@ export async function POST(req) {
 
     const body = await req.json();
     const messages = Array.isArray(body?.messages) ? body.messages : null;
-    const lessonContext = typeof body?.lessonContext === "string" ? body.lessonContext.slice(0, 500) : null;
+    // Des identifiants, pas du texte libre : le serveur retrouve lui-même le
+    // titre et le contenu au catalogue. Le navigateur ne dicte plus ce que le
+    // tuteur croit savoir de la leçon.
+    const piste = typeof body?.piste === "string" ? body.piste : null;
+    const lecon = typeof body?.lecon === "string" ? body.lecon : null;
 
     if (!messages || messages.length === 0) {
       return Response.json({ error: "invalid_messages" }, { status: 400 });
@@ -75,9 +150,7 @@ export async function POST(req) {
       return Response.json({ error: "no_api_key" }, { status: 401 });
     }
 
-    const systemPrompt = lessonContext
-      ? `${SYSTEM_PROMPT}\n\nCONTEXTE ACTUEL : L'apprenant est en train d'étudier la leçon suivante — adapte tes réponses à ce contexte précis :\n${lessonContext}`
-      : SYSTEM_PROMPT;
+    const systemPrompt = await assemblerPrompt(piste, lecon);
 
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",

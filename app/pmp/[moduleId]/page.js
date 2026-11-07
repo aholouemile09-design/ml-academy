@@ -189,7 +189,7 @@ export default function PmpModulePage() {
           </div>
         </div>
       </div>
-      <LessonChat moduleTitle={mod.title} lessonTitle={lesson.title} track="PMP 2026" />
+      <LessonChat moduleTitle={mod.title} lessonTitle={lesson.title} piste="pmp" lecon={lesson.id} />
     </div>
   );
 }

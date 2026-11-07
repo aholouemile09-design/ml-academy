@@ -185,7 +185,7 @@ export default function ModulePage() {
           </div>
         </div>
       </div>
-      <LessonChat moduleTitle={mod.title} lessonTitle={lesson.title} track="ML & Data Science" />
+      <LessonChat moduleTitle={mod.title} lessonTitle={lesson.title} piste="ml" lecon={lesson.id} />
     </div>
   );
 }
