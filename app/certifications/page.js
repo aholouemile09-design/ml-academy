@@ -3,118 +3,60 @@ import Link from "next/link";
 import { CertificationIllustration } from "@/components/Illustrations";
 import { CERT_PREP } from "@/lib/certPrep";
 
+// La liste est passée de huit entrées à trois, sur un critère unique : est-ce
+// un examen réel, et dit-il « ML Engineer » à quelqu'un qui recrute ?
+//
+// Écartés, et pourquoi — c'est la partie utile :
+//   Kaggle Python / Pandas / Intro to ML  les badges de fin de cours Kaggle ne
+//     sont pas des certifications : aucun examen, aucune surveillance, aucune
+//     valeur sur un CV. Les cours eux-mêmes restent de bons entraînements
+//     gratuits, ils n'ont simplement rien à faire sur une feuille de route.
+//   IBM Data Science Professional  fait doublon avec ce parcours, pour 50 USD
+//     par mois. L'argent est mieux placé sur un examen surveillé.
+//   AWS Solutions Architect (SAA-C03)  c'est de l'architecture, pas du ML.
+//   AWS Professional / CKA  hors sujet pour un premier poste.
 const CERTIFICATIONS = [
-  {
-    id: "c1",
-    title: "Kaggle Python Certificate",
-    provider: "Kaggle (Google)",
-    when: "Août 2026",
-    condition: "Après avoir terminé les exercices Python + un mini-projet CLI",
-    cost: "Gratuit",
-    url: "https://www.kaggle.com/learn/python",
-    priority: "A",
-    color: "text-emerald-400",
-    badge: "border-emerald-500/30 bg-emerald-500/5",
-    icon: "🏅",
-    why: "Validation rapide et pratique. Faible pression, reconnu par les recruteurs tech.",
-  },
-  {
-    id: "c2",
-    title: "Kaggle Pandas Certificate",
-    provider: "Kaggle (Google)",
-    when: "Nov 2026",
-    condition: "Après le bloc NumPy/Pandas/EDA",
-    cost: "Gratuit",
-    url: "https://www.kaggle.com/learn/pandas",
-    priority: "A",
-    color: "text-emerald-400",
-    badge: "border-emerald-500/30 bg-emerald-500/5",
-    icon: "🏅",
-    why: "Concrétise les compétences data. Gratuit et rapide.",
-  },
-  {
-    id: "c3",
-    title: "Kaggle Intro to Machine Learning",
-    provider: "Kaggle (Google)",
-    when: "Jan 2027",
-    condition: "Après le bloc ML classique + premier projet portfolio",
-    cost: "Gratuit",
-    url: "https://www.kaggle.com/learn/intro-to-machine-learning",
-    priority: "A",
-    color: "text-emerald-400",
-    badge: "border-emerald-500/30 bg-emerald-500/5",
-    icon: "🏅",
-    why: "Montre une progression concrète sur le ML.",
-  },
-  {
-    id: "c4",
-    title: "IBM Data Science Professional Certificate",
-    provider: "IBM / Coursera",
-    when: "Mars–Mai 2027",
-    condition: "Après avoir un repo data/ML publié sur GitHub",
-    cost: "~50 USD/mois (auditable gratuitement)",
-    url: "https://www.coursera.org/professional-certificates/ibm-data-science",
-    priority: "B",
-    color: "text-amber-400",
-    badge: "border-amber-500/30 bg-amber-500/5",
-    icon: "🎓",
-    why: "Structure générale Data Science reconnu par les employeurs. Pas prioritaire sur les projets — à faire si en avance.",
-  },
   {
     id: "c5",
     title: "DeepLearning.AI — ML in Production (MLOps)",
     provider: "DeepLearning.AI / Coursera",
-    when: "Juin–Juil 2027",
+    when: "Mi-2027",
     condition: "Après avoir une API ML locale fonctionnelle",
-    cost: "Auditable gratuitement sur Coursera",
+    cost: "Audit gratuit — certificat payant",
     url: "https://www.deeplearning.ai/courses/machine-learning-engineering-for-production-mlops/",
     priority: "A",
-    color: "text-amber-400",
-    badge: "border-amber-500/30 bg-amber-500/5",
+    color: "text-emerald-400",
+    badge: "border-emerald-500/30 bg-emerald-500/5",
     icon: "🎓",
-    why: "Correspond précisément au rôle ML Engineer. À faire après la pratique MLOps, pas avant.",
+    why: "La seule formation qui couvre exactement le métier visé : dérive, surveillance, cycle de vie d'un modèle. Le nom d'Andrew Ng est reconnu dans le milieu, et le contenu tient tout seul même sans le certificat.",
+  },
+  {
+    id: "mla",
+    title: "AWS Certified Machine Learning Engineer — Associate (MLA-C01)",
+    provider: "Amazon Web Services",
+    when: "Fin 2027 — début 2028",
+    condition: "Après avoir déployé toi-même un modèle sur AWS",
+    cost: "~150 USD — préparation gratuite sur AWS Skill Builder",
+    url: "https://aws.amazon.com/certification/certified-machine-learning-engineer-associate/",
+    priority: "A",
+    color: "text-emerald-400",
+    badge: "border-emerald-500/30 bg-emerald-500/5",
+    icon: "☁️",
+    why: "Examen surveillé, et c'est le seul dont l'intitulé est exactement le poste. Il remplace l'ancienne ML Specialty, retirée le 31 mars 2026. Aucun prérequis : inutile de passer Cloud Practitioner avant.",
   },
   {
     id: "c6",
     title: "AWS Cloud Practitioner (CLF-C02)",
     provider: "Amazon Web Services",
-    when: "Août 2027",
-    condition: "Après avoir déployé au moins une application sur AWS",
-    cost: "~100 USD (exam) — préparation gratuite AWS Skill Builder",
+    when: "Optionnel, 2027",
+    condition: "Seulement si le vocabulaire AWS reste opaque après tes premiers déploiements",
+    cost: "~100 USD",
     url: "https://aws.amazon.com/certification/certified-cloud-practitioner/",
-    priority: "A",
+    priority: "B",
     color: "text-amber-400",
     badge: "border-amber-500/30 bg-amber-500/5",
     icon: "☁️",
-    why: "La certification devient crédible parce qu'elle suit la pratique. Sans pratique d'abord, elle n'a pas de valeur.",
-  },
-  {
-    id: "c7",
-    title: "AWS Solutions Architect Associate (SAA-C03)",
-    provider: "Amazon Web Services",
-    when: "2028 (après expérience cloud réelle)",
-    condition: "Après 1 an de pratique cloud sérieuse",
-    cost: "~300 USD",
-    url: "https://aws.amazon.com/certification/certified-solutions-architect-associate/",
-    priority: "B",
-    color: "text-rose-400",
-    badge: "border-rose-500/30 bg-rose-500/5",
-    icon: "☁️",
-    why: "Certification expérimentée. À reporter — trop lourde pour 2026-2027.",
-  },
-  {
-    id: "c8",
-    title: "AWS Professional / Kubernetes / CKA",
-    provider: "AWS / CNCF",
-    when: "2028-2029",
-    condition: "Expérience emploi ou projet production significatif",
-    cost: "Variés",
-    url: "https://aws.amazon.com/certification/",
-    priority: "C",
-    color: "text-slate-400",
-    badge: "border-slate-600/30 bg-slate-600/5",
-    icon: "🏗",
-    why: "À reporter. Trop lourd avant Docker + API + AWS de base.",
+    why: "Une marche d'échauffement, pas un argument d'embauche. Elle n'est pas exigée pour MLA-C01 : la passer quand même, c'est 100 USD pour du confort. À sauter si les déploiements se passent bien.",
   },
 ];
 
@@ -134,14 +76,13 @@ export default function Certifications() {
         <div>
           <h1 className="text-3xl font-bold text-white mb-1">Certifications</h1>
           <p className="text-slate-400">
-            Ordre réaliste issu de ton plan — la certification vaut quelque chose parce qu'elle suit la pratique, pas l'inverse.
+            Trois, pas huit. Une certification vaut quelque chose parce qu'elle suit la pratique — et une certification sans dépôt de projets derrière est un signal négatif, pas un atout.
           </p>
         </div>
       </div>
       <div className="flex gap-3 mb-10 flex-wrap text-sm">
-        <span className="px-3 py-1 rounded-full border text-emerald-400 border-emerald-500/30 bg-emerald-500/5">Priorité A — Obligatoire 2026-2027</span>
-        <span className="px-3 py-1 rounded-full border text-amber-400 border-amber-500/30 bg-amber-500/5">Priorité B — Si en avance</span>
-        <span className="px-3 py-1 rounded-full border text-slate-400 border-slate-600/30 bg-slate-600/5">Priorité C — 2028+</span>
+        <span className="px-3 py-1 rounded-full border text-emerald-400 border-emerald-500/30 bg-emerald-500/5">Priorité A — À viser</span>
+        <span className="px-3 py-1 rounded-full border text-amber-400 border-amber-500/30 bg-amber-500/5">Priorité B — Optionnel</span>
       </div>
 
       <div className="space-y-5">
