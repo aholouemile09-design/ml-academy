@@ -30,6 +30,22 @@ export default function Tuteur() {
     setHasKey(Boolean(localStorage.getItem("ml-academy-api-key")));
   }, []);
 
+  // La conversation générale survit aux rechargements : on la reprend, et le
+  // message d'accueil ne s'affiche que pour une première visite.
+  useEffect(() => {
+    let annule = false;
+    fetch("/api/chat/historique")
+      .then((r) => (r.ok ? r.json() : { messages: [] }))
+      .catch(() => ({ messages: [] }))
+      .then((d) => {
+        if (!annule && d.messages?.length) setMessages(d.messages);
+      });
+
+    return () => {
+      annule = true;
+    };
+  }, []);
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);

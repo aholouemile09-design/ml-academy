@@ -61,3 +61,42 @@ alter table public.user_progress
 
 alter table public.user_progress
   add column if not exists module_time  jsonb not null default '{}'::jsonb;
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- Migration : conversations avec le tuteur
+--
+-- Le fil mourait au rechargement : il vivait dans un useState. Il vit
+-- maintenant ici, une ligne par message, groupé par (piste, leçon) — la
+-- conversation générale de /tuteur a piste et lecon à null.
+-- À exécuter dans le SQL Editor de Supabase.
+-- ─────────────────────────────────────────────────────────────────────────────
+create table if not exists public.tutor_messages (
+  id         bigserial   primary key,
+  user_id    uuid        not null references auth.users(id) on delete cascade,
+  piste      text,
+  lecon      text,
+  role       text        not null check (role in ('user', 'assistant')),
+  contenu    text        not null,
+  created_at timestamptz not null default now()
+);
+
+-- La seule lecture est « les derniers messages de cette conversation » :
+-- l'index suit exactement cet accès.
+create index if not exists idx_tutor_messages_conversation
+  on public.tutor_messages (user_id, piste, lecon, created_at desc);
+
+alter table public.tutor_messages enable row level security;
+
+-- Pas de politique d'update : un message envoyé ne se réécrit pas. Le delete
+-- existe pour qu'un apprenant puisse effacer une conversation.
+drop policy if exists "select own messages" on public.tutor_messages;
+create policy "select own messages" on public.tutor_messages
+  for select using (auth.uid() = user_id);
+
+drop policy if exists "insert own messages" on public.tutor_messages;
+create policy "insert own messages" on public.tutor_messages
+  for insert with check (auth.uid() = user_id);
+
+drop policy if exists "delete own messages" on public.tutor_messages;
+create policy "delete own messages" on public.tutor_messages
+  for delete using (auth.uid() = user_id);

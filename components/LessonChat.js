@@ -14,10 +14,25 @@ export default function LessonChat({ moduleTitle, lessonTitle, piste, lecon }) {
   const greeting = `Bonjour ! 👋 Tu étudies **${lessonTitle}** dans le module *${moduleTitle}*.\nPose-moi n'importe quelle question sur cette leçon, je suis là pour t'aider !`;
 
   useEffect(() => {
-    if (open && messages.length === 0) {
-      setMessages([{ role: "assistant", content: greeting }]);
-    }
-    if (open) setTimeout(() => inputRef.current?.focus(), 100);
+    if (!open) return;
+    setTimeout(() => inputRef.current?.focus(), 100);
+    if (messages.length > 0) return;
+
+    // La conversation de cette leçon a peut-être déjà eu lieu — hier, ou sur un
+    // autre appareil. On la reprend là où elle s'est arrêtée, et on ne montre
+    // le message d'accueil que s'il n'y a vraiment rien.
+    let annule = false;
+    fetch(`/api/chat/historique?piste=${encodeURIComponent(piste)}&lecon=${encodeURIComponent(lecon)}`)
+      .then((r) => (r.ok ? r.json() : { messages: [] }))
+      .catch(() => ({ messages: [] }))
+      .then((d) => {
+        if (annule) return;
+        setMessages(d.messages?.length ? d.messages : [{ role: "assistant", content: greeting }]);
+      });
+
+    return () => {
+      annule = true;
+    };
   }, [open]);
 
   useEffect(() => {

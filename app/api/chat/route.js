@@ -6,6 +6,7 @@ import { rateLimit, getClientKey } from "../../../lib/rateLimit";
 import { createClient } from "@/lib/supabase/server";
 import { ficheLecon, lireLecon } from "@/lib/contenuLecons";
 import { lireProfil, resumerProgression } from "@/lib/memoireTuteur";
+import { lireHistorique, enregistrer } from "@/lib/conversationTuteur";
 
 const MAX_MESSAGES = 50;
 const MAX_MESSAGE_LENGTH = 8000;
@@ -39,17 +40,28 @@ En revanche, tu PEUX et DOIS :
 Réponds en français, de façon structurée mais concise. Utilise des blocs de code markdown quand tu montres du code.`;
 
 /**
- * La progression de l'apprenant connecté, résumée, ou "" si on ne sait pas qui
- * il est — un visiteur non connecté est un cas normal, pas une erreur.
+ * La session Supabase de la requête.
+ *
+ * Un visiteur non connecté est un cas normal, pas une erreur : le tuteur
+ * répond alors sans mémoire plutôt que pas du tout. Supabase injoignable mène
+ * au même endroit — une dégradation, pas une panne à montrer à l'apprenant.
  */
-async function lireProgression(piste, lecon) {
+async function session() {
   try {
     const supabase = createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    if (!user) return "";
+    return { supabase, user: user ?? null };
+  } catch {
+    return { supabase: null, user: null };
+  }
+}
 
+/** La progression de l'apprenant, résumée, ou "" si on ne sait pas qui il est. */
+async function lireProgression(supabase, user, piste, lecon) {
+  if (!user) return "";
+  try {
     // Le `eq("user_id", ...)` double la politique RLS : la ressource est
     // autorisée explicitement, pas seulement l'appelant authentifié.
     const { data } = await supabase
@@ -60,8 +72,6 @@ async function lireProgression(piste, lecon) {
 
     return resumerProgression(data, piste ?? data?.track_preference ?? "ml", lecon);
   } catch {
-    // Supabase indisponible : le tuteur répond sans mémoire plutôt que pas du
-    // tout. C'est une dégradation, pas une panne à montrer à l'apprenant.
     return "";
   }
 }
@@ -73,7 +83,7 @@ async function lireProgression(piste, lecon) {
  * profil de l'apprenant, la leçon qu'il a sous les yeux, puis son avancement.
  * Tout est lu sur le serveur ; le navigateur n'envoie que des identifiants.
  */
-async function assemblerPrompt(piste, lecon) {
+async function assemblerPrompt(supabase, user, piste, lecon) {
   const couches = [SYSTEM_PROMPT];
 
   const profil = lireProfil();
@@ -98,7 +108,7 @@ async function assemblerPrompt(piste, lecon) {
     }
   }
 
-  const progression = await lireProgression(piste, lecon);
+  const progression = await lireProgression(supabase, user, piste, lecon);
   if (progression) {
     couches.push(`SON AVANCEMENT RÉEL, lu dans son compte à l'instant :\n\n${progression}`);
   }
@@ -144,13 +154,27 @@ export async function POST(req) {
       }
     }
 
+    const question = messages[messages.length - 1];
+    if (question.role !== "user") {
+      return Response.json({ error: "invalid_messages" }, { status: 400 });
+    }
+
     const apiKey = userKey || process.env.ANTHROPIC_API_KEY;
 
     if (!apiKey) {
       return Response.json({ error: "no_api_key" }, { status: 401 });
     }
 
-    const systemPrompt = await assemblerPrompt(piste, lecon);
+    const { supabase, user } = await session();
+    const systemPrompt = await assemblerPrompt(supabase, user, piste, lecon);
+
+    // Pour un apprenant connecté, le fil vient de la base, pas du navigateur :
+    // c'est le serveur qui sait ce qui s'est dit, et une conversation reprise
+    // depuis un autre appareil retrouve son historique. Sans session, on garde
+    // l'ancien comportement — la fenêtre envoyée par le client.
+    const fil = user
+      ? [...(await lireHistorique(supabase, user.id, piste, lecon)), { role: "user", content: question.content }]
+      : messages.slice(-12).map((m) => ({ role: m.role, content: m.content }));
 
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -163,7 +187,7 @@ export async function POST(req) {
         model: "claude-sonnet-5",
         max_tokens: 1500,
         system: systemPrompt,
-        messages: messages.slice(-12).map((m) => ({ role: m.role, content: m.content })),
+        messages: fil,
       }),
     });
 
@@ -177,6 +201,8 @@ export async function POST(req) {
       .filter((b) => b.type === "text")
       .map((b) => b.text)
       .join("\n");
+
+    if (user) await enregistrer(supabase, user.id, piste, lecon, question.content, text);
 
     return Response.json({ reply: text });
   } catch (e) {
