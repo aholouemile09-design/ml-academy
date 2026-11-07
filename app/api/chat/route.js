@@ -8,7 +8,7 @@
 
 import { rateLimit, getClientKey } from "../../../lib/rateLimit";
 import { createClient } from "@/lib/supabase/server";
-import { ficheLecon, lireLecon } from "@/lib/contenuLecons";
+import { ficheLecon, lireLecon, exercicesLecon } from "@/lib/contenuLecons";
 import { lireProfil, resumerProgression } from "@/lib/memoireTuteur";
 import { lireHistorique, enregistrer } from "@/lib/conversationTuteur";
 
@@ -40,6 +40,26 @@ En revanche, tu PEUX et DOIS :
 - Montrer un MINI-EXEMPLE différent du projet pour illustrer un concept
 - Expliquer une erreur dans le code que l'apprenant a déjà écrit
 - Suggérer quelle documentation lire, quelle bibliothèque utiliser
+
+RÈGLE ABSOLUE — EXERCICES (à respecter sans exception) :
+Quand l'apprenant travaille sur un exercice, ton but n'est pas qu'il ait la réponse : c'est qu'il la trouve. Tu ne donnes JAMAIS la solution spontanément — ni parce qu'il bloque, ni parce qu'il a collé du code faux, ni parce que ce serait plus rapide.
+
+Ce que tu fais à la place, et qui vaut mieux qu'une correction :
+- Tu expliques mieux. Si son blocage vient du cours, reprends le concept autrement — une analogie, un cas plus petit, un dessin en mots.
+- Tu montres ce qu'il n'a pas vu : le piège dans lequel il s'avance, le cas limite qu'il oublie, la forme plus idiomatique, la raison pour laquelle son approche va marcher à moitié.
+- Tu poses la question qui débloque, plutôt que d'annoncer la réponse. « Que retourne cette ligne si la table de droite est vide ? » vaut mieux que « il faut un LEFT JOIN ».
+- Tu fais rétrécir le problème : identifie avec lui la seule étape qui coince, et travaille là, pas sur tout l'énoncé.
+
+Si tu dois quand même l'aider davantage, escalade dans cet ordre, une marche à la fois, en le laissant réessayer entre chaque :
+1. reformuler l'énoncé en termes plus concrets
+2. nommer l'étape précise qui bloque
+3. donner le concept ou la fonction nécessaire, sans l'appliquer à son cas
+4. donner la structure du raisonnement, sans le code
+5. écrire la première ligne seulement
+
+Tu ne donnes la solution complète que s'il te la demande explicitement, et en dernier recours. Même là : propose-lui d'abord l'étape manquante plutôt que tout. S'il confirme qu'il veut la réponse, donne-la en entier, explique POURQUOI elle fonctionne, puis demande-lui immédiatement de la refaire page blanche ou sur une variante — une solution lue et non rejouée ne s'apprend pas.
+
+On te donne peut-être la correction attendue plus bas. Elle est là pour que tu guides vers le bon endroit avec précision, jamais pour la recopier.
 
 Réponds en français, de façon structurée mais concise. Utilise des blocs de code markdown quand tu montres du code.`;
 
@@ -108,6 +128,22 @@ async function assemblerPrompt(supabase, user, piste, lecon) {
     if (texte) {
       couches.push(
         `LE TEXTE DE CETTE LEÇON, tel qu'il l'a sous les yeux. Appuie-toi dessus et ne le contredis pas ; s'il est trop court pour sa question, complète-le sans le lui faire remarquer.\n\n${texte}`
+      );
+    }
+
+    // La correction attendue, pour guider vers le bon endroit. Elle est déjà
+    // dans le navigateur — le bouton « Solution » de la leçon la montre —, la
+    // donner au tuteur n'expose donc rien de plus ; ce qui la protège est la
+    // règle ci-dessus, pas son absence.
+    const exercices = exercicesLecon(piste, lecon);
+    if (exercices.length) {
+      couches.push(
+        `LES EXERCICES DE CETTE LEÇON. Tu connais la correction attendue : sers-t'en pour viser juste, pas pour la recopier.\n\n${exercices
+          .map(
+            (e) =>
+              `### ${e.title} (${e.kind})\n\nÉNONCÉ :\n${e.statement}\n\nINDICE PRÉVU :\n${e.hint}\n\nCORRECTION ATTENDUE — NE PAS DONNER :\n${e.solution}`
+          )
+          .join("\n\n")}`
       );
     }
   }
