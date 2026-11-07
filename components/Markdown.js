@@ -1,6 +1,6 @@
 // Mini-rendu markdown sans dépendance externe :
-// titres (## et ###), gras, code inline, blocs de code, listes à puces,
-// listes numérotées, citations (>) et retours à la ligne simples à
+// titres (## et ###), gras, code inline, blocs de code, tableaux, listes à
+// puces, listes numérotées, citations (>) et retours à la ligne simples à
 // l'intérieur d'un paragraphe.
 
 export default function Markdown({ text }) {
@@ -31,6 +31,25 @@ const BULLET = /^[-*]\s+/;
 const NUMBERED = /^(\d+)[.)]\s+/;
 const QUOTE = /^>\s?/;
 const TITRE = /^(#{2,3})\s+(.+)$/;
+const TABLEAU_LIGNE = /^\s*\|.*\|\s*$/;
+const TABLEAU_SEPARATEUR = /^\s*\|[\s:|-]+\|\s*$/;
+
+/** Les cellules d'une ligne de tableau, barres de bord retirées. */
+function cellules(ligne) {
+  return ligne
+    .trim()
+    .replace(/^\||\|$/g, "")
+    .split("|")
+    .map((c) => c.trim());
+}
+
+/** L'alignement d'une colonne, lu sur la ligne de séparation (:--- , ---:). */
+function alignement(separateur) {
+  const gauche = separateur.startsWith(":");
+  const droite = separateur.endsWith(":");
+  if (gauche && droite) return "text-center";
+  return droite ? "text-right" : "text-left";
+}
 
 /**
  * Un paragraphe peut en réalité être une liste, une citation ou du texte
@@ -54,6 +73,24 @@ function renderBlock(para, key) {
       <h3 key={key} className="text-base font-semibold text-white pt-3">
         {renderInline(texte)}
       </h3>
+    );
+  }
+
+  // ── Tableau ────────────────────────────────────────────────────────────
+  // Un tableau se reconnaît à sa ligne de tirets, pas à sa position : dans ce
+  // dépôt il est presque toujours collé à une ligne de titre en gras, sans
+  // ligne vide. On cherche donc où il commence et on rend le début en texte.
+  const debut = lines.findIndex(
+    (l, i) => TABLEAU_LIGNE.test(l) && TABLEAU_SEPARATEUR.test(lines[i + 1] ?? "")
+  );
+  if (debut !== -1 && lines.slice(debut).every((l) => TABLEAU_LIGNE.test(l))) {
+    const tableau = renderTableau(lines.slice(debut), key);
+    if (debut === 0) return tableau;
+    return (
+      <div key={key} className="space-y-2">
+        <p>{withLineBreaks(lines.slice(0, debut))}</p>
+        {tableau}
+      </div>
     );
   }
 
@@ -101,6 +138,57 @@ function renderBlock(para, key) {
 
   // ── Paragraphe classique (retours à la ligne simples préservés) ────────
   return <p key={key}>{withLineBreaks(lines)}</p>;
+}
+
+/**
+ * Les lignes d'un tableau, séparateur compris, en vrai tableau HTML.
+ *
+ * Le conteneur porte `min-w-0` en plus de `overflow-x-auto` : sans lui, un
+ * élément de grille garde sa largeur de contenu et c'est la page qui
+ * s'élargit au lieu du conteneur qui défile. Les cellules coupent les mots
+ * longs, pour qu'une URL ou un nom de fonction ne pousse pas une colonne.
+ */
+function renderTableau(lines, key) {
+  const entetes = cellules(lines[0]);
+  const alignements = cellules(lines[1]).map(alignement);
+  const corps = lines.slice(2).map(cellules);
+
+  return (
+    <div key={`${key}-tableau`} className="overflow-x-auto min-w-0">
+      <table className="w-full text-sm border-collapse">
+        <thead>
+          <tr className="border-b border-ink-700">
+            {entetes.map((cell, i) => (
+              <th
+                key={i}
+                className={`px-3 py-2 font-semibold text-white break-words ${
+                  alignements[i] ?? "text-left"
+                }`}
+              >
+                {renderInline(cell)}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {corps.map((ligne, i) => (
+            <tr key={i} className="border-b border-ink-800 last:border-0">
+              {ligne.map((cell, j) => (
+                <td
+                  key={j}
+                  className={`px-3 py-2 align-top break-words ${
+                    alignements[j] ?? "text-left"
+                  }`}
+                >
+                  {renderInline(cell)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 function withLineBreaks(lines) {
