@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { simulatedReply } from "@/lib/simulatedTutor";
 import Markdown from "@/components/Markdown";
 import { TutorAvatar } from "@/components/Illustrations";
 
@@ -23,12 +21,7 @@ export default function Tuteur() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [hasKey, setHasKey] = useState(false);
   const bottomRef = useRef(null);
-
-  useEffect(() => {
-    setHasKey(Boolean(localStorage.getItem("ml-academy-api-key")));
-  }, []);
 
   // La conversation générale survit aux rechargements : on la reprend, et le
   // message d'accueil ne s'affiche que pour une première visite.
@@ -59,39 +52,33 @@ export default function Tuteur() {
     setInput("");
     setLoading(true);
 
-    const apiKey = localStorage.getItem("ml-academy-api-key");
-
-    if (apiKey) {
-      try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "content-type": "application/json", "x-user-api-key": apiKey },
-          body: JSON.stringify({ messages: newMessages }),
-        });
-        const data = await res.json();
-        if (res.ok && data.reply) {
-          setMessages((m) => [...m, { role: "assistant", content: data.reply }]);
-        } else {
-          setMessages((m) => [
-            ...m,
-            {
-              role: "assistant",
-              content:
-                "⚠️ L'appel à l'API a échoué (clé invalide ou quota dépassé). Vérifie ta clé dans **Paramètres**. En attendant, je passe en mode simulé :\n\n" +
-                simulatedReply(content),
-            },
-          ]);
-        }
-      } catch {
-        setMessages((m) => [
-          ...m,
-          { role: "assistant", content: "⚠️ Erreur réseau. Mode simulé :\n\n" + simulatedReply(content) },
-        ]);
-      }
-    } else {
-      // Mode simulé : petite latence pour le naturel
-      await new Promise((r) => setTimeout(r, 600));
-      setMessages((m) => [...m, { role: "assistant", content: simulatedReply(content) }]);
+    // Une réponse pré-construite présentée comme celle du tuteur est pire
+    // qu'une erreur : elle trompe sur ce qui s'est passé. On dit ce qui a
+    // échoué, et la question reste à l'écran pour être renvoyée.
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ messages: newMessages }),
+      });
+      const data = await res.json();
+      setMessages((m) => [
+        ...m,
+        {
+          role: "assistant",
+          content:
+            res.ok && data.reply
+              ? data.reply
+              : data?.error === "rate_limited"
+                ? "Trop de questions d'affilée. Attends une minute et réessaie."
+                : "Je n'ai pas pu répondre. Réessaie dans un instant.",
+        },
+      ]);
+    } catch {
+      setMessages((m) => [
+        ...m,
+        { role: "assistant", content: "Erreur réseau. Réessaie dans un instant." },
+      ]);
     }
     setLoading(false);
   };
@@ -103,17 +90,7 @@ export default function Tuteur() {
         <div>
           <h1 className="text-2xl font-bold text-white">Tuteur AI</h1>
           <p className="text-sm text-slate-500">
-            {hasKey ? (
-              <span className="text-emerald-400">● Connecté à l'API Claude</span>
-            ) : (
-              <>
-                <span className="text-amber-400">● Mode simulé</span> —{" "}
-                <Link href="/parametres" className="underline hover:text-accent-light">
-                  ajouter une clé API
-                </Link>{" "}
-                pour débloquer le tuteur complet
-              </>
-            )}
+            Il connaît ton parcours, tes leçons terminées et le cours que tu as ouvert.
           </p>
         </div>
       </div>

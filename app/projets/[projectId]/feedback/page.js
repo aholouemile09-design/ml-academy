@@ -80,13 +80,9 @@ export default function ProjectFeedbackPage() {
     setError("");
     setLoading(true);
 
-    const apiKey = typeof window !== "undefined" ? localStorage.getItem("ml-academy-api-key") : null;
-    const headers = { "Content-Type": "application/json" };
-    if (apiKey) headers["x-user-api-key"] = apiKey;
-
     const res = await fetch("/api/project-feedback", {
       method: "POST",
-      headers,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         project_id: projectId,
         project_title: project.title,
@@ -156,12 +152,6 @@ export default function ProjectFeedbackPage() {
               className="w-full bg-ink-950 border border-ink-700 rounded-xl px-4 py-3 text-sm font-mono focus:outline-none focus:border-accent placeholder:text-slate-600 resize-y"
             />
             {error && <p className="text-sm text-rose-400">{error}</p>}
-            {!localStorage?.getItem?.("ml-academy-api-key") && (
-              <p className="text-xs text-amber-400 bg-amber-400/10 border border-amber-400/20 rounded-lg p-3">
-                ⚠️ Aucune clé API Anthropic configurée. Le feedback utilisera la clé partagée du site (limitée).{" "}
-                <Link href="/parametres" className="underline hover:text-white">Configurer ma clé →</Link>
-              </p>
-            )}
           </div>
           <div className="flex gap-3">
             <button onClick={() => setStep("rubric")} className="btn-secondary text-sm">← Retour</button>

@@ -41,8 +41,9 @@ export async function POST(req) {
     return NextResponse.json({ error: "Paramètres manquants" }, { status: 400 });
   }
 
-  const userKey = req.headers.get("x-user-api-key");
-  const apiKey = userKey || process.env.ANTHROPIC_API_KEY;
+  // La clé vient de l'environnement seulement : elle était auparavant gardée
+  // dans le localStorage du navigateur et renvoyée dans un en-tête.
+  const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return NextResponse.json({ error: "Clé API Anthropic manquante." }, { status: 400 });
 
   const rubricSummary = Object.entries(rubric)

@@ -48,13 +48,9 @@ export default function LessonChat({ moduleTitle, lessonTitle, piste, lecon }) {
     setLoading(true);
 
     try {
-      const apiKey = typeof window !== "undefined" ? localStorage.getItem("ml-academy-api-key") : null;
       const res = await fetch("/api/chat", {
         method: "POST",
-        headers: {
-          "content-type": "application/json",
-          ...(apiKey ? { "x-user-api-key": apiKey } : {}),
-        },
+        headers: { "content-type": "application/json" },
         // Deux identifiants suffisent : le serveur retrouve le titre, le texte
         // de la leçon et l'avancement de l'apprenant tout seul.
         body: JSON.stringify({ messages: next, piste, lecon }),

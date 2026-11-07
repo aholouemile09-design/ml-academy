@@ -1,6 +1,10 @@
 // Proxy sécurisé vers l'API Anthropic.
-// La clé vient soit de l'en-tête x-user-api-key (saisie dans Paramètres),
-// soit de la variable d'environnement ANTHROPIC_API_KEY.
+//
+// La clé vient de l'environnement, et de là seulement. Elle était auparavant
+// saisie dans Paramètres et gardée dans le localStorage du navigateur, d'où
+// elle repartait dans un en-tête à chaque question : un secret côté client,
+// que rien n'obligeait à être là puisque ANTHROPIC_API_KEY existe sur le
+// serveur.
 
 import { rateLimit, getClientKey } from "../../../lib/rateLimit";
 import { createClient } from "@/lib/supabase/server";
@@ -118,15 +122,11 @@ async function assemblerPrompt(supabase, user, piste, lecon) {
 
 export async function POST(req) {
   try {
-    const userKey = req.headers.get("x-user-api-key");
-
-    // Le rate-limit ne s'applique qu'à l'usage de la clé serveur partagée :
-    // un utilisateur qui fournit sa propre clé consomme son propre quota.
-    if (!userKey) {
-      const { allowed } = rateLimit(getClientKey(req), { limit: 20, windowMs: 60_000 });
-      if (!allowed) {
-        return Response.json({ error: "rate_limited" }, { status: 429 });
-      }
+    // Toutes les questions passent par la clé du site, donc par le même
+    // quota : plus personne ne contourne la limite en apportant la sienne.
+    const { allowed } = rateLimit(getClientKey(req), { limit: 20, windowMs: 60_000 });
+    if (!allowed) {
+      return Response.json({ error: "rate_limited" }, { status: 429 });
     }
 
     const body = await req.json();
@@ -159,7 +159,7 @@ export async function POST(req) {
       return Response.json({ error: "invalid_messages" }, { status: 400 });
     }
 
-    const apiKey = userKey || process.env.ANTHROPIC_API_KEY;
+    const apiKey = process.env.ANTHROPIC_API_KEY;
 
     if (!apiKey) {
       return Response.json({ error: "no_api_key" }, { status: 401 });
