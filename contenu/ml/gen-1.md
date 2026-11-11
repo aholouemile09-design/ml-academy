@@ -127,6 +127,6 @@ print(f"ecart de re-encodage : {ecart.mean():.3f}")        # 0,436 ici -> non
 
 Trois réflexes :
 
-1. **Choisis `k` par la mesure, pas par principe.** Ici k=8 retient 67,5 % de la variance pour une MSE de 0,01259, et k supérieur ou égal à 64 donne une recopie inutile à 10⁻⁴. Il n'y a pas de bonne valeur par défaut : trace la courbe MSE contre k sur tes données et choisis le coude.
+1. **Choisis le goulot par la mesure, pas par principe.** Ici k=8 retient 67,5 % de la variance pour une MSE de 0,01259, et k supérieur ou égal à 64 donne une recopie inutile à 10⁻⁴. Il n'y a pas de bonne valeur par défaut : trace la courbe MSE contre k sur tes données et choisis le coude.
 2. **Si l'entrée peut être bruitée en production, bruite-la à l'entraînement.** L'auto-encodeur simple montait à 0,08737 sur des entrées bruitées, soit pire que ne rien faire (0,05198) ; le débruiteur descendait à 0,02054 pour 0,00148 de MSE perdue sur les entrées propres.
 3. **Avant de croire qu'un latent est échantillonnable, mesure l'écart de ré-encodage.** 0,087 sur de vrais codes contre 0,436 sur des tirages gaussiens : trois lignes de code, et la réponse est sans appel. Et souviens-toi que le milieu de deux vrais codes tombait déjà à 0,626 de confiance — l'interpolation naïve n'est pas plus sûre que le tirage au sort.
