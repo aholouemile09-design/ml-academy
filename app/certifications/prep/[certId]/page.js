@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { getCertPrep } from "@/lib/certPrep";
+import { CERT_PREP, getCertPrep } from "@/lib/certPrep";
 import { useUserProgress as useProgress } from "@/lib/userProgress";
 
 const DIFFICULTY_LABELS = { 1: "Très facile", 2: "Facile", 3: "Moyen", 4: "Difficile", 5: "Expert" };
@@ -127,7 +127,11 @@ export default function CertPrepPage() {
     return (
       <div className="max-w-3xl mx-auto px-6 py-20 text-center">
         <p className="text-slate-400 mb-4">Préparation non disponible pour cette certification.</p>
-        <p className="text-slate-500 text-sm mb-6">Les préparations disponibles : Kaggle Python (c1), Kaggle ML (c3), MLOps DeepLearning.AI (c5), AWS CLF-C02 (c6).</p>
+        {/* La liste se lit sur les données : codée en dur, elle annonçait encore
+            des préparations retirées depuis. */}
+        <p className="text-slate-500 text-sm mb-6">
+          Les préparations disponibles : {Object.values(CERT_PREP).map((p) => p.title).join(", ")}.
+        </p>
         <Link href="/certifications" className="btn-primary">← Retour aux certifications</Link>
       </div>
     );
