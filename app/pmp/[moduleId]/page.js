@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { getPmpModule, PMP_LEVELS } from "@/lib/pmp";
 import { useUserProgress as useProgress } from "@/lib/userProgress";
 import ContenuLecon from "@/components/ContenuLecon";
+import IllustrationLecon from "@/components/IllustrationLecon";
 import QuizPlayer from "@/components/QuizPlayer";
 import ReflectionPrompt from "@/components/ReflectionPrompt";
 import LessonChat from "@/components/LessonChat";
@@ -154,6 +155,7 @@ export default function PmpModulePage() {
                 <h2 className="text-xl font-bold text-white">{lesson.title}</h2>
                 <span className="text-xs text-slate-500">⏱ {lesson.duration}</span>
               </div>
+              <IllustrationLecon leconId={lesson.id} />
               <ContenuLecon piste="pmp" lecon={lesson.id} />
               <LessonResources resources={lesson.resources} />
               <LessonExercises exercises={lesson.exercises} />
