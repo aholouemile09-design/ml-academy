@@ -29,12 +29,19 @@
 :root,
 html.dark {
   color-scheme: dark;
-  /* Fonds — gris neutres, presque noirs */
-  --ink-950: 10 10 10;    /* #0A0A0A — la page */
-  --ink-900: 23 23 23;    /* #171717 — les cartes */
-  --ink-800: 38 38 38;    /* #262626 — surfaces surélevées, survols */
-  --ink-700: 55 55 55;    /* #373737 — filets et bordures */
-  --ink-600: 82 82 82;    /* #525252 — bordures marquées, pointillés */
+  /* Fonds — gris BLEUTÉS, et un plancher relevé.
+     Le noir pur n'existe pas dans la nature : une surface sombre réfléchit
+     toujours un peu de la lumière ambiante, et l'œil s'attend à cette
+     lueur. #0A0A0A la supprime, l'écran devient un trou et chaque mot clair
+     posé dessus frappe au maximum du rapport possible. La page remonte donc
+     à L* 12 et toute l'échelle porte la même teinte faible (bleu ~222°,
+     B > V > R) : les gris ne sont plus neutres, c'est cette couleur
+     commune qui adoucit le blanc comme le noir. */
+  --ink-950: 28  31  38;  /* #1C1F26 — la page, L* 11,7 */
+  --ink-900: 35  39  47;  /* #23272F — les cartes, L* 15,6 */
+  --ink-800: 43  48  57;  /* #2B3039 — surfaces surélevées, survols, L* 19,7 */
+  --ink-700: 54  60  71;  /* #363C47 — filets et bordures */
+  --ink-600: 100 109 125; /* #646D7D — bordures marquées : 3,16:1 sur la page */
   /* Accent unique — bleu franc. C'est la couleur du secteur : Coursera,
      OpenClassrooms et LinkedIn Learning la portent toutes. Un aplat, jamais
      un dégradé — le bleu-violet dégradé reste la signature des produits
@@ -42,20 +49,22 @@ html.dark {
      Deux tons parce qu'un bleu lisible en texte sur un fond presque noir est
      trop clair pour porter du texte blanc en bouton, et inversement. */
   --accent:       37  99 235;  /* #2563EB — 5,2:1 avec du texte blanc dessus */
-  --accent-light: 96 165 250;  /* #60A5FA — 7,8:1 sur le fond, lisible en texte */
+  --accent-light: 125 178 252; /* #7DB2FC — 7,6:1 sur la page remontée */
   --accent-2:     37  99 235;  /* identique à --accent : plus aucun dégradé à deux tons */
-  /* Textes — gris neutres, sans réchauffement */
-  --color-text-primary:   250 250 250;
-  --color-text-secondary: 212 212 212;
-  --color-text-muted:     163 163 163;
-  /* 145 et non 115 : sur un fond presque noir, #737373 ne donne que 3,8:1.
-     La teinte la plus discrète de l'échelle doit rester au-dessus de 4,5:1,
-     sinon « discret » veut dire « illisible ». Échelle obtenue, du texte
-     courant au plus effacé : 19:1 · 12:1 · 7:1 · 4,6:1. */
-  --color-text-subtle:    145 145 145;
+  /* Textes — même teinte bleutée que les fonds, et plus de blanc pur.
+     Au-delà de ~12:1 le gain de lisibilité est nul ; seule la fatigue
+     continue de monter. Le texte principal descend donc à L* 90 et la
+     paire la plus dure de la page passe de 19,8:1 à 12,7:1.
+     Échelle obtenue sur la page, du titre au plus effacé :
+     12,7:1 · 10,1:1 · 7,1:1 · 6,1:1 — toutes au-dessus de 4,5:1, y compris
+     sur une surface surélevée (le pire cas, 4,9:1). */
+  --color-text-primary:   222 226 233; /* #DEE2E9 — L* 89,8 */
+  --color-text-secondary: 197 203 214; /* #C5CBD6 — le corps des leçons */
+  --color-text-muted:     163 171 186; /* #A3ABBA */
+  --color-text-subtle:    149 158 173; /* #959EAD */
   /* Scrollbar */
-  --scrollbar-track: #171717;
-  --scrollbar-thumb: #373737;
+  --scrollbar-track: #23272F;
+  --scrollbar-thumb: #363C47;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -63,35 +72,38 @@ html.dark {
    ───────────────────────────────────────────────────────────────────────────── */
 html.light {
   color-scheme: light;
-  /* Fonds — la page n'est pas blanche, les cartes le sont.
-     Du blanc pur en pleine page renvoie toute la luminosité de l'écran dans
-     l'œil ; la page descend donc d'un cran et ce sont les cartes qui portent
-     le blanc, ce qui les détache en plus. Gris strictement neutres : un
-     blanc cassé chaud donnerait le fond crème qu'on ne veut pas. */
-  --ink-950: 245 245 245;  /* #F5F5F5 — la page */
-  --ink-900: 255 255 255;  /* #FFFFFF — les cartes, plus claires que la page */
-  --ink-800: 250 250 250;  /* #FAFAFA */
-  --ink-700: 229 229 229;  /* #E5E5E5 */
-  --ink-600: 212 212 212;  /* #D4D4D4 */
+  /* Fonds — ni la page ni les cartes ne sont blanches.
+     Le blanc pur renvoie toute la luminosité de l'écran dans l'œil, et un
+     gris strictement neutre ne l'atténue pas : il reste la même lumière,
+     juste moins forte. C'est la teinte qui adoucit, pas la quantité. Toute
+     l'échelle porte donc la même pointe de bleu (~220°) que le thème
+     sombre, assez faible pour ne pas virer au gris-bleu visible. */
+  --ink-950: 240 242 246;  /* #F0F2F6 — la page */
+  --ink-900: 250 251 253;  /* #FAFBFD — les cartes, plus claires que la page */
+  --ink-800: 244 246 249;  /* #F4F6F9 */
+  --ink-700: 222 227 234;  /* #DEE3EA */
+  --ink-600: 129 139 155;  /* #818B9B — bordures marquées : 3,07:1 sur la page */
   /* Bleu bien plus foncé qu'en mode sombre : sur fond clair, le #2563EB ne
      mesure que 4,7:1 et le ton clair 2,3:1. Un seul ton suffit ici, il tient
      les deux emplois. */
   --accent:       29  78 216;  /* #1D4ED8 — 6,7:1 avec du texte blanc dessus */
   --accent-light: 29  78 216;  /* #1D4ED8 — 6,2:1 en texte sur la page claire */
   --accent-2:     29  78 216;  /* identique à --accent : plus aucun dégradé à deux tons */
-  /* Textes — noir adouci. Du #0A0A0A sur fond clair donne un contraste de
-     19:1 : au-delà de ~16:1 le gain de lisibilité est nul et la fatigue
-     visuelle, elle, continue d'augmenter. #171717 mesure 16,9:1. */
-  --color-text-primary:   23  23  23;
-  --color-text-secondary: 51  51  51;
-  --color-text-muted:     82  82  82;
-  /* 110 et non 115 : #737373 mesure 4,2:1 sur la page claire, soit sous le
-     seuil. Cinq points de gris suffisent à repasser au-dessus — #6E6E6E
-     donne 4,68:1 sur #F5F5F5. */
-  --color-text-subtle:   110 110 110;
+  /* Textes — gris très foncé bleuté, jamais noir. #171717 sur la page
+     claire mesurait 16,4:1, soit le même excès qu'en sombre dans l'autre
+     sens. #23272F ramène la paire la plus dure à 13,4:1.
+     Échelle obtenue sur la page : 13,4:1 · 9,2:1 · 5,9:1 · 4,7:1. */
+  --color-text-primary:   35  39  47;   /* #23272F — L* 15,6 */
+  --color-text-secondary: 59  65  76;   /* #3B414C — le corps des leçons */
+  --color-text-muted:     85  93  107;  /* #555D6B */
+  /* #646C7B tenait 4,72:1 sur la page, mais 4,06:1 une fois posé sur une
+     pastille teintée (bg-accent/10), qui assombrit le fond sans assombrir le
+     texte. Mesuré dans le DOM, pas estimé : #59616F repasse à 4,80:1 dans ce
+     pire cas et 5,57:1 sur la page. */
+  --color-text-subtle:    89  97 111;  /* #59616F */
   /* Scrollbar */
-  --scrollbar-track: #fafafa;
-  --scrollbar-thumb: #e5e5e5;
+  --scrollbar-track: #F4F6F9;
+  --scrollbar-thumb: #DEE3EA;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -128,6 +140,20 @@ body {
 html.dark .text-slate-500,
 html.dark .text-slate-600 { color: rgb(var(--color-text-subtle)) !important; }
 
+/* text-white porte 271 titres et libellés, et c'était la moitié du problème :
+   du #FFFFFF sur un fond presque noir, c'est le contraste maximal qu'un écran
+   sache produire, page après page. Le jeton de texte principal le remplace
+   partout — sauf sur les aplats colorés, traités plus bas. Le thème clair
+   faisait déjà exactement cette substitution, dans l'autre sens. */
+html.dark .text-white { color: rgb(var(--color-text-primary)) !important; }
+
+/* slate-200/300/400 sont calibrés pour un fond bleu-ardoise ; ils sont
+   ramenés sur l'échelle du thème pour que tout le texte partage la même
+   teinte que les fonds, sans quoi la page mélange deux familles de gris. */
+html.dark .text-slate-200,
+html.dark .text-slate-300 { color: rgb(var(--color-text-secondary)) !important; }
+html.dark .text-slate-400 { color: rgb(var(--color-text-muted))     !important; }
+
 /* Surcharge textes en mode CLAIR */
 html.light .text-white  { color: rgb(var(--color-text-primary))   !important; }
 html.light .text-slate-100 { color: rgb(var(--color-text-primary)) !important; }
@@ -145,7 +171,7 @@ html.light .text-slate-600 { color: rgb(var(--color-text-subtle))  !important; }
    Le sélecteur reste la classe d'origine : rien à changer dans le balisage. */
 html.light .text-emerald-200,
 html.light .text-emerald-300,
-html.light .text-emerald-400 { color: #047857 !important; } /* 4,8:1 */
+html.light .text-emerald-400 { color: #046C4E !important; } /* 5,3:1 sur la pastille verte */
 html.light .text-amber-200,
 html.light .text-amber-300,
 html.light .text-amber-400   { color: #B45309 !important; } /* 4,6:1 */
@@ -167,6 +193,15 @@ html.light .text-purple-400  { color: #7E22CE !important; } /* 6,4:1 */
    justifiait le bouton neutre visait l'ancien bleu : #1D4ED8 tient 6,7:1 avec
    du texte blanc en thème clair, #2563EB 5,2:1 en thème sombre. */
 .btn-primary { color: #FFFFFF !important; }
+
+/* Seule exception au texte adouci : un aplat de couleur. Le blanc pur n'y
+   fatigue pas — c'est le fond, pas le texte, qui porte la luminosité — et
+   l'adoucir ferait tomber le libellé de 5,2:1 à 4,2:1, sous le seuil.
+   Spécificité volontairement plus forte que les règles de thème ci-dessus. */
+html.dark  .bg-accent.text-white,
+html.light .bg-accent.text-white,
+html.dark  .bg-emerald-500.text-white,
+html.light .bg-emerald-500.text-white { color: #FFFFFF !important; }
 
 /* ─────────────────────────────────────────────────────────────────────────────
    COMPOSANTS SÉMANTIQUES
@@ -199,7 +234,10 @@ html.light .card {
   @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-ink-700 text-sm font-semibold;
 }
 
-html.dark  .btn-secondary { @apply text-slate-200 hover:border-accent; }
+/* Couleur posée directement et non par @apply : la règle de thème
+   ci-dessus redéfinit .text-slate-200, et Tailwind refuse d'appliquer un
+   utilitaire qu'une feuille du projet réécrit — dépendance circulaire. */
+html.dark  .btn-secondary { color: rgb(var(--color-text-secondary)); @apply hover:border-accent; }
 html.light .btn-secondary { color: rgb(var(--color-text-secondary)); }
 html.light .btn-secondary:hover { border-color: rgb(var(--accent)); }
 
@@ -217,7 +255,7 @@ html.light .btn-secondary:hover { border-color: rgb(var(--accent)); }
    Évite le « flou » dû à un panneau presque de la même couleur que la page
    ───────────────────────────────────────────────────────────────────────────── */
 html.light .nav-dropdown {
-  background-color: #ffffff !important;
+  background-color: rgb(var(--ink-900)) !important;
   border-color: rgb(var(--ink-700)) !important;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(0, 0, 0, 0.05) !important;
 }
@@ -228,7 +266,7 @@ html.light .nav-dropdown button {
 }
 html.light .nav-dropdown a:hover,
 html.light .nav-dropdown button:hover {
-  background-color: rgb(var(--ink-900)) !important;
+  background-color: rgb(var(--ink-700)) !important;
   color: rgb(var(--color-text-primary)) !important;
 }
 /* L'élément actif garde l'accent */
@@ -480,11 +518,11 @@ html.light .aurora-bg { opacity: 0.18; }
   -webkit-backdrop-filter: blur(14px) saturate(150%);
 }
 html.dark .glass {
-  background: rgba(10, 10, 10, 0.62);
+  background: rgb(var(--ink-950) / 0.62);
   border: 1px solid rgba(255, 255, 255, 0.10);
 }
 html.light .glass {
-  background: rgba(255, 255, 255, 0.72);
+  background: rgb(var(--ink-900) / 0.72);
   border: 1px solid rgba(0, 0, 0, 0.10);
 }
 
