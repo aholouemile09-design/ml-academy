@@ -160,7 +160,7 @@ export default function Home() {
           <h2 className="text-3xl font-extrabold text-[#FFFFFF] tracking-tight">
             Commencez aujourd'hui
           </h2>
-          <p className="mt-3 text-[#DBE6FD] max-w-lg mx-auto">
+          <p className="mt-3 text-[#EBF1FE] max-w-lg mx-auto">
             Choisissez votre formation et ouvrez la première leçon dans la minute.
           </p>
           <Link
