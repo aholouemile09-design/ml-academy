@@ -29,7 +29,7 @@ export default function Ressources() {
   if (freeOnly) results = results.filter((r) => r.free);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
       <h1 className="text-3xl font-bold text-white mb-1">Bibliothèque de Ressources</h1>
       <p className="text-slate-400 mb-8">
         {RESOURCES.length} ressources vérifiées, gratuites et légales — toutes issues des meilleures sources de l'industrie.
@@ -72,7 +72,7 @@ export default function Ressources() {
 
       <p className="text-sm text-slate-500 mb-4">{results.length} ressource{results.length > 1 ? "s" : ""}</p>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         {results.map((r) => (
           <a
             key={r.id}

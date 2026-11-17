@@ -32,7 +32,7 @@ export default function Home() {
     <div>
       {/* ── HÉROS ────────────────────────────────────────────────────────── */}
       <section className="bg-ink-900 border-b border-ink-700">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
           <div>
             <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.1] [text-wrap:balance]">
               Devenez opérationnel en machine learning, en développement web ou
@@ -64,7 +64,7 @@ export default function Home() {
       </section>
 
       {/* ── CE QUE VOUS Y TROUVEZ ────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
         <div className="grid sm:grid-cols-3 gap-8">
           {VALEURS.map((v) => (
             <div key={v.titre} className="flex gap-3.5">
@@ -85,7 +85,7 @@ export default function Home() {
       </section>
 
       {/* ── LES FORMATIONS ───────────────────────────────────────────────── */}
-      <section id="formations" className="max-w-6xl mx-auto px-4 sm:px-6 py-8 pb-16">
+      <section id="formations" className="max-w-7xl mx-auto px-4 sm:px-6 py-8 pb-16">
         <div className="mb-8">
           <h2 className="text-3xl font-extrabold text-white tracking-tight">Nos formations</h2>
           <p className="mt-2 text-slate-400">
@@ -128,13 +128,13 @@ export default function Home() {
       </section>
 
       {/* ── PROGRESSION DE L'UTILISATEUR ─────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-16">
         <ProfileWidget />
       </section>
 
       {/* ── COMMENT ÇA MARCHE ────────────────────────────────────────────── */}
       <section className="bg-ink-900 border-y border-ink-700">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
           <h2 className="text-3xl font-extrabold text-white tracking-tight mb-10">
             Comment ça marche
           </h2>
@@ -143,7 +143,7 @@ export default function Home() {
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <h2 className="text-3xl font-extrabold text-white tracking-tight mb-8">
           Questions fréquentes
         </h2>
@@ -156,7 +156,7 @@ export default function Home() {
             presque noir par le thème clair, ce qui effacerait le texte sur
             l'aplat bleu. Ici le fond ne change pas avec le thème, le texte
             non plus. */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center">
           <h2 className="text-3xl font-extrabold text-[#FFFFFF] tracking-tight">
             Commencez aujourd'hui
           </h2>

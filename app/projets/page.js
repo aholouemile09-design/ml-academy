@@ -77,7 +77,7 @@ export default function Projets() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
       {/* Banner */}
       <div className="relative rounded-2xl overflow-hidden mb-8 h-40 sm:h-52">
         <Image
@@ -156,7 +156,7 @@ export default function Projets() {
       </div>
 
       {/* Grille de projets */}
-      <div className="grid sm:grid-cols-2 gap-5">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {filtered.map(p => {
           const lvl = PROJECT_LEVELS[p.level];
           const isOpen = expanded === p.id;

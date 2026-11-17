@@ -86,13 +86,13 @@ function WeeklyGoalWidget({ progress }) {
 export default function Dashboard() {
   const progress = useProgress();
   if (!progress || !progress.loaded) {
-    return <div className="max-w-6xl mx-auto px-6 py-20 text-slate-500">Chargement…</div>;
+    return <div className="max-w-7xl mx-auto px-6 py-20 text-slate-500">Chargement…</div>;
   }
 
   const stats = computeStats(progress);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
       <h1 className="text-3xl font-bold text-white mb-1">Tableau de bord</h1>
       <p className="text-slate-400 mb-10">Votre progression dans le parcours CodeGraft Academy.</p>
 

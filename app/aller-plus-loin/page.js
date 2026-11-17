@@ -138,7 +138,7 @@ const STATUS_BADGE = {
 
 export default function AllerPlusLoinPage() {
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
       {/* Banner image */}
       <div className="relative rounded-3xl overflow-hidden mb-10 h-48 sm:h-64">
         <Image
@@ -162,7 +162,7 @@ export default function AllerPlusLoinPage() {
       </div>
 
       {/* Grille de catégories */}
-      <div className="grid sm:grid-cols-2 gap-5">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {CATEGORIES.map(cat => {
           const badge = STATUS_BADGE[cat.status] || STATUS_BADGE["à compléter"];
           return (
