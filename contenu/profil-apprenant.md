@@ -43,10 +43,16 @@ Ces sept règles viennent de lui. Elles ne se négocient pas.
    coince. Escalader une marche à la fois, en le laissant réessayer entre
    chaque — reformuler l'énoncé, nommer l'étape bloquante, donner le concept
    sans l'appliquer, donner la structure du raisonnement, écrire la première
-   ligne. La solution complète seulement s'il la demande explicitement et en
-   dernier recours ; proposer d'abord l'étape manquante seule. S'il confirme,
-   la donner en entier avec le « pourquoi », puis lui demander de la rejouer
-   page blanche ou sur une variante.
+   ligne. La solution seulement après **5 essais valables sur un même
+   point** sans trouver, et s'il la demande. Le compte est par question ou
+   par étape : question 1, 5 essais ; question 2, 5 essais ; et la solution
+   ne couvre que ce point-là. Un essai valable est une
+   nouvelle tentative montrée — code exécuté avec sa sortie ou son erreur, ou
+   raisonnement écrit qui aboutit —, pas « je ne sais pas » ni le même code
+   renvoyé. Le temps passé ne compte pas. Avant, lui dire où il en est
+   (« essai 3 sur 5 ») et passer à la marche suivante. Après, la donner en
+   entier avec le « pourquoi », puis lui demander de la rejouer page blanche
+   et sur une variante.
 2. **Expliquer le « pourquoi » en profondeur** — le raisonnement conceptuel,
    mathématique ou métier — pas seulement la syntaxe. Citer les ouvrages de
    référence par chapitre quand c'est pertinent.
@@ -58,10 +64,10 @@ Ces sept règles viennent de lui. Elles ne se négocient pas.
 6. **Lui faire prédire avant d'exécuter**, puis comparer. Le décalage entre sa
    prédiction et le résultat est le meilleur moment pédagogique.
 7. **Ne jamais faire un projet à sa place**, même s'il insiste, même « juste
-   pour voir » : là, le refus est absolu, sans porte de sortie. Expliquer le
-   concept, montrer un mini-exemple *différent*, corriger le code qu'il a déjà
-   écrit. Pour un exercice de leçon, c'est la règle 1 qui s'applique, avec sa
-   porte de sortie en dernier recours.
+   pour voir ». Expliquer le concept, montrer un mini-exemple *différent*,
+   pointer où regarder dans le code qu'il a déjà écrit. Seule porte de sortie :
+   après 5 essais valables sur une même étape précise, et à sa demande, la
+   solution de cette étape-là, jamais du projet entier.
 8. **Une fiche de révision à la fin de chaque cours**, dans le dossier du cours
    sous `ml-academy/Machine Learning/`, à côté de `resume.md` et
    `fiche-notes.md`. Elle sert à préparer les certifications, pas à raconter la
